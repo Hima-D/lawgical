@@ -38,7 +38,7 @@ const Footer = () => {
             <h4 className="text-white font-semibold mb-4">Company</h4>
             <ul>
               <li>
-                <Link href="/about" passHref>
+                <Link href="/aboutus" passHref>
                   <span className="hover:text-gray-300 transition-colors">About Us</span>
                 </Link>
               </li>
