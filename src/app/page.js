@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';  // Import the Link component
 import Header from '@/components/header';
 import Footer from '@/components/footer';
-
+import { SpeedInsights } from "@vercel/speed-insights/next"
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">

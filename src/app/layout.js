@@ -1,6 +1,8 @@
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+// Google Fonts
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -11,31 +13,26 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Metadata
 export const metadata = {
   title: "Lawyer Portal - Legal Services & Case Management",
   description: "Lawyer Portal connects clients with legal professionals. Manage cases, discussions, and access trusted legal services.",
   keywords: "lawyer, legal services, case management, legal portal, lawyer portal, legal advice, law firm",
-  author: "Chahat Siwach", // Replace with the actual author
-  viewport: "width=device-width, initial-scale=1.0", // Ensures proper scaling for mobile devices
-  
-  // Open Graph metadata (for better sharing on social media)
+  author: "Chahat Siwach", // Replace with actual author
+  viewport: "width=device-width, initial-scale=1.0",
   openGraph: {
     title: "Lawyer Portal - Legal Services & Case Management",
     description: "Lawyer Portal connects clients with legal professionals. Manage cases, discussions, and access trusted legal services.",
     type: "website",
-    image: "/og-image.jpg", // Add a relevant image for Open Graph sharing
+    image: "/og-image.jpg",
   },
-  
-  // Twitter card metadata
   twitter: {
-    card: "summary_large_image", // Use 'summary_large_image' for better preview
+    card: "summary_large_image",
     title: "Lawyer Portal - Legal Services & Case Management",
     description: "Lawyer Portal connects clients with legal professionals. Manage cases, discussions, and access trusted legal services.",
-    creator: "@chahat_siwach", // Replace with your Twitter handle
-    image: "/twitter-card.jpg", // Add a relevant image for Twitter sharing
+    creator: "@chahat_siwach", // Replace with Twitter handle
+    image: "/twitter-card.jpg",
   },
-
-  // Robots directive for search engine indexing
   robots: "index, follow",
 };
 
@@ -65,9 +62,10 @@ export default function RootLayout({ children }) {
         {/* Favicon */}
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {/* Add SpeedInsights here */}
+        <SpeedInsights/>
+        
         {children}
       </body>
     </html>
