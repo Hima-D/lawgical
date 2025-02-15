@@ -16,11 +16,11 @@ const Contact = () => {
 
         <div className="text-center mb-12">
           <p className="text-lg text-gray-300 mb-6">
-            Have any questions, feedback, or inquiries? We are just a message away! Fill out the form below, and we’ll get back to you as soon as possible.
+            If you have any questions or feedback, we’re just a message away. Fill out the form below and we’ll get back to you shortly.
           </p>
         </div>
 
-        <div className="max-w-4xl mx-auto bg-black p-8 rounded-2xl shadow-2xl border border-white">
+        <div className="max-w-4xl mx-auto bg-black p-8 rounded-2xl shadow-lg border border-white">
           <form action="#" method="POST">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-8">
               {/* Name Input */}
@@ -31,7 +31,7 @@ const Contact = () => {
                   id="name"
                   name="name"
                   required
-                  className="w-full p-4 text-lg bg-black border border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                  className="w-full p-4 text-lg bg-black border border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-white transition-all duration-300"
                 />
               </div>
 
@@ -43,7 +43,7 @@ const Contact = () => {
                   id="email"
                   name="email"
                   required
-                  className="w-full p-4 text-lg bg-black border border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                  className="w-full p-4 text-lg bg-black border border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-white transition-all duration-300"
                 />
               </div>
             </div>
@@ -56,7 +56,7 @@ const Contact = () => {
                 name="message"
                 rows="6"
                 required
-                className="w-full p-4 text-lg bg-black border border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                className="w-full p-4 text-lg bg-black border border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-white transition-all duration-300"
               ></textarea>
             </div>
 
@@ -64,7 +64,7 @@ const Contact = () => {
             <div className="mt-8 text-center">
               <button
                 type="submit"
-                className="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-lg py-3 px-10 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="bg-white text-black text-lg py-3 px-10 rounded-lg hover:bg-gray-200 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white"
               >
                 Send Message
               </button>
