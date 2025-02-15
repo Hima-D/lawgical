@@ -6,17 +6,16 @@ const Footer = () => {
   return (
     <footer className="bg-primary text-white py-12">
       <div className="max-w-7xl mx-auto px-6 sm:px-12">
-        {/* Logo Section */}
-        <div className="flex justify-between items-center mb-8 border-b border-white pb-6">
-          <div className="flex items-center gap-3">
+        {/* Logo and Social Media Section */}
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-8 border-b border-white pb-6">
+          <div className="flex items-center gap-4 mb-4 sm:mb-0">
             <Image
-              src="/lawyer-portal-logo.svg"  // Update with your actual logo
+              src="/lawyer-portal-logo.svg" // Update with your actual logo
               alt="Lawyer Portal Logo"
               width={120}
               height={40}
               priority
             />
-            <span className="font-bold text-2xl">Lawyer Portal</span>
           </div>
 
           {/* Social Media Links */}
@@ -40,7 +39,7 @@ const Footer = () => {
             <ul>
               <li>
                 <Link href="/about" passHref>
-                  <span className="hover:text-gray-300 transition-colors">About</span>
+                  <span className="hover:text-gray-300 transition-colors">About Us</span>
                 </Link>
               </li>
               <li>
@@ -86,12 +85,12 @@ const Footer = () => {
           {/* Newsletter Section */}
           <div>
             <h4 className="text-white font-semibold mb-4">Stay Updated</h4>
-            <p className="mb-4">Subscribe to our newsletter for legal tips and updates.</p>
-            <form>
+            <p className="mb-4 text-gray-300">Subscribe to our newsletter for legal tips, updates, and more.</p>
+            <form className="flex">
               <input
                 type="email"
                 placeholder="Your email address"
-                className="p-2 rounded-l-md border-none text-black"
+                className="p-2 rounded-l-md border-none text-black w-72"
               />
               <button
                 type="submit"
@@ -104,8 +103,8 @@ const Footer = () => {
         </div>
 
         {/* Copyright Section */}
-        <div className="text-center text-sm text-gray-400">
-          &copy; {new Date().getFullYear()} Lawyer Portal. All rights reserved.
+        <div className="text-center text-sm text-gray-400 mt-8">
+          <p>&copy; {new Date().getFullYear()} Lawyer Portal. All rights reserved.</p>
         </div>
       </div>
     </footer>
