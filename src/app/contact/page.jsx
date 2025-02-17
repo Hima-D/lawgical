@@ -76,7 +76,7 @@ const Contact = () => {
         <div className="mt-16 text-center">
           <h2 className="text-3xl font-semibold text-white mb-6">Need Immediate Assistance?</h2>
           <p className="text-lg text-gray-300 mb-6">
-            You can reach us directly at <span className="text-white">chahatsiwach07@gmail.com</span>
+            You can reach us directly at <span className="text-white">advocatechahat@gmail.com</span>
           </p>
           <p className="text-lg text-gray-300 mb-6">
             Or call us at <span className="text-white">+919876543210</span>
