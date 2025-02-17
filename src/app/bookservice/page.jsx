@@ -15,6 +15,33 @@ const BookServicePage = () => {
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Get today's date and format it as yyyy-mm-dd
+  const today = new Date().toISOString().split('T')[0];
+
+  // Function to generate time slots in half-hour increments
+  const generateTimeSlots = (startHour = 9, endHour = 17) => {
+    const timeSlots = [];
+    const add30Minutes = (date) => new Date(date.setMinutes(date.getMinutes() + 30));
+
+    let currentTime = new Date();
+    currentTime.setHours(startHour, 0, 0, 0); // Start at 9:00 AM
+
+    while (currentTime.getHours() < endHour) {
+      const hours = currentTime.getHours();
+      const minutes = currentTime.getMinutes();
+      const timeSlot = `${hours % 12 || 12}:${minutes === 0 ? '00' : '30'} ${hours >= 12 ? 'PM' : 'AM'}`;
+      timeSlots.push(timeSlot);
+
+      // Move to the next half-hour slot
+      currentTime = add30Minutes(currentTime);
+    }
+
+    return timeSlots;
+  };
+
+  // Generate time slots from 9 AM to 5 PM
+  const timeSlots = generateTimeSlots();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -92,6 +119,7 @@ const BookServicePage = () => {
                 onChange={(e) => setDate(e.target.value)}
                 className="mt-2 block w-full px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 required
+                min={today}  
               />
             </div>
 
@@ -99,15 +127,21 @@ const BookServicePage = () => {
               <label htmlFor="time" className="block text-lg font-medium text-gray-200">
                 Pick a Time
               </label>
-              <input
-                type="time"
+              <select
                 id="time"
                 name="time"
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
                 className="mt-2 block w-full px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 required
-              />
+              >
+                <option value="">Select a time</option>
+                {timeSlots.map((slot, index) => (
+                  <option key={index} value={slot}>
+                    {slot}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
