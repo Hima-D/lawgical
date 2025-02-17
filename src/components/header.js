@@ -41,9 +41,10 @@ const Header = () => {
                 Home
               </Link>
             </li>
+            {/* Removed Discussions link, added Book Service link */}
             <li>
-              <Link href="/discussions" className="hover:text-gray-300">
-                Discussions
+              <Link href="/bookservice" className="hover:text-gray-300">
+                Book Service
               </Link>
             </li>
             <li>
@@ -97,8 +98,9 @@ const Header = () => {
             <li>
               <Link href="/" className="hover:text-gray-300">Home</Link>
             </li>
+            {/* Mobile menu: Removed Discussions link, added Book Service link */}
             <li>
-              <Link href="/discussions" className="hover:text-gray-300">Discussions</Link>
+              <Link href="/bookservice" className="hover:text-gray-300">Book Service</Link>
             </li>
             <li>
               <Link href="/signup" className="block py-2 text-center bg-transparent border-2 border-white text-white rounded-full">Get Started</Link>
