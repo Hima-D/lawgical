@@ -1,8 +1,10 @@
+// pages/bookservice.js
 "use client";
+import { useState } from 'react';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
-import { useState } from 'react';
 import Link from 'next/link';
+
 
 const BookServicePage = () => {
   const [service, setService] = useState('');
@@ -14,6 +16,7 @@ const BookServicePage = () => {
   const [phone, setPhone] = useState('');
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   // Get today's date and format it as yyyy-mm-dd
   const today = new Date().toISOString().split('T')[0];
@@ -42,15 +45,73 @@ const BookServicePage = () => {
   // Generate time slots from 9 AM to 5 PM
   const timeSlots = generateTimeSlots();
 
-  const handleSubmit = (e) => {
+  // Helper function to format phone number
+  const formatPhoneNumber = (phone) => {
+    if (!phone.startsWith('whatsapp:')) {
+      return `whatsapp:${phone}`;
+    }
+    return phone;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage(''); // Reset the error message on each submit
 
-    // Simulate an API call or form submission
-    setTimeout(() => {
-      alert('Your booking has been submitted successfully!');
+    // Ensure phone number is in the correct format
+    const formattedPhone = formatPhoneNumber(phone);
+
+    // Validate that all fields are filled in
+    if (!service || !attorney || !date || !time || !name || !email || !phone || !description) {
+      setErrorMessage('Please fill in all required fields.');
       setIsSubmitting(false);
-    }, 2000);
+      return;
+    }
+
+    // Prepare form data to be sent
+    const formData = {
+      service,
+      attorney,
+      date,
+      time,
+      name,
+      email,
+      phone: formattedPhone,
+      description,
+    };
+
+    try {
+      // Send form data to the API
+      const response = await fetch('/api/bookservice', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData), // Send data as JSON
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert(data.message || 'Your booking has been submitted successfully!');
+        // Reset form after success
+        setService('');
+        setAttorney('');
+        setDate('');
+        setTime('');
+        setName('');
+        setEmail('');
+        setPhone('');
+        setDescription('');
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.error || 'There was an issue with your submission.');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setErrorMessage('There was an error submitting your form.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -62,6 +123,13 @@ const BookServicePage = () => {
         <p className="text-lg text-center text-gray-400 mb-12">
           Get expert legal advice from our experienced attorneys. Follow the steps below to book your consultation.
         </p>
+
+        {/* Error Message */}
+        {errorMessage && (
+          <div className="bg-red-500 text-white p-4 rounded-lg mb-6">
+            <p>{errorMessage}</p>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl mx-auto">
           {/* Step 1: Select Service */}
@@ -119,7 +187,7 @@ const BookServicePage = () => {
                 onChange={(e) => setDate(e.target.value)}
                 className="mt-2 block w-full px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 required
-                min={today}  
+                min={today}
               />
             </div>
 
