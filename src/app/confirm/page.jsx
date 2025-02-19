@@ -43,8 +43,8 @@ const ConfirmEmail = () => {
   }, [router]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 py-12 px-6">
-      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-xl">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-black py-12 px-6">
+      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-2xl">
         {loading && (
           <div className="flex justify-center items-center">
             <svg
@@ -65,25 +65,25 @@ const ConfirmEmail = () => {
         )}
 
         {!loading && error && (
-          <div className="bg-red-100 text-red-800 p-4 rounded-md text-center">
+          <div className="bg-red-600 text-white p-4 rounded-md text-center shadow-md">
             <p>{error}</p>
           </div>
         )}
 
         {!loading && !error && (
-          <div className="bg-green-100 text-green-800 p-4 rounded-md text-center">
+          <div className="bg-green-600 text-white p-4 rounded-md text-center shadow-md">
             <p className="font-semibold">Your email has been successfully confirmed!</p>
             <p>You can now sign in and start using the Lawyer Portal.</p>
             <button
               onClick={() => router.push("/signin")}
-              className="mt-4 w-full py-2 bg-black text-white rounded-md hover:bg-gray-800 focus:outline-none"
+              className="mt-4 w-full py-2 bg-black text-white rounded-md hover:bg-gray-800 focus:outline-none transition-all duration-200"
             >
               Go to Sign In
             </button>
           </div>
         )}
 
-        <div className="mt-8 text-center text-sm text-gray-600">
+        <div className="mt-8 text-center text-sm text-gray-500">
           <p>Need help? Contact our support team at <a href="mailto:support@lawyer-portal.com" className="text-black hover:underline">support@lawyer-portal.com</a></p>
         </div>
       </div>
