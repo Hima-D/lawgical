@@ -46,9 +46,9 @@ const About = () => {
             Our team consists of passionate individuals dedicated to making Lawyer Portal the best platform for legal professionals. We are committed to empowering our users with the tools they need to succeed.
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
             {/* Team Member: Chahat Siwach */}
-            <div className="text-center transition transform hover:scale-105 hover:shadow-xl rounded-lg p-6 bg-white border border-gray-200">
+            <div className="transition transform hover:scale-105 hover:shadow-2xl rounded-lg p-8 bg-white text-center border border-gray-200">
               <Image
                 src="/chahat-siwach.jpg"  // Replace with actual image of Chahat Siwach
                 alt="Chahat Siwach"
@@ -57,33 +57,26 @@ const About = () => {
                 className="rounded-full mx-auto mb-4 grayscale"
               />
               <h3 className="text-xl font-semibold text-black">Chahat Siwach</h3>
-              <p className="text-gray-600">Founder & CEO</p>
+              <p className="text-gray-600 text-lg">Founder & CEO</p>
+              <p className="text-gray-500 mt-2">
+                Chahat is a highly skilled lawyer with a sharp intellect and exceptional courtroom presence. With years of experience, she’s earned a reputation for handling even the most challenging cases with poise and precision. When she’s not in the courtroom, she’s mentoring fellow lawyers and refining her legal strategies.
+              </p>
             </div>
 
-            {/* Team Member 2 */}
-            <div className="text-center transition transform hover:scale-105 hover:shadow-xl rounded-lg p-6 bg-white border border-gray-200">
+            {/* Team Member: Millit Bhati */}
+            <div className="transition transform hover:scale-105 hover:shadow-2xl rounded-lg p-8 bg-white text-center border border-gray-200">
               <Image
-                src="/team-member-2.jpg"  // Replace with actual team member image
-                alt="Team Member 2"
+                src="/millit-bhati.jpg"  // Replace with actual image of Millit Bhati
+                alt="Millit Bhati"
                 width={150}
                 height={150}
                 className="rounded-full mx-auto mb-4 grayscale"
               />
-              <h3 className="text-xl font-semibold text-black">Jane Smith</h3>
-              <p className="text-gray-600">Chief Technology Officer</p>
-            </div>
-
-            {/* Team Member 3 */}
-            <div className="text-center transition transform hover:scale-105 hover:shadow-xl rounded-lg p-6 bg-white border border-gray-200">
-              <Image
-                src="/team-member-3.jpg"  // Replace with actual team member image
-                alt="Team Member 3"
-                width={150}
-                height={150}
-                className="rounded-full mx-auto mb-4 grayscale"
-              />
-              <h3 className="text-xl font-semibold text-black">Michael Brown</h3>
-              <p className="text-gray-600">Lead Developer</p>
+              <h3 className="text-xl font-semibold text-black">Millit Bhati</h3>
+              <p className="text-gray-600 text-lg">CS Engineer (Professional One)</p>
+              <p className="text-gray-500 mt-2">
+              Millit is a brilliant CS engineer with exceptional technical skills. However, when certain people are around, his usual focus seems to waver, and his coding abilities take a bit of a backseat. Despite this, he remains an invaluable team member, renowned for his problem-solving abilities and sharp intellect. His passion for technology and his readiness to tackle any challenge are always evident, even if he occasionally gets a little distracted.
+              </p>
             </div>
           </div>
         </div>
