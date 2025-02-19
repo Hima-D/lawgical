@@ -42,15 +42,51 @@ const ConfirmEmail = () => {
     confirmEmail();
   }, [router]);
 
-  if (loading) return <p>Loading...</p>;
-
   return (
-    <div className="container">
-      {error ? (
-        <p className="error">{error}</p>
-      ) : (
-        <p>Your email has been successfully confirmed. You can now sign in!</p>
-      )}
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 py-12 px-6">
+      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-xl">
+        {loading && (
+          <div className="flex justify-center items-center">
+            <svg
+              className="w-8 h-8 animate-spin text-black"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 0116 0"
+              ></path>
+            </svg>
+          </div>
+        )}
+
+        {!loading && error && (
+          <div className="bg-red-100 text-red-800 p-4 rounded-md text-center">
+            <p>{error}</p>
+          </div>
+        )}
+
+        {!loading && !error && (
+          <div className="bg-green-100 text-green-800 p-4 rounded-md text-center">
+            <p className="font-semibold">Your email has been successfully confirmed!</p>
+            <p>You can now sign in and start using the Lawyer Portal.</p>
+            <button
+              onClick={() => router.push("/signin")}
+              className="mt-4 w-full py-2 bg-black text-white rounded-md hover:bg-gray-800 focus:outline-none"
+            >
+              Go to Sign In
+            </button>
+          </div>
+        )}
+
+        <div className="mt-8 text-center text-sm text-gray-600">
+          <p>Need help? Contact our support team at <a href="mailto:support@lawyer-portal.com" className="text-black hover:underline">support@lawyer-portal.com</a></p>
+        </div>
+      </div>
     </div>
   );
 };
