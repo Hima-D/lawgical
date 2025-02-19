@@ -43,8 +43,6 @@ export async function POST(req) {
       Description: ${description}
     `;
 
-    // Log the message content for debugging
-    console.log('Sending WhatsApp message:', message);
 
     // Send a WhatsApp message to the provided phone number
     const response = await client.messages.create({
