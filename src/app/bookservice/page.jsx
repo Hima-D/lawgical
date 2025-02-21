@@ -5,7 +5,6 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'; // For redirecting the user
-import { supabase } from '@/lib/supabaseclient';
 
 const BookServicePage = () => {
   const [service, setService] = useState('');
@@ -18,27 +17,10 @@ const BookServicePage = () => {
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [user, setUser] = useState(null); // State to hold user data
-  const [loading, setLoading] = useState(true); // To show loading state while fetching user info
-  const router = useRouter();
+  const [loading, setLoading] = useState(false); // Remove loading state for fetching user info
 
   // Get today's date and format it as yyyy-mm-dd
   const today = new Date().toISOString().split('T')[0];
-
-  useEffect(() => {
-    // Fetch current user session from Supabase
-    const checkSession = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        router.push('/signin'); // Redirect to login if user is not authenticated
-      } else {
-        setUser(user); // Set user if authenticated
-      }
-      setLoading(false); // End loading state
-    };
-
-    checkSession();
-  }, [router]);
 
   // Function to generate time slots in half-hour increments
   const generateTimeSlots = (startHour = 9, endHour = 17) => {
@@ -132,8 +114,6 @@ const BookServicePage = () => {
       setIsSubmitting(false);
     }
   };
-
-  if (loading) return <div>Loading...</div>; // Loading state
 
   return (
     <div className="min-h-screen bg-black text-white">
