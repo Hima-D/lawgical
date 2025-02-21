@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'; // Import from next/navigation
-import { supabase } from '@/lib/supabaseclient';
+import { useRouter } from 'next/navigation'; 
+import { supabase } from '@/lib/supabaseclient';  // Ensure this is correctly set up
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 
@@ -23,15 +23,24 @@ const SignIn = () => {
     setError(null);
     setLoading(true);
 
-    const { user, error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const { data, error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (authError) {
-      setError(authError.message);
-    } else {
-      router.push('/dashboard');
+      if (authError) {
+        setError(authError.message || authError.details);
+      } else {
+        // Check if 'data' contains a valid user, then navigate
+        if (data.user) {
+          router.push('/dashboard');
+        } else {
+          setError('Something went wrong. Please try again.');
+        }
+      }
+    } catch (err) {
+      setError('An unexpected error occurred.');
     }
     setLoading(false);
   };
@@ -43,7 +52,6 @@ const SignIn = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-black">
-      {/* Include Header */}
       <Header />
 
       <div className="flex-grow flex items-center justify-center py-8">
@@ -130,7 +138,6 @@ const SignIn = () => {
         </div>
       </div>
 
-      {/* Include Footer */}
       <Footer />
     </div>
   );
