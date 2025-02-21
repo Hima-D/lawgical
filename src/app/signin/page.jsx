@@ -1,88 +1,146 @@
-import Image from 'next/image';
-import Link from 'next/link';
+"use client";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabaseclient';  // Ensure this is correctly set up
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 
-export default function Home() {
+const SignIn = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    setIsMounted(true); // Ensures the component is mounted
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    try {
+      const { data, error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (authError) {
+        setError(authError.message || authError.details);
+      } else {
+        // Check if 'data' contains a valid user, then navigate
+        if (data.user) {
+          router.push('/dashboard');
+        } else {
+          setError('Something went wrong. Please try again.');
+        }
+      }
+    } catch (err) {
+      setError('An unexpected error occurred.');
+    }
+    setLoading(false);
+  };
+
+  // If the component is not mounted yet, don't render anything (prevents hydration errors)
+  if (!isMounted) {
+    return null;
+  }
+
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      {/* Header */}
+    <div className="min-h-screen flex flex-col bg-black">
       <Header />
 
-      {/* Main Content */}
-      <div className="flex-1 grid grid-rows-[auto_1fr_auto] gap-16 px-8 sm:px-20 py-16 sm:py-24 font-[family-name:var(--font-geist-sans)]">
-        <main className="flex flex-col gap-8 items-center sm:items-start text-center sm:text-left">
-          <Image
-            className="dark"
-            src="/law.jpg"  // Update with your logo image
-            alt="Lawyer Portal Logo"
-            width={180}
-            height={38}
-            priority
-          />
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-primary text-center sm:text-left">
-            Welcome to the Lawyer Portal
-          </h1>
-          <p className="text-lg sm:text-xl font-medium text-gray-600 sm:text-left">
-            Connect with fellow lawyers, discuss cases, and access resources for a seamless legal practice.
-          </p>
+      <div className="flex-grow flex items-center justify-center py-8">
+        <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-xl">
+          <h2 className="text-2xl font-semibold text-center mb-6 text-black">Sign In</h2>
 
-          <ol className="list-inside list-decimal text-lg sm:text-xl font-mono text-gray-700 sm:text-left mt-6">
-            <li className="mb-2">Collaborate with other lawyers on cases and legal topics.</li>
-            <li>Join exclusive discussions and access legal resources right at your fingertips.</li>
-          </ol>
+          {error && (
+            <div className="mb-4 p-2 bg-red-100 text-red-800 rounded-md text-center">
+              {error}
+            </div>
+          )}
 
-          <div className="flex gap-6 items-center flex-col sm:flex-row mt-10">
-            <Link
-              href="/cases"
-              className="rounded-full border border-transparent transition-colors flex items-center justify-center bg-primary text-background gap-2 py-3 px-8 text-lg sm:text-xl hover:bg-[#383838] dark:hover:bg-[#ccc]"
+          <form onSubmit={handleSubmit}>
+            {/* Email Field */}
+            <div className="mb-4 relative">
+              <label
+                htmlFor="email"
+                className="absolute text-sm font-medium text-gray-700 left-4 -top-3 bg-white px-1"
+              >
+                Email Address
+              </label>
+              <input
+                type="email"
+                id="email"
+                className={`mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black ${error ? 'border-red-500' : ''} text-black`}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="Enter your email"
+                aria-describedby="emailHelp"
+                aria-invalid={error ? "true" : "false"}
+              />
+            </div>
+
+            {/* Password Field */}
+            <div className="mb-6 relative">
+              <label
+                htmlFor="password"
+                className="absolute text-sm font-medium text-gray-700 left-4 -top-3 bg-white px-1"
+              >
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                className={`mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black ${error ? 'border-red-500' : ''} text-black`}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="Enter your password"
+                aria-describedby="passwordHelp"
+                aria-invalid={error ? "true" : "false"}
+              />
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className={`w-full py-2 px-4 bg-black text-white rounded-md ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-800'} focus:outline-none`}
+              disabled={loading}
             >
-              Access Cases
-            </Link>
-            <Link
-              href="/discussions"
-              className="rounded-full border border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center py-3 px-8 text-lg sm:text-xl bg-white dark:bg-[#1a1a1a] hover:bg-[#f2f2f2] dark:hover:bg-[#383838] hover:border-transparent"
-            >
-              Join Discussions
-            </Link>
+              {loading ? (
+                <div className="flex justify-center items-center">
+                  <svg className="w-5 h-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 0116 0"></path>
+                  </svg>
+                </div>
+              ) : (
+                'Sign In'
+              )}
+            </button>
+          </form>
+
+          {/* Sign Up Link */}
+          <div className="mt-4 text-center">
+            <span className="text-sm text-gray-600">
+              Don't have an account?{' '}
+              <a href="/signup" className="text-black hover:underline">
+                Sign Up
+              </a>
+            </span>
           </div>
-
-          {/* Why We Exist */}
-          <section className="mt-20 sm:mt-24 text-center sm:text-left">
-            <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-4">Why We Exist</h2>
-            <p className="text-lg sm:text-xl text-gray-700">
-              At the Lawyer Portal, we believe in empowering legal professionals by creating a space where lawyers can
-              come together to share knowledge, collaborate, and make informed decisions. Our mission is to foster a
-              community of like-minded professionals dedicated to delivering justice and high-quality legal services.
-            </p>
-          </section>
-
-          {/* Where We Work */}
-          <section className="mt-16 sm:mt-20 text-center sm:text-left">
-            <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-4">Where We Work</h2>
-            <p className="text-lg sm:text-xl text-gray-700">
-              Our platform serves lawyers across the globe, with an emphasis on providing resources for various legal
-              fields. Whether you're in corporate law, criminal law, family law, or any other specialty, our network is
-              here to help you connect with peers, share insights, and collaborate on cases, no matter where you are.
-            </p>
-          </section>
-
-          {/* Why We Stand as an Organization */}
-          <section className="mt-16 sm:mt-20 text-center sm:text-left">
-            <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-4">Why We Stand as an Organization</h2>
-            <p className="text-lg sm:text-xl text-gray-700">
-              We stand by the values of integrity, collaboration, and accessibility. Our core belief is that legal
-              professionals should have access to tools and resources that allow them to succeed. We are committed to
-              building a diverse and inclusive community, where legal practitioners can share their knowledge freely and
-              collaborate without boundaries. Our organization thrives on supporting the legal community and advancing the
-              future of law through innovation and connection.
-            </p>
-          </section>
-        </main>
+        </div>
       </div>
 
-      {/* Footer */}
       <Footer />
     </div>
   );
-}
+};
+
+export default SignIn;
