@@ -85,7 +85,7 @@ export default function Home() {
             <h3 className="text-xl font-semibold text-primary mb-4">Join Discussions</h3>
             <p className="text-gray-600 dark:text-gray-400">Participate in discussions with peers and share insights on legal matters.</p>
             <Link
-              href="/discussions"
+              href="/community"
               className="text-primary hover:underline mt-4 inline-block"
             >
               Join Now
