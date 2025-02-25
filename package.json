@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@supabase/supabase-js": "^2.48.1",
     "@vercel/speed-insights": "^1.2.0",
     "axios": "^1.7.9",
