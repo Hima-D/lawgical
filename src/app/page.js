@@ -5,6 +5,7 @@ import Link from "next/link";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import Testimonial from "@/components/testimonial";
+import Services, { services } from "@/components/services";  // Import services array
 
 export default function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -95,6 +96,10 @@ export default function Home() {
             </Link>
           </div>
         </section>
+        <h2 className="text-3xl sm:text-4xl font-semibold text-center text-primary mb-8">
+          Our Services
+        </h2>
+        <Services services={services} />  {/* Pass the services array as a prop */}
 
         {/* Testimonial Section */}
         <section className="my-16 w-full">

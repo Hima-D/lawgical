@@ -23,7 +23,7 @@ export default function ScheduleConsultation() {
     setTodayDate(date);
   }, []);
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     // Validate form fields
@@ -45,13 +45,36 @@ export default function ScheduleConsultation() {
 
     setIsSubmitting(true);
     setErrors({});
+    setConfirmationMessage(""); // Clear previous confirmation message
 
-    // Simulate sending the data to your backend or third-party service
-    setTimeout(() => {
-      // Assuming success
-      setConfirmationMessage("Your consultation has been scheduled successfully!");
+    // Send the form data to the API route
+    try {
+      const res = await fetch('/api/schedule', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fullName,
+          email,
+          selectedDate,
+          selectedTime,
+          message,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setConfirmationMessage(data.message);
+      } else {
+        setConfirmationMessage("Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      setConfirmationMessage("Error: " + error.message);
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -67,13 +90,6 @@ export default function ScheduleConsultation() {
         <p className="text-base sm:text-lg text-center sm:text-left font-medium text-gray-400">
           Choose a convenient time and date for your video consultation with one of our expert lawyers.
         </p>
-
-        {/* Description about Lawyers */}
-        <div className="mt-8 text-center text-gray-400">
-          <p>
-            Our team of highly experienced and dedicated lawyers is ready to assist you with any legal matters. Whether it’s business law, family disputes, or criminal defense, we have the expertise to guide you through the most complex legal challenges. Book your consultation today with the best in the field!
-          </p>
-        </div>
 
         {/* Consultation Scheduling Form */}
         <form onSubmit={handleFormSubmit} className="w-full max-w-lg mt-8">
