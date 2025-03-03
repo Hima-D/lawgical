@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 
+
 const Contact = () => {
   return (
     <div className="min-h-screen bg-black text-white px-6 sm:px-12">
@@ -9,62 +10,62 @@ const Contact = () => {
       <Header />
 
       {/* Contact Form Section */}
-      <div className="max-w-7xl mx-auto pt-16 pb-32">
-        <h1 className="text-5xl font-bold text-center mb-6 text-white leading-tight">
-          Get In Touch With Us
+      <div className="max-w-4xl mx-auto pt-16 pb-24">
+        <h1 className="text-3xl sm:text-4xl font-bold text-center mb-6 animate__animated animate__fadeIn">
+          Get In Touch
         </h1>
 
-        <div className="text-center mb-12">
-          <p className="text-lg text-gray-300 mb-6">
-            If you have any questions or feedback, we’re just a message away. Fill out the form below and we’ll get back to you shortly.
+        <div className="text-center mb-8 animate__animated animate__fadeIn animate__delay-1s">
+          <p className="text-lg text-gray-300">
+            We’d love to hear from you. Fill out the form below and we’ll respond shortly.
           </p>
         </div>
 
-        <div className="max-w-4xl mx-auto bg-black p-8 rounded-2xl shadow-lg border border-white">
+        <div className="bg-black p-8 rounded-lg shadow-xl border border-white transition-all duration-300 transform hover:scale-105 hover:shadow-2xl">
           <form action="#" method="POST">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
               {/* Name Input */}
               <div className="sm:col-span-1">
-                <label htmlFor="name" className="text-xl font-semibold text-white mb-3">Full Name</label>
+                <label htmlFor="name" className="text-lg font-semibold text-white mb-2">Full Name</label>
                 <input
                   type="text"
                   id="name"
                   name="name"
                   required
-                  className="w-full p-4 text-lg bg-black border border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-white transition-all duration-300"
+                  className="w-full p-3 text-lg bg-black border border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-white transition-all duration-300"
                 />
               </div>
 
               {/* Email Input */}
               <div className="sm:col-span-1">
-                <label htmlFor="email" className="text-xl font-semibold text-white mb-3">Email Address</label>
+                <label htmlFor="email" className="text-lg font-semibold text-white mb-2">Email Address</label>
                 <input
                   type="email"
                   id="email"
                   name="email"
                   required
-                  className="w-full p-4 text-lg bg-black border border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-white transition-all duration-300"
+                  className="w-full p-3 text-lg bg-black border border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-white transition-all duration-300"
                 />
               </div>
             </div>
 
             {/* Message Textarea */}
-            <div className="mt-6 mb-8">
-              <label htmlFor="message" className="text-xl font-semibold text-white mb-3">Your Message</label>
+            <div className="mb-6">
+              <label htmlFor="message" className="text-lg font-semibold text-white mb-2">Your Message</label>
               <textarea
                 id="message"
                 name="message"
-                rows="6"
+                rows="4"
                 required
-                className="w-full p-4 text-lg bg-black border border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-white transition-all duration-300"
+                className="w-full p-3 text-lg bg-black border border-white rounded-lg focus:outline-none focus:ring-2 focus:ring-white transition-all duration-300"
               ></textarea>
             </div>
 
             {/* Submit Button */}
-            <div className="mt-8 text-center">
+            <div className="text-center">
               <button
                 type="submit"
-                className="bg-white text-black text-lg py-3 px-10 rounded-lg hover:bg-gray-200 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white"
+                className="bg-white text-black text-lg py-3 px-8 rounded-lg hover:bg-gray-200 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white"
               >
                 Send Message
               </button>
@@ -73,13 +74,13 @@ const Contact = () => {
         </div>
 
         {/* Optional Info Section */}
-        <div className="mt-16 text-center">
-          <h2 className="text-3xl font-semibold text-white mb-6">Need Immediate Assistance?</h2>
-          <p className="text-lg text-gray-300 mb-6">
-            You can reach us directly at <span className="text-white">advocatechahat@gmail.com</span>
+        <div className="mt-12 text-center animate__animated animate__fadeIn animate__delay-2s">
+          <h2 className="text-xl font-semibold text-white mb-4">Need Help Immediately?</h2>
+          <p className="text-lg text-gray-300">
+            Reach out to us at <a href="mailto:advocatechahat@gmail.com" className="text-white">advocatechahat@gmail.com</a>
           </p>
-          <p className="text-lg text-gray-300 mb-6">
-            Or call us at <span className="text-white">+919876543210</span>
+          <p className="text-lg text-gray-300 mt-2">
+            Or give us a call at <span className="text-white">+918383801899</span>
           </p>
         </div>
       </div>

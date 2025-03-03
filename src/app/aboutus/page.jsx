@@ -15,7 +15,7 @@ const About = () => {
         <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between mb-16">
           <div className="sm:w-1/2 mb-8 sm:mb-0">
             <Image
-              src="/about-us-image.jpg" // Replace with your actual image
+              src="https://picsum.photos/600/400?random=1" // Replace with your actual image
               alt="About Us Image"
               width={600}
               height={400}
@@ -50,7 +50,7 @@ const About = () => {
             {/* Team Member: Chahat Siwach */}
             <div className="transition transform hover:scale-105 hover:shadow-2xl rounded-lg p-8 bg-white text-center border border-gray-200">
               <Image
-                src="/chahat-siwach.jpg"  // Replace with actual image of Chahat Siwach
+                src="https://picsum.photos/150/150?random=2"  // Replace with actual image of Chahat Siwach
                 alt="Chahat Siwach"
                 width={150}
                 height={150}
@@ -59,14 +59,14 @@ const About = () => {
               <h3 className="text-xl font-semibold text-black">Chahat Siwach</h3>
               <p className="text-gray-600 text-lg">Founder & CEO</p>
               <p className="text-gray-500 mt-2">
-                Chahat is a highly skilled lawyer with a sharp intellect and exceptional courtroom presence. With years of experience, she’s earned a reputation for handling even the most challenging cases with poise and precision. When she’s not in the courtroom, she’s mentoring fellow lawyers and refining her legal strategies.
+                Chahat is a highly skilled lawyer with a sharp intellect and exceptional courtroom presence. With years of experience, she’s earned a reputation for handling even the most challenging cases with poise and precision. When she’s not in the courtroom, she’s mentoring fellow lawyers and refining her legal strategies. Chahat’s leadership and strict approach to legal matters ensure that every case is treated with the utmost professionalism and rigor.
               </p>
             </div>
 
             {/* Team Member: Millit Bhati */}
             <div className="transition transform hover:scale-105 hover:shadow-2xl rounded-lg p-8 bg-white text-center border border-gray-200">
               <Image
-                src="/millit-bhati.jpg"  // Replace with actual image of Millit Bhati
+                src="https://picsum.photos/150/150?random=3"  // Replace with actual image of Millit Bhati
                 alt="Millit Bhati"
                 width={150}
                 height={150}
@@ -75,7 +75,7 @@ const About = () => {
               <h3 className="text-xl font-semibold text-black">Millit Bhati</h3>
               <p className="text-gray-600 text-lg">CS Engineer (Professional One)</p>
               <p className="text-gray-500 mt-2">
-              Millit is a brilliant CS engineer with exceptional technical skills. However, when certain people are around, his usual focus seems to waver, and his coding abilities take a bit of a backseat. Despite this, he remains an invaluable team member, renowned for his problem-solving abilities and sharp intellect. His passion for technology and his readiness to tackle any challenge are always evident, even if he occasionally gets a little distracted.
+                Millit is a brilliant CS engineer with exceptional technical skills. However, when certain people are around, his usual focus seems to waver, and his coding abilities take a bit of a backseat. Despite this, he remains an invaluable team member, renowned for his problem-solving abilities and sharp intellect. His passion for technology and his readiness to tackle any challenge are always evident, even if he occasionally gets a little distracted.
               </p>
             </div>
           </div>

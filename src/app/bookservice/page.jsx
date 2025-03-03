@@ -1,31 +1,32 @@
-// pages/bookservice.js
 "use client";
-import { useState, useEffect } from 'react';
-import Header from '@/components/header';
-import Footer from '@/components/footer';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation'; // For redirecting the user
+import { useState, useEffect } from "react";
+import Header from "@/components/header";
+import Footer from "@/components/footer";
+import Link from "next/link";
+import { useRouter } from "next/navigation"; // For redirecting the user
+import services from "@/components/services"; // Import the services list
 
 const BookServicePage = () => {
-  const [service, setService] = useState('');
-  const [attorney, setAttorney] = useState('');
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [description, setDescription] = useState('');
+  const [service, setService] = useState(""); // service will store the id or name of the selected service
+  const [attorney, setAttorney] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [description, setDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [loading, setLoading] = useState(false); // Remove loading state for fetching user info
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Get today's date and format it as yyyy-mm-dd
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split("T")[0];
 
   // Function to generate time slots in half-hour increments
   const generateTimeSlots = (startHour = 9, endHour = 17) => {
     const timeSlots = [];
-    const add30Minutes = (date) => new Date(date.setMinutes(date.getMinutes() + 30));
+    const add30Minutes = (date) =>
+      new Date(date.setMinutes(date.getMinutes() + 30));
 
     let currentTime = new Date();
     currentTime.setHours(startHour, 0, 0, 0); // Start at 9:00 AM
@@ -33,7 +34,9 @@ const BookServicePage = () => {
     while (currentTime.getHours() < endHour) {
       const hours = currentTime.getHours();
       const minutes = currentTime.getMinutes();
-      const timeSlot = `${hours % 12 || 12}:${minutes === 0 ? '00' : '30'} ${hours >= 12 ? 'PM' : 'AM'}`;
+      const timeSlot = `${hours % 12 || 12}:${minutes === 0 ? "00" : "30"} ${
+        hours >= 12 ? "PM" : "AM"
+      }`;
       timeSlots.push(timeSlot);
 
       // Move to the next half-hour slot
@@ -48,7 +51,7 @@ const BookServicePage = () => {
 
   // Helper function to format phone number
   const formatPhoneNumber = (phone) => {
-    if (!phone.startsWith('whatsapp:')) {
+    if (!phone.startsWith("whatsapp:")) {
       return `whatsapp:${phone}`;
     }
     return phone;
@@ -57,14 +60,23 @@ const BookServicePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setErrorMessage(''); // Reset the error message on each submit
+    setErrorMessage(""); // Reset the error message on each submit
 
     // Ensure phone number is in the correct format
     const formattedPhone = formatPhoneNumber(phone);
 
     // Validate that all fields are filled in
-    if (!service || !attorney || !date || !time || !name || !email || !phone || !description) {
-      setErrorMessage('Please fill in all required fields.');
+    if (
+      !service ||
+      !attorney ||
+      !date ||
+      !time ||
+      !name ||
+      !email ||
+      !phone ||
+      !description
+    ) {
+      setErrorMessage("Please fill in all required fields.");
       setIsSubmitting(false);
       return;
     }
@@ -83,33 +95,33 @@ const BookServicePage = () => {
 
     try {
       // Send form data to the API
-      const response = await fetch('/api/bookservice', {
-        method: 'POST',
+      const response = await fetch("/api/bookservice", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData), // Send data as JSON
       });
 
       if (response.ok) {
         const data = await response.json();
-        alert(data.message || 'Your booking has been submitted successfully!');
+        alert(data.message || "Your booking has been submitted successfully!");
         // Reset form after success
-        setService('');
-        setAttorney('');
-        setDate('');
-        setTime('');
-        setName('');
-        setEmail('');
-        setPhone('');
-        setDescription('');
+        setService("");
+        setAttorney("");
+        setDate("");
+        setTime("");
+        setName("");
+        setEmail("");
+        setPhone("");
+        setDescription("");
       } else {
         const errorData = await response.json();
-        setErrorMessage(errorData.error || 'There was an issue with your submission.');
+        setErrorMessage(errorData.error || "There was an issue with your submission.");
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
-      setErrorMessage('There was an error submitting your form.');
+      console.error("Error submitting form:", error);
+      setErrorMessage("There was an error submitting your form.");
     } finally {
       setIsSubmitting(false);
     }
@@ -147,10 +159,13 @@ const BookServicePage = () => {
               required
             >
               <option value="">Choose a service</option>
-              <option value="initial-consultation">Initial Consultation</option>
-              <option value="case-evaluation">Case Evaluation</option>
-              <option value="business-legal-services">Business Legal Services</option>
-              <option value="family-law-consultation">Family Law Consultation</option>
+              {/* Ensure services is an array before using .map */}
+              {Array.isArray(services) &&
+                services.map((serviceItem) => (
+                  <option key={serviceItem.id} value={serviceItem.name}>
+                    {serviceItem.title} {/* Changed from `serviceItem.name` to `serviceItem.title` */}
+                  </option>
+                ))}
             </select>
           </div>
 
@@ -278,10 +293,12 @@ const BookServicePage = () => {
           <div>
             <button
               type="submit"
-              className={`w-full bg-white text-black py-3 rounded-lg ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`w-full bg-white text-black py-3 rounded-lg ${
+                isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+              }`}
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Submitting...' : 'Book Your Appointment'}
+              {isSubmitting ? "Submitting..." : "Book Your Appointment"}
             </button>
           </div>
         </form>
