@@ -68,7 +68,7 @@ const Footer = () => {
             <ul>
               <li>
                 <Link href="/posco" passHref>
-                  <span className="hover:text-gray-300 transition-colors duration-300 ease-in-out">POSCO (Prevention of Sexual Offenses)</span>
+                  <span className="hover:text-gray-300 transition-colors duration-300 ease-in-out">POCSO (Prevention of Sexual Offenses)</span>
                 </Link>
               </li>
               <li>

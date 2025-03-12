@@ -25,7 +25,7 @@ const Header = () => {
     // Simulating search results (you can replace this with an actual search query to an API or database)
     const simulatedResults = [
       'Corporate Law Guide',
-      'POSCO Legal Procedures',
+      'POCSO Legal Procedures',
       'POSH Workplace Guidelines',
       'Contract Law Best Practices',
       'Litigation Services Overview',
