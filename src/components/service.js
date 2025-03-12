@@ -10,9 +10,9 @@ const Services = () => {
         {/* POSCO (Prevention of Sexual Offenses) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 mb-16">
           <div className="flex flex-col justify-center">
-            <h2 className="text-3xl font-semibold text-white mb-4">POSCO (Prevention of Sexual Offenses)</h2>
+            <h2 className="text-3xl font-semibold text-white mb-4">POCSO (Prevention of Sexual Offenses)</h2>
             <p className="text-lg text-gray-300 mb-6">
-              We assist organizations in creating and implementing policies and procedures to prevent sexual offenses in the workplace, ensuring compliance with the POSCO Act.
+              We assist organizations in creating and implementing policies and procedures to prevent sexual offenses in the workplace, ensuring compliance with the POCSO Act.
             </p>
             <Link
               href="/posco"

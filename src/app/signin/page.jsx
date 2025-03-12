@@ -30,24 +30,25 @@ const SignIn = () => {
       });
 
       if (authError) {
+        console.error(authError); // Log for debugging
         setError(authError.message || authError.details);
       } else {
-        // Check if 'data' contains a valid user, then navigate
-        if (data.user) {
+        console.log('SignIn Data:', data); // Log for debugging
+        if (data?.user) {
           router.push('/dashboard');
         } else {
           setError('Something went wrong. Please try again.');
         }
       }
     } catch (err) {
+      console.error(err); // Log for debugging
       setError('An unexpected error occurred.');
     }
     setLoading(false);
   };
 
-  // If the component is not mounted yet, don't render anything (prevents hydration errors)
   if (!isMounted) {
-    return null;
+    return null; // Prevent rendering before the component is mounted
   }
 
   return (
