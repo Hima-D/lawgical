@@ -37,7 +37,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-black text-white py-4 shadow-md">
+    <header className="bg-black text-white py-4 shadow-md relative">
       <div className="max-w-7xl mx-auto flex justify-between items-center px-6 sm:px-12">
         {/* Logo */}
         <div className="flex items-center gap-4">
@@ -47,6 +47,7 @@ const Header = () => {
             width={150}
             height={40}
             priority
+            className="transition-transform transform hover:scale-105 duration-300"
           />
         </div>
 
@@ -55,32 +56,32 @@ const Header = () => {
           <ul className="flex gap-8">
             {/* Home */}
             <li>
-              <Link href="/" className="hover:text-gray-300 transition-colors duration-300 ease-in-out">
+              <Link href="/" className="hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">
                 Home
               </Link>
             </li>
 
             {/* Services with Hover Dropdown */}
             <li className="relative group">
-              <Link href="#" className="hover:text-gray-300 transition-colors duration-300 ease-in-out">
+              <Link href="#" className="hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">
                 Services
               </Link>
-              <div className="absolute left-0 hidden bg-primary text-white py-2 px-4 w-48 group-hover:block shadow-lg rounded-lg">
+              <div className="absolute left-0 hidden bg-gradient-to-t from-black via-gray-800 to-black text-white py-3 px-6 w-56 group-hover:block shadow-xl rounded-lg transition-all duration-300 ease-in-out transform scale-95 group-hover:scale-100">
                 <ul>
                   <li>
-                    <Link href="/posco" className="block py-2 hover:text-gray-300">POSCO (Prevention of Sexual Offenses)</Link>
+                    <Link href="/posco" className="block py-2 hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">POSCO (Prevention of Sexual Offenses)</Link>
                   </li>
                   <li>
-                    <Link href="/posh" className="block py-2 hover:text-gray-300">POSH (Prevention of Sexual Harassment)</Link>
+                    <Link href="/posh" className="block py-2 hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">POSH (Prevention of Sexual Harassment)</Link>
                   </li>
                   <li>
-                    <Link href="/corporate-law" className="block py-2 hover:text-gray-300">Corporate Law</Link>
+                    <Link href="/corporate-law" className="block py-2 hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">Corporate Law</Link>
                   </li>
                   <li>
-                    <Link href="/litigation" className="block py-2 hover:text-gray-300">Litigation Services</Link>
+                    <Link href="/litigation" className="block py-2 hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">Litigation Services</Link>
                   </li>
                   <li>
-                    <Link href="/contract-law" className="block py-2 hover:text-gray-300">Contract Law</Link>
+                    <Link href="/contract-law" className="block py-2 hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">Contract Law</Link>
                   </li>
                 </ul>
               </div>
@@ -88,7 +89,7 @@ const Header = () => {
 
             {/* Book Service */}
             <li>
-              <Link href="/bookservice" className="hover:text-gray-300 transition-colors duration-300 ease-in-out">
+              <Link href="/bookservice" className="hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">
                 Book Service
               </Link>
             </li>
@@ -97,7 +98,7 @@ const Header = () => {
             <li>
               <Link
                 href="/signup"
-                className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 ease-in-out"
+                className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 ease-in-out transform hover:scale-105"
               >
                 Get Started
               </Link>
@@ -111,13 +112,13 @@ const Header = () => {
               placeholder="Search..."
               value={searchQuery}
               onChange={handleSearchChange}
-              className="bg-white text-black py-2 px-4 rounded-lg shadow-md w-48 sm:w-72 transition-all duration-300 ease-in-out"
+              className="bg-white text-black py-2 px-4 rounded-lg shadow-md w-48 sm:w-72 transition-all duration-300 ease-in-out transform hover:scale-105"
             />
             <button
               type="submit"
               className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <svg className="w-6 h-6 transition-all duration-300 ease-in-out transform hover:scale-105" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 3a8 8 0 100 16 8 8 0 000-16zm0 3a5 5 0 110 10 5 5 0 010-10zm8 9l-4.35-4.35"></path>
               </svg>
             </button>
@@ -128,7 +129,7 @@ const Header = () => {
             <div className="absolute mt-2 bg-white text-black rounded-lg shadow-lg w-72 z-10">
               <ul className="max-h-60 overflow-y-auto">
                 {searchResults.map((result, index) => (
-                  <li key={index} className="py-2 px-4 hover:bg-gray-200 cursor-pointer">
+                  <li key={index} className="py-2 px-4 hover:bg-gray-200 cursor-pointer transition-all duration-300 ease-in-out transform hover:scale-105">
                     <Link href={`/search-results?query=${result}`} className="block">
                       {result}
                     </Link>
@@ -145,7 +146,7 @@ const Header = () => {
         <button
           aria-label="Menu"
           onClick={toggleMenu}
-          className="text-white"
+          className="text-white transition-transform transform hover:scale-105 duration-300"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -155,38 +156,38 @@ const Header = () => {
 
       {/* Mobile Menu - Toggle visibility */}
       {isMenuOpen && (
-        <div className="sm:hidden bg-black text-white py-4 px-6">
+        <div className="sm:hidden bg-black text-white py-4 px-6 transform transition-all duration-300 ease-in-out">
           <ul className="space-y-4">
             <li>
-              <Link href="/" className="hover:text-gray-300 transition-colors duration-300 ease-in-out">Home</Link>
+              <Link href="/" className="hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">Home</Link>
             </li>
             <li>
-              <Link href="/bookservice" className="hover:text-gray-300 transition-colors duration-300 ease-in-out">Book Service</Link>
+              <Link href="/bookservice" className="hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">Book Service</Link>
             </li>
             <li>
-              <Link href="/signup" className="block py-2 text-center bg-transparent border-2 border-white text-white rounded-full hover:bg-gray-700 transition-colors duration-300 ease-in-out">Get Started</Link>
+              <Link href="/signup" className="block py-2 text-center bg-transparent border-2 border-white text-white rounded-full hover:bg-gray-700 transition-all duration-300 ease-in-out transform hover:scale-105">Get Started</Link>
             </li>
             {/* Mobile Services */}
             <li className="relative group">
-              <Link href="#" className="hover:text-gray-300 transition-colors duration-300 ease-in-out">
+              <Link href="#" className="hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">
                 Services
               </Link>
-              <div className="absolute left-0 hidden bg-primary text-white py-2 px-4 w-48 group-hover:block shadow-lg rounded-lg">
+              <div className="absolute left-0 hidden bg-gradient-to-t from-black via-gray-800 to-black text-white py-3 px-6 w-56 group-hover:block shadow-xl rounded-lg transform transition-all duration-300 ease-in-out scale-95 group-hover:scale-100">
                 <ul>
                   <li>
-                    <Link href="/posco" className="block py-2 hover:text-gray-300">POSCO (Prevention of Sexual Offenses)</Link>
+                    <Link href="/posco" className="block py-2 hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">POSCO (Prevention of Sexual Offenses)</Link>
                   </li>
                   <li>
-                    <Link href="/posh" className="block py-2 hover:text-gray-300">POSH (Prevention of Sexual Harassment)</Link>
+                    <Link href="/posh" className="block py-2 hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">POSH (Prevention of Sexual Harassment)</Link>
                   </li>
                   <li>
-                    <Link href="/corporate-law" className="block py-2 hover:text-gray-300">Corporate Law</Link>
+                    <Link href="/corporate-law" className="block py-2 hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">Corporate Law</Link>
                   </li>
                   <li>
-                    <Link href="/litigation" className="block py-2 hover:text-gray-300">Litigation Services</Link>
+                    <Link href="/litigation" className="block py-2 hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">Litigation Services</Link>
                   </li>
                   <li>
-                    <Link href="/contract-law" className="block py-2 hover:text-gray-300">Contract Law</Link>
+                    <Link href="/contract-law" className="block py-2 hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">Contract Law</Link>
                   </li>
                 </ul>
               </div>

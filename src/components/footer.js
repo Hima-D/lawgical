@@ -1,10 +1,52 @@
-
 "use client";
 import Link from 'next/link';
 import { FaLinkedin, FaTwitter, FaFacebook } from 'react-icons/fa'; // Import icons
 import Image from 'next/image';
+import { useState } from 'react';
 
 const Footer = () => {
+  const [email, setEmail] = useState('');
+  const [statusMessage, setStatusMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  // Handle newsletter subscription
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setStatusMessage('');
+
+    // Basic email validation
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setStatusMessage('Please enter a valid email address.');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      // Simulate sending the email to the backend or a service
+      // Replace with your actual service logic
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setStatusMessage('Subscription successful!');
+        setEmail('');
+      } else {
+        setStatusMessage(data.error || 'Something went wrong, please try again.');
+      }
+    } catch (error) {
+      setStatusMessage('Failed to subscribe. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <footer className="bg-primary text-white py-12">
       <div className="max-w-7xl mx-auto px-6 sm:px-12">
@@ -37,7 +79,7 @@ const Footer = () => {
         {/* Footer Links Section */}
         <div className="grid sm:grid-cols-4 gap-12 mb-8 text-sm text-gray-400">
           <div>
-            <h4 className="text-white font-semibold mb-4">Company</h4>
+            <h4 className="text-white font-semibold mb-4 text-lg">Company</h4>
             <ul>
               <li>
                 <Link href="/aboutus" passHref>
@@ -64,7 +106,7 @@ const Footer = () => {
 
           {/* Lawgical Services Section */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Lawgical Services</h4>
+            <h4 className="text-white font-semibold mb-4 text-lg">Lawgical Services</h4>
             <ul>
               <li>
                 <Link href="/posco" passHref>
@@ -94,9 +136,9 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Additional Links Section */}
+          {/* Resources Section */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Resources</h4>
+            <h4 className="text-white font-semibold mb-4 text-lg">Resources</h4>
             <ul>
               <li>
                 <Link href="/faq" passHref>
@@ -118,21 +160,31 @@ const Footer = () => {
 
           {/* Newsletter Section */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Stay Updated</h4>
+            <h4 className="text-white font-semibold mb-4 text-lg">Stay Updated</h4>
             <p className="mb-4 text-gray-300">Subscribe to our newsletter for legal tips, updates, and more.</p>
-            <form className="flex flex-col sm:flex-row items-center">
+            <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row items-center">
               <input
                 type="email"
                 placeholder="Your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="p-3 rounded-l-md border-none text-black w-72 mb-4 sm:mb-0 sm:w-64"
+                required
+                aria-label="Your email address"
               />
               <button
                 type="submit"
+                disabled={loading}
                 className="bg-secondary text-white py-2 px-6 rounded-r-md hover:bg-secondary-dark transition-colors duration-300 ease-in-out"
               >
-                Subscribe
+                {loading ? 'Subscribing...' : 'Subscribe'}
               </button>
             </form>
+            {statusMessage && (
+              <p className={`mt-2 text-sm ${statusMessage.includes('successful') ? 'text-green-500' : 'text-red-500'}`}>
+                {statusMessage}
+              </p>
+            )}
           </div>
         </div>
 
