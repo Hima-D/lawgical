@@ -121,7 +121,14 @@ const Contact = () => {
             </div>
           </form>
 
-          {status && (
+          {status === 'Sending...' && (
+            <div className="mt-4 text-center">
+              {/* Tailwind CSS Spinner */}
+              <div className="w-8 h-8 border-4 border-t-4 border-white border-solid rounded-full animate-spin mx-auto"></div>
+            </div>
+          )}
+
+          {status && status !== 'Sending...' && (
             <div className="mt-4 text-center text-lg">
               <p>{status}</p>
             </div>
