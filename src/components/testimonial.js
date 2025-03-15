@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 const Testimonial = ({ testimonial, authorName, authorPosition, authorImage }) => {
   return (
-    <div className="bg-gradient-to-r from-indigo-500 to-blue-600 text-white p-8 rounded-xl shadow-lg hover:scale-105 hover:shadow-2xl transition-all duration-300 ease-in-out flex flex-col items-center">
+    <div className="bg-gradient-to-r from-[#1f1f1f] to-[#333333] text-white p-8 rounded-xl shadow-lg hover:scale-105 hover:shadow-2xl transition-all duration-300 ease-in-out flex flex-col items-center">
       <blockquote className="text-lg sm:text-xl italic text-gray-200 mb-8 text-center leading-relaxed">
         <span className="block mb-4">"</span>
         {testimonial}
