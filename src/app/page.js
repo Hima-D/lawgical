@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/header";
@@ -9,7 +9,7 @@ import Services from "@/components/service"; // Import the Services component
 
 export default function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  
+
   // Updated list of 9 Testimonials (including Indian professionals)
   const testimonials = [
     {
@@ -84,6 +84,16 @@ export default function Home() {
   const prevTestimonial = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length);
   };
+
+  // Auto Slide Functionality
+  useEffect(() => {
+    const interval = setInterval(() => {
+      nextTestimonial();
+    }, 5000); // Change every 5 seconds
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-black text-white">
@@ -165,13 +175,14 @@ export default function Home() {
               style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
               {testimonials.map((testimonial, index) => (
-                <Testimonial
-                  key={index}
-                  testimonial={testimonial.testimonial}
-                  authorName={testimonial.authorName}
-                  authorPosition={testimonial.authorPosition}
-                  authorImage={testimonial.authorImage}
-                />
+                <div key={index} className="w-full flex-shrink-0">
+                  <Testimonial
+                    testimonial={testimonial.testimonial}
+                    authorName={testimonial.authorName}
+                    authorPosition={testimonial.authorPosition}
+                    authorImage={testimonial.authorImage}
+                  />
+                </div>
               ))}
             </div>
 
