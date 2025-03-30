@@ -1,6 +1,6 @@
 "use client";
 import Link from 'next/link';
-import { FaLinkedin, FaTwitter, FaFacebook, FaInstagram, FaPhone, FaEnvelope, FaMapMarkerAlt, FaArrowRight } from 'react-icons/fa';
+import { FaLinkedin, FaTwitter, FaFacebook, FaInstagram, FaArrowRight } from 'react-icons/fa';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -70,25 +70,6 @@ const Footer = () => {
             <p className="mt-4 text-gray-300 max-w-md">
               Expert legal services focused on transparency, ethics, and client success.
             </p>
-          </div>
-
-          {/* Contact Information */}
-          <div className="mt-8 md:mt-0">
-            <h4 className="text-lg font-bold mb-4">Contact Us</h4>
-            <div className="space-y-3">
-              <a href="tel:+911234567890" className="flex items-center text-gray-300 hover:text-blue-400 transition-colors duration-300">
-                <FaPhone className="mr-3" size={16} />
-                <span>+91 1234 567 890</span>
-              </a>
-              <a href="mailto:contact@lawgical.com" className="flex items-center text-gray-300 hover:text-blue-400 transition-colors duration-300">
-                <FaEnvelope className="mr-3" size={16} />
-                <span>contact@lawgical.com</span>
-              </a>
-              <div className="flex items-start text-gray-300">
-                <FaMapMarkerAlt className="mr-3 mt-1" size={16} />
-                <span>123 Legal Avenue, Bangalore, Karnataka 560001</span>
-              </div>
-            </div>
           </div>
 
           {/* Social Media Links */}
