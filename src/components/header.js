@@ -14,11 +14,18 @@ const Header = () => {
   // Close menus when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
+      // Check if the click was outside the menu and menu is open
+      if (mobileMenuRef.current && 
+          !mobileMenuRef.current.contains(event.target) && 
+          !event.target.closest('button[aria-label]')) {
         setIsMenuOpen(false);
         setIsMobileServicesOpen(false);
       }
-      if (searchResultsRef.current && !searchResultsRef.current.contains(event.target)) {
+      
+      // Check if click was outside search results
+      if (searchResultsRef.current && 
+          !searchResultsRef.current.contains(event.target) && 
+          !event.target.closest('form')) {
         setSearchResults([]);
       }
     }
@@ -27,14 +34,19 @@ const Header = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Handle menu functions
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+    setIsMobileServicesOpen(false); // Also close the services submenu
+  };
   const toggleMobileServices = () => setIsMobileServicesOpen(!isMobileServicesOpen);
 
   // Handle search input change
   const handleSearchChange = (e) => setSearchQuery(e.target.value);
 
   // Simulating a search function
-  const handleSearchSubmit = async (e) => {
+  const handleSearchSubmit = (e) => {
     e.preventDefault();
     
     if (searchQuery.trim() === '') {
@@ -65,20 +77,27 @@ const Header = () => {
     { name: 'Contract Law', href: '/contract-law' },
   ];
 
+  // Close menu when route changes
+  const handleLinkClick = () => {
+    closeMenu();
+  };
+
   return (
-    <header className="bg-black text-white py-4 shadow-md relative">
+    <header className="bg-black text-white py-4 shadow-md relative z-40">
       <div className="max-w-7xl mx-auto flex justify-between items-center px-6 sm:px-12">
         {/* Logo */}
         <div className="flex items-center gap-4">
-          <Link href="/">
-            <Image
-              src="/next.svg"  // Update with your actual logo path
-              alt="Lawgical"
-              width={150}
-              height={40}
-              priority
-              className="transition-transform transform hover:scale-105 duration-300"
-            />
+          <Link href="/" onClick={handleLinkClick}>
+            <div className="h-10 w-32 relative">
+              <Image
+                src="/logo.png"  // Update with your actual logo path
+                alt="Lawgical"
+                fill
+                style={{ objectFit: 'contain' }}
+                priority
+                className="transition-transform transform hover:scale-105 duration-300"
+              />
+            </div>
           </Link>
         </div>
 
@@ -149,7 +168,7 @@ const Header = () => {
                 className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black"
               >
                 <svg className="w-6 h-6 transition-all duration-300 ease-in-out" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 3a8 8 0 100 16 8 8 0 000-16zm0 3a5 5 0 110 10 5 5 0 010-10zm8 9l-4.35-4.35"></path>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
               </button>
             </form>
@@ -174,10 +193,10 @@ const Header = () => {
           </div>
         </nav>
 
-        {/* Mobile Menu Button (Hamburger) */}
+        {/* Mobile Menu Button (Hamburger/Close) */}
         <div className="sm:hidden">
           <button
-            aria-label="Menu"
+            aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
             onClick={toggleMenu}
             className="text-white p-2 transition-transform transform hover:scale-105 duration-300"
           >
@@ -216,7 +235,7 @@ const Header = () => {
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 3a8 8 0 100 16 8 8 0 000-16zm0 3a5 5 0 110 10 5 5 0 010-10zm8 9l-4.35-4.35"></path>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
               </button>
             </form>
@@ -227,7 +246,11 @@ const Header = () => {
                 <ul className="max-h-60 overflow-y-auto">
                   {searchResults.map((result, index) => (
                     <li key={index} className="py-3 px-4 hover:bg-gray-200 cursor-pointer border-b border-gray-200 last:border-b-0">
-                      <Link href={`/search-results?query=${encodeURIComponent(result)}`} className="block">
+                      <Link 
+                        href={`/search-results?query=${encodeURIComponent(result)}`} 
+                        className="block"
+                        onClick={handleLinkClick}
+                      >
                         {result}
                       </Link>
                     </li>
@@ -243,7 +266,7 @@ const Header = () => {
                   <Link 
                     href="/" 
                     className="block py-3 px-4 hover:bg-gray-800 rounded-lg transition-all duration-300"
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={handleLinkClick}
                   >
                     Home
                   </Link>
@@ -275,7 +298,7 @@ const Header = () => {
                           <Link 
                             href={service.href} 
                             className="block py-2 px-3 hover:bg-gray-800 rounded-lg transition-all duration-300"
-                            onClick={() => setIsMenuOpen(false)}
+                            onClick={handleLinkClick}
                           >
                             {service.name}
                           </Link>
@@ -289,7 +312,7 @@ const Header = () => {
                   <Link 
                     href="/bookservice" 
                     className="block py-3 px-4 hover:bg-gray-800 rounded-lg transition-all duration-300"
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={handleLinkClick}
                   >
                     Book Service
                   </Link>
@@ -299,7 +322,7 @@ const Header = () => {
                   <Link 
                     href="/signup"
                     className="block py-3 text-center bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300"
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={handleLinkClick}
                   >
                     Get Started
                   </Link>
