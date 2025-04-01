@@ -1,7 +1,6 @@
 "use client";
 import Link from 'next/link';
 import { FaLinkedin, FaTwitter, FaFacebook, FaInstagram, FaArrowRight } from 'react-icons/fa';
-import Image from 'next/image';
 import { useState } from 'react';
 
 const Footer = () => {
@@ -58,16 +57,11 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center mb-12 border-b border-gray-800 pb-8">
           <div>
             <Link href="/">
-              <Image 
-                src="/next.svg" 
-                alt="Lawgical"
-                width={140}
-                height={50}
-                priority
-                className="invert"
-              />
+              <h2 className="text-3xl font-bold text-white">
+                <span className="text-blue-400">Law</span>gical
+              </h2>
             </Link>
-            <p className="mt-4 text-gray-300 max-w-md">
+            <p className="mt-4 text-white max-w-md">
               Expert legal services focused on transparency, ethics, and client success.
             </p>
           </div>
@@ -76,19 +70,21 @@ const Footer = () => {
           <div className="mt-8 md:mt-0">
             <h4 className="text-lg font-bold mb-4 text-center md:text-right">Connect With Us</h4>
             <div className="flex gap-4">
-              {['linkedin', 'twitter', 'facebook', 'instagram'].map((platform) => (
+              {[
+                { platform: 'linkedin', icon: <FaLinkedin size={18} />, color: 'hover:bg-gray-700' },
+                { platform: 'twitter', icon: <FaTwitter size={18} />, color: 'hover:bg-gray-700' },
+                { platform: 'facebook', icon: <FaFacebook size={18} />, color: 'hover:bg-gray-700' },
+                { platform: 'instagram', icon: <FaInstagram size={18} />, color: 'hover:bg-gray-700' }
+              ].map((item) => (
                 <a
-                  key={platform}
-                  href={`https://${platform}.com`}
+                  key={item.platform}
+                  href={`https://${item.platform}.com`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={platform}
-                  className="bg-gray-800 p-3 rounded-full hover:bg-blue-600 transition-all duration-300"
+                  aria-label={item.platform}
+                  className={`bg-gray-900 p-3 rounded-full ${item.color} transition-all duration-300`}
                 >
-                  {platform === 'linkedin' && <FaLinkedin size={18} />}
-                  {platform === 'twitter' && <FaTwitter size={18} />}
-                  {platform === 'facebook' && <FaFacebook size={18} />}
-                  {platform === 'instagram' && <FaInstagram size={18} />}
+                  {item.icon}
                 </a>
               ))}
             </div>
@@ -105,9 +101,9 @@ const Footer = () => {
                 <li key={link.name}>
                   <Link 
                     href={link.href} 
-                    className="text-gray-300 hover:text-blue-400 transition-colors duration-300"
+                    className="text-white hover:text-gray-300 transition-colors duration-300 flex items-center"
                   >
-                    › {link.name}
+                    <span className="mr-2 text-white">›</span> {link.name}
                   </Link>
                 </li>
               ))}
@@ -122,9 +118,9 @@ const Footer = () => {
                 <li key={service.name}>
                   <Link 
                     href={service.href}
-                    className="text-gray-300 hover:text-blue-400 transition-colors duration-300"
+                    className="text-white hover:text-gray-300 transition-colors duration-300 flex items-center"
                   >
-                    › {service.name}
+                    <span className="mr-2 text-white">›</span> {service.name}
                   </Link>
                 </li>
               ))}
@@ -139,9 +135,9 @@ const Footer = () => {
                 <li key={link.name}>
                   <Link 
                     href={link.href}
-                    className="text-gray-300 hover:text-blue-400 transition-colors duration-300"
+                    className="text-white hover:text-gray-300 transition-colors duration-300 flex items-center"
                   >
-                    › {link.name}
+                    <span className="mr-2 text-white">›</span> {link.name}
                   </Link>
                 </li>
               ))}
@@ -151,21 +147,23 @@ const Footer = () => {
           {/* Newsletter Section */}
           <div>
             <h4 className="text-lg font-bold mb-6 pb-2 border-b border-gray-800">Stay Updated</h4>
-            <div className="bg-gray-900 p-5 rounded-lg">
-              <p className="mb-4 text-gray-300">Subscribe to our newsletter for legal tips, updates, and exclusive insights.</p>
+            <div className="bg-gray-900 p-5 rounded-lg shadow-lg">
+              <p className="mb-4 text-white">Subscribe to our newsletter for legal tips, updates, and exclusive insights.</p>
               <form onSubmit={handleSubscribe} className="space-y-3">
-                <input
-                  type="email"
-                  placeholder="Your email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full p-3 pl-4 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type="email"
+                    placeholder="Your email address"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full p-3 pl-4 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    required
+                  />
+                </div>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-blue-600 py-3 rounded-md flex items-center justify-center transition-colors duration-300 hover:bg-blue-700"
+                  className="w-full bg-white text-black py-3 rounded-md flex items-center justify-center transition-colors duration-300 hover:bg-gray-200 font-medium"
                 >
                   {loading ? (
                     <span className="animate-pulse">Subscribing...</span>
@@ -196,7 +194,7 @@ const Footer = () => {
                 <Link 
                   key={item}
                   href={`/${item.toLowerCase().replace(/ /g, '-')}`} 
-                  className="text-gray-400 hover:text-blue-400 text-sm transition-colors duration-300"
+                  className="text-gray-400 hover:text-white text-sm transition-colors duration-300"
                 >
                   {item}
                 </Link>

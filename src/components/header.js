@@ -1,15 +1,11 @@
 "use client";
 import Link from 'next/link';
-import Image from 'next/image';
 import { useState, useRef, useEffect } from 'react';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
   const mobileMenuRef = useRef(null);
-  const searchResultsRef = useRef(null);
 
   // Close menus when clicking outside
   useEffect(() => {
@@ -20,13 +16,6 @@ const Header = () => {
           !event.target.closest('button[aria-label]')) {
         setIsMenuOpen(false);
         setIsMobileServicesOpen(false);
-      }
-      
-      // Check if click was outside search results
-      if (searchResultsRef.current && 
-          !searchResultsRef.current.contains(event.target) && 
-          !event.target.closest('form')) {
-        setSearchResults([]);
       }
     }
 
@@ -41,32 +30,6 @@ const Header = () => {
     setIsMobileServicesOpen(false); // Also close the services submenu
   };
   const toggleMobileServices = () => setIsMobileServicesOpen(!isMobileServicesOpen);
-
-  // Handle search input change
-  const handleSearchChange = (e) => setSearchQuery(e.target.value);
-
-  // Simulating a search function
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    
-    if (searchQuery.trim() === '') {
-      setSearchResults([]);
-      return;
-    }
-
-    // Simulating search results
-    const simulatedResults = [
-      'Corporate Law Guide',
-      'POCSO Legal Procedures',
-      'POSH Workplace Guidelines',
-      'Contract Law Best Practices',
-      'Litigation Services Overview',
-    ].filter((result) =>
-      result.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-    setSearchResults(simulatedResults);
-  };
 
   // Services list - centralized for reuse
   const servicesList = [
@@ -85,25 +48,18 @@ const Header = () => {
   return (
     <header className="bg-black text-white py-4 shadow-md relative z-40">
       <div className="max-w-7xl mx-auto flex justify-between items-center px-6 sm:px-12">
-        {/* Logo */}
+        {/* Text Logo */}
         <div className="flex items-center gap-4">
           <Link href="/" onClick={handleLinkClick}>
-            <div className="h-10 w-32 relative">
-              <Image
-                src="/logo.png"  // Update with your actual logo path
-                alt="Lawgical"
-                fill
-                style={{ objectFit: 'contain' }}
-                priority
-                className="transition-transform transform hover:scale-105 duration-300"
-              />
-            </div>
+            <h2 className="text-3xl font-bold text-white">
+              <span className="text-blue-400">Law</span>gical
+            </h2>
           </Link>
         </div>
 
-        {/* Navigation Links, Search, and Get Started Button */}
+        {/* Navigation Links */}
         <nav className="hidden sm:flex items-center gap-8 text-lg font-semibold">
-          <ul className="flex gap-8">
+          <ul className="flex gap-8 items-center">
             {/* Home */}
             <li>
               <Link href="/" className="hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">
@@ -135,62 +91,20 @@ const Header = () => {
               </div>
             </li>
 
+            {/* Team - Added as requested */}
+            <li>
+              <Link href="/team" className="hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">
+                Team
+              </Link>
+            </li>
+
             {/* Book Service */}
             <li>
               <Link href="/bookservice" className="hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">
                 Book Service
               </Link>
             </li>
-
-            {/* Get Started Button */}
-            <li>
-              <Link
-                href="/signup"
-                className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 ease-in-out transform hover:scale-105"
-              >
-                Get Started
-              </Link>
-            </li>
           </ul>
-
-          {/* Search Bar */}
-          <div className="relative ml-6">
-            <form onSubmit={handleSearchSubmit} className="flex items-center">
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-                className="bg-white text-black py-2 px-4 rounded-lg shadow-md w-48 sm:w-72 transition-all duration-300 ease-in-out"
-              />
-              <button
-                type="submit"
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black"
-              >
-                <svg className="w-6 h-6 transition-all duration-300 ease-in-out" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
-              </button>
-            </form>
-
-            {/* Search Results Dropdown */}
-            {searchResults.length > 0 && (
-              <div 
-                ref={searchResultsRef}
-                className="absolute top-full mt-2 bg-white text-black rounded-lg shadow-lg w-full z-10"
-              >
-                <ul className="max-h-60 overflow-y-auto">
-                  {searchResults.map((result, index) => (
-                    <li key={index} className="py-2 px-4 hover:bg-gray-200 cursor-pointer transition-all duration-300 ease-in-out">
-                      <Link href={`/search-results?query=${encodeURIComponent(result)}`} className="block">
-                        {result}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
         </nav>
 
         {/* Mobile Menu Button (Hamburger/Close) */}
@@ -221,44 +135,6 @@ const Header = () => {
           style={{ top: '76px' }} // Adjust based on your header height
         >
           <div className="px-6 py-6 flex flex-col gap-6">
-            {/* Mobile Search */}
-            <form onSubmit={handleSearchSubmit} className="flex items-center relative">
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-                className="w-full bg-white text-black py-3 px-4 rounded-lg shadow-md"
-              />
-              <button
-                type="submit"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
-              </button>
-            </form>
-
-            {/* Search Results */}
-            {searchResults.length > 0 && (
-              <div className="bg-white text-black rounded-lg shadow-lg w-full">
-                <ul className="max-h-60 overflow-y-auto">
-                  {searchResults.map((result, index) => (
-                    <li key={index} className="py-3 px-4 hover:bg-gray-200 cursor-pointer border-b border-gray-200 last:border-b-0">
-                      <Link 
-                        href={`/search-results?query=${encodeURIComponent(result)}`} 
-                        className="block"
-                        onClick={handleLinkClick}
-                      >
-                        {result}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
             {/* Navigation Links */}
             <nav className="text-white font-medium">
               <ul className="space-y-4">
@@ -308,6 +184,17 @@ const Header = () => {
                   )}
                 </li>
                 
+                {/* Team - Added to mobile menu */}
+                <li>
+                  <Link 
+                    href="/team" 
+                    className="block py-3 px-4 hover:bg-gray-800 rounded-lg transition-all duration-300"
+                    onClick={handleLinkClick}
+                  >
+                    Team
+                  </Link>
+                </li>
+                
                 <li>
                   <Link 
                     href="/bookservice" 
@@ -315,16 +202,6 @@ const Header = () => {
                     onClick={handleLinkClick}
                   >
                     Book Service
-                  </Link>
-                </li>
-                
-                <li className="pt-4">
-                  <Link 
-                    href="/signup"
-                    className="block py-3 text-center bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300"
-                    onClick={handleLinkClick}
-                  >
-                    Get Started
                   </Link>
                 </li>
               </ul>
