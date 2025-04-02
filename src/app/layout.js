@@ -3,6 +3,7 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { ThemeProvider } from "@/components/theme-provider";
 
 
 // Google Fonts
@@ -107,8 +108,14 @@ export default function RootLayout({ children }) {
         <SpeedInsights />
         {/* Add Google Analytics */}
         <GoogleAnalytics gaId="G-4H1WL5DLNM" />
-        
-        {children}
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
       </body>
     </html>
   );
