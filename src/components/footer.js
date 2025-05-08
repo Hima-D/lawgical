@@ -71,14 +71,14 @@ const Footer = () => {
             <h4 className="text-lg font-bold mb-4 text-center md:text-right">Connect With Us</h4>
             <div className="flex gap-4">
               {[
-                { platform: 'linkedin', icon: <FaLinkedin size={18} />, color: 'hover:bg-gray-700' },
-                { platform: 'twitter', icon: <FaTwitter size={18} />, color: 'hover:bg-gray-700' },
-                { platform: 'facebook', icon: <FaFacebook size={18} />, color: 'hover:bg-gray-700' },
-                { platform: 'instagram', icon: <FaInstagram size={18} />, color: 'hover:bg-gray-700' }
+                { platform: 'linkedin', icon: <FaLinkedin size={18} />, color: 'hover:bg-gray-700', url: 'https://www.linkedin.com/company/lawkaro/' },
+                { platform: 'twitter', icon: <FaTwitter size={18} />, color: 'hover:bg-gray-700', url: 'https://twitter.com' },
+                { platform: 'facebook', icon: <FaFacebook size={18} />, color: 'hover:bg-gray-700', url: 'https://facebook.com' },
+                { platform: 'instagram', icon: <FaInstagram size={18} />, color: 'hover:bg-gray-700', url: 'https://instagram.com' }
               ].map((item) => (
                 <a
                   key={item.platform}
-                  href={`https://${item.platform}.com`}
+                  href={item.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={item.platform}
