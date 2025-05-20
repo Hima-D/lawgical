@@ -8,57 +8,58 @@ import { UserCircleIcon, X, ChevronRight, Calendar, Mail, Phone } from 'lucide-r
 const teamMembers = [
   {
     id: 1,
-    name: "John Doe",
+    name: "Rajesh Sharma",
     title: "Senior Partner",
     specialty: "Corporate Law",
-    description: "John is an experienced corporate lawyer with over 15 years of experience handling mergers, acquisitions, and corporate compliance.",
-    education: "J.D., Harvard Law School",
-    barAdmissions: ["New York", "California"],
+    description: "Rajesh is an experienced corporate lawyer with over 20 years of experience handling mergers, acquisitions, and corporate compliance.",
+    education: "LL.B., National Law School of India University (NLSIU), Bangalore",
+    barAdmissions: ["Delhi High Court", "Supreme Court of India"],
     contactInfo: {
-      email: "john.doe@lawfirm.com",
-      phone: "(555) 123-4567"
+      email: "rajesh.sharma@lawgical.io",
+      phone: "+91 9876543210"
     }
   },
   {
     id: 2,
-    name: "Jane Smith",
+    name: "Anjali Menon",
     title: "Associate Attorney",
     specialty: "Criminal Defense",
-    description: "Jane specializes in criminal defense and has successfully defended clients in numerous high-profile cases.",
-    education: "J.D., Yale Law School",
-    barAdmissions: ["Pennsylvania", "New Jersey"],
+    description: "Anjali specializes in criminal defense and has successfully defended clients in several high-profile cases.",
+    education: "LL.B., Gujarat National Law University (GNLU), Gandhinagar",
+    barAdmissions: ["Kerala High Court", "Madras High Court"],
     contactInfo: {
-      email: "jane.smith@lawfirm.com",
-      phone: "(555) 234-5678"
+      email: "anjali.menon@lawgical.io",
+      phone: "+91 9876543211"
     }
   },
   {
     id: 3,
-    name: "Michael Brown",
+    name: "Vikram Iyer",
     title: "Legal Consultant",
     specialty: "Family Law",
-    description: "Michael offers expert legal consultation on family law matters, including divorce and child custody.",
-    education: "J.D., Stanford Law School",
-    barAdmissions: ["Texas", "Florida"],
+    description: "Vikram offers expert legal consultation on family law matters, including divorce and child custody.",
+    education: "LL.M., Faculty of Law, University of Delhi",
+    barAdmissions: ["Bombay High Court", "Karnataka High Court"],
     contactInfo: {
-      email: "michael.brown@lawfirm.com",
-      phone: "(555) 345-6789"
+      email: "vikram.iyer@lawgical.io",
+      phone: "+91 9876543212"
     }
   },
   {
     id: 4,
-    name: "Emily White",
+    name: "Sneha Patel",
     title: "Managing Partner",
     specialty: "Intellectual Property",
-    description: "Emily provides legal counsel on intellectual property rights, patents, and trademarks.",
-    education: "J.D., Columbia Law School",
-    barAdmissions: ["Washington", "Oregon"],
+    description: "Sneha provides legal counsel on intellectual property rights, patents, and trademarks.",
+    education: "LL.M., Indian Law Institute (ILI), New Delhi",
+    barAdmissions: ["Gujarat High Court", "Delhi High Court"],
     contactInfo: {
-      email: "emily.white@lawfirm.com",
-      phone: "(555) 456-7890"
+      email: "sneha.patel@lawgical.io",
+      phone: "+91 9876543213"
     }
   },
 ];
+
 
 const Team = () => {
   const [selectedMember, setSelectedMember] = React.useState(null);
