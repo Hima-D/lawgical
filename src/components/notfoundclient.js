@@ -5,365 +5,174 @@ import Footer from '@/components/footer';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 export default function NotFoundClient() {
   const router = useRouter();
-  const [countdown, setCountdown] = useState(15);
-  const [isRedirecting, setIsRedirecting] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [countdown, setCountdown] = useState(10);
   
-  // Track mouse movement for interactive effects
+  // Automatically redirect after countdown
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({ 
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100
-      });
-    };
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-  
-  // Enhanced countdown with redirect state
-  useEffect(() => {
-    if (countdown === 0) {
-      setIsRedirecting(true);
-      setTimeout(() => router.push('/'), 500);
-      return;
-    }
-    
-    const timer = setInterval(() => {
-      setCountdown(prev => prev - 1);
+    const timer = countdown > 0 && setInterval(() => {
+      setCountdown(countdown - 1);
     }, 1000);
+    
+    if (countdown === 0) {
+      router.push('/');
+    }
     
     return () => clearInterval(timer);
   }, [countdown, router]);
 
-  // Advanced animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
+  // Animation variants
+  const fadeIn = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i) => ({
       opacity: 1,
-      transition: {
-        delayChildren: 0.3,
-        staggerChildren: 0.15
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 30, opacity: 0 },
-    visible: {
       y: 0,
-      opacity: 1,
       transition: {
-        type: "spring",
-        damping: 12,
-        stiffness: 100
+        delay: i * 0.2,
+        duration: 0.8,
+        ease: "easeOut"
       }
-    }
-  };
-
-  const floatingVariants = {
-    animate: {
-      y: [-20, 20, -20],
-      rotate: [-5, 5, -5],
-      transition: {
-        duration: 6,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }
-  };
-
-  const glitchVariants = {
-    animate: {
-      x: [0, -2, 2, 0],
-      textShadow: [
-        "0 0 0 transparent",
-        "2px 0 0 #ff0000, -2px 0 0 #00ff00",
-        "-2px 0 0 #ff0000, 2px 0 0 #00ff00",
-        "0 0 0 transparent"
-      ],
-      transition: {
-        duration: 0.5,
-        repeat: Infinity,
-        repeatDelay: 3
-      }
-    }
+    })
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white overflow-hidden relative">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Gradient orbs */}
-        <motion.div 
-          className="absolute w-96 h-96 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-full blur-3xl"
-          style={{
-            left: `${mousePosition.x * 0.02}%`,
-            top: `${mousePosition.y * 0.02}%`,
-          }}
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.6, 0.3]
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div 
-          className="absolute w-64 h-64 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-full blur-2xl right-0 bottom-0"
-          style={{
-            right: `${mousePosition.x * 0.01}%`,
-            bottom: `${mousePosition.y * 0.01}%`,
-          }}
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.2, 0.4, 0.2]
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        
-        {/* Floating particles */}
-        {Array.from({ length: 20 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-white/30 rounded-full"
-            initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
-            }}
-            animate={{
-              y: [null, -100],
-              opacity: [0, 1, 0]
-            }}
-            transition={{
-              duration: Math.random() * 3 + 2,
-              repeat: Infinity,
-              delay: Math.random() * 2
-            }}
-          />
-        ))}
-      </div>
-
+    <div className="min-h-screen bg-black text-white flex flex-col">
+      {/* Header Component */}
       <Header />
 
-      <motion.div 
-        className="flex-grow flex items-center justify-center p-4 md:p-8 lg:p-12 relative z-10"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <div className="max-w-6xl mx-auto space-y-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left content */}
-            <motion.div className="space-y-6" variants={itemVariants}>
-              <motion.div className="relative">
-                <motion.h1 
-                  className="text-8xl md:text-9xl font-black bg-gradient-to-r from-white via-gray-300 to-gray-500 bg-clip-text text-transparent leading-none"
-                  variants={glitchVariants}
-                  animate="animate"
-                >
-                  404
-                </motion.h1>
-                <div className="absolute inset-0 text-8xl md:text-9xl font-black text-red-500/20 blur-sm">
-                  404
-                </div>
-              </motion.div>
+      {/* Main content */}
+      <div className="flex-grow flex items-center justify-center p-4 md:p-8 lg:p-12">
+        <div className="max-w-4xl mx-auto space-y-6 text-center">
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center"
+            initial="hidden"
+            animate="visible"
+            variants={fadeIn}
+            custom={0}
+          >
+            <div className="order-2 md:order-1 text-left">
+              <motion.h1 
+                className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent mb-4"
+                variants={fadeIn}
+                custom={1}
+              >
+                404
+              </motion.h1>
               
               <motion.h2 
-                className="text-4xl md:text-5xl font-bold text-transparent bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text"
-                variants={itemVariants}
+                className="text-3xl md:text-4xl font-semibold text-gray-300 mb-6"
+                variants={fadeIn}
+                custom={2}
               >
-                Legal Logic Error
+                Case Logic Error
               </motion.h2>
               
               <motion.p 
-                className="text-xl text-gray-300 leading-relaxed max-w-lg"
-                variants={itemVariants}
+                className="text-lg text-gray-400 mb-8"
+                variants={fadeIn}
+                custom={3}
               >
-                Our advanced legal algorithms have encountered an unexpected case. Even our most experienced digital attorneys couldn't locate this page in our vast legal database.
+                It seems our legal algorithms couldn't find the page you're looking for. No objection needed — our Lawgical team is already investigating this matter.
               </motion.p>
               
               <motion.div
-                className="flex flex-col sm:flex-row gap-4 pt-4"
-                variants={itemVariants}
+                className="flex flex-col sm:flex-row gap-4"
+                variants={fadeIn}
+                custom={4}
               >
-                <Link href="/" className="group relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl">
-                  <span className="relative z-10 flex items-center gap-2">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                    </svg>
-                    Return Home
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <Link href="/" className="bg-gray-700 hover:bg-gray-600 text-white font-medium py-3 px-6 rounded-md transition duration-300 ease-in-out transform hover:-translate-y-1">
+                  Return to Dashboard
                 </Link>
                 
-                <Link href="/search" className="group border-2 border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-semibold py-4 px-8 rounded-lg transition-all duration-300 hover:bg-gray-600/20 backdrop-blur-sm">
-                  <span className="flex items-center gap-2">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    Search Database
-                  </span>
+                <Link href="/search" className="border border-gray-600 text-gray-300 hover:bg-gray-600 hover:text-white font-medium py-3 px-6 rounded-md transition duration-300 ease-in-out">
+                  Search Lawgical Database
                 </Link>
               </motion.div>
               
-              <AnimatePresence>
-                {!isRedirecting ? (
-                  <motion.div
-                    className="flex items-center gap-3 text-gray-400 mt-8"
-                    variants={itemVariants}
-                    exit={{ opacity: 0, y: -20 }}
-                  >
-                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                    <span>Auto-redirecting in</span>
-                    <motion.span 
-                      className="font-bold text-2xl text-white bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"
-                      key={countdown}
-                      initial={{ scale: 1.2 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: "spring" }}
-                    >
-                      {countdown}
-                    </motion.span>
-                    <span>seconds</span>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    className="flex items-center gap-3 text-blue-400 mt-8"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                  >
-                    <div className="w-6 h-6 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
-                    <span className="font-semibold">Redirecting to dashboard...</span>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
+              <motion.p
+                className="mt-6 text-gray-500"
+                variants={fadeIn}
+                custom={5}
+              >
+                Auto-redirecting in <span className="font-bold text-white">{countdown}</span> seconds
+              </motion.p>
+            </div>
             
-            {/* Right illustration */}
             <motion.div 
-              className="relative flex justify-center"
-              variants={floatingVariants}
-              animate="animate"
+              className="order-1 md:order-2 relative"
+              variants={fadeIn}
+              custom={1}
             >
-              <div className="relative w-full max-w-md">
-                <motion.div 
-                  className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-purple-500/30 rounded-full blur-3xl"
-                  animate={{ 
-                    scale: [1, 1.1, 1],
-                    opacity: [0.3, 0.6, 0.3]
-                  }}
-                  transition={{ 
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                />
+              <div className="relative w-full h-64 md:h-96">
                 <Image
                   src="/images/lawgical-error.svg"
-                  alt="Legal Error Illustration"
+                  alt="Lawgical Error Illustration"
                   width={500}
                   height={400}
-                  className="relative z-10 w-full h-auto object-contain drop-shadow-2xl"
+                  className="object-contain"
                   priority
                 />
               </div>
             </motion.div>
-          </div>
+          </motion.div>
           
-          {/* Quick links section */}
           <motion.div 
-            className="mt-20 space-y-8"
-            variants={itemVariants}
+            className="mt-16 border-t border-gray-700 pt-8"
+            variants={fadeIn}
+            custom={6}
           >
-            <div className="text-center">
-              <h3 className="text-2xl font-bold text-white mb-2">Popular Lawgical Resources</h3>
-              <p className="text-gray-400">Get back on track with these frequently accessed tools</p>
-            </div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <h3 className="text-xl font-semibold text-white mb-4">Popular Lawgical Resources</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-center">
               {[
-                { title: "Legal Templates", url: "/templates", icon: "📄" },
-                { title: "Document Analysis", url: "/analysis", icon: "🔍" },
-                { title: "Case Manager", url: "/cases", icon: "📁" },
-                { title: "Attorney Connect", url: "/connect", icon: "🤝" },
-                { title: "Contract Builder", url: "/contracts", icon: "📝" },
-                { title: "Help Center", url: "/help", icon: "💡" }
+                { title: "Legal Templates", url: "/templates" },
+                { title: "Document Analysis", url: "/analysis" },
+                { title: "Case Manager", url: "/cases" },
+                { title: "Attorney Connect", url: "/connect" },
+                { title: "Contract Builder", url: "/contracts" },
+                { title: "Help Center", url: "/help" }
               ].map((link, index) => (
-                <motion.div
+                <Link 
+                  href={link.url} 
                   key={index}
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  whileTap={{ scale: 0.95 }}
+                  className="bg-gray-800 hover:bg-gray-700 p-4 rounded-lg transition duration-300"
                 >
-                  <Link 
-                    href={link.url}
-                    className="block bg-gray-800/50 hover:bg-gray-700/70 backdrop-blur-sm border border-gray-700 hover:border-gray-600 p-6 rounded-xl transition-all duration-300 text-center group"
-                  >
-                    <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">
-                      {link.icon}
-                    </div>
-                    <div className="text-sm font-medium text-gray-300 group-hover:text-white transition-colors">
-                      {link.title}
-                    </div>
-                  </Link>
-                </motion.div>
+                  {link.title}
+                </Link>
               ))}
             </div>
           </motion.div>
           
-          {/* Support section */}
           <motion.div
-            className="mt-16 bg-gradient-to-r from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700 p-8 rounded-2xl"
-            variants={itemVariants}
+            className="mt-12 bg-gray-800 p-6 rounded-lg"
+            variants={fadeIn}
+            custom={7}
           >
-            <div className="text-center mb-6">
-              <h3 className="text-2xl font-bold text-white mb-2">Need Technical Support?</h3>
-              <p className="text-gray-400 max-w-2xl mx-auto">
-                Our dedicated support team is standing by 24/7 to help resolve any technical issues or answer questions about the Lawgical platform.
-              </p>
-            </div>
-            
+            <h3 className="text-xl font-semibold text-white mb-4">Need Assistance with Lawgical?</h3>
+            <p className="text-gray-400 mb-4">
+              Our support team is available to help you navigate any technical issues or questions about the platform.
+            </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <motion.a 
-                href="tel:+18005551234"
-                className="group flex items-center justify-center gap-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <svg className="w-5 h-5 group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <a href="tel:+18005551234" className="flex items-center justify-center gap-2 bg-gray-600 hover:bg-gray-500 text-white py-2 px-4 rounded-md transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
-                24/7 Support Hotline
-              </motion.a>
-              
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link 
-                  href="/support/chat"
-                  className="flex items-center justify-center gap-3 bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                  </svg>
-                  Live Chat Support
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                </Link>
-              </motion.div>
+                Support Hotline
+              </a>
+              <Link href="/support/chat" className="flex items-center justify-center gap-2 bg-gray-600 hover:bg-gray-500 text-white py-2 px-4 rounded-md transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                </svg>
+                Live Chat Support
+              </Link>
             </div>
           </motion.div>
         </div>
-      </motion.div>
+      </div>
 
+      {/* Footer Component */}
       <Footer />
     </div>
   );
