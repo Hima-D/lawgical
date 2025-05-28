@@ -8,6 +8,12 @@ import Testimonial from "@/components/testimonial";
 import Services from "@/components/service";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Clarity from '@microsoft/clarity';
+const projectId = "rqrymu68ha"
+
+Clarity.init(projectId);
+Clarity.consent();
+
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
