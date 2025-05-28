@@ -12,7 +12,6 @@ import Clarity from '@microsoft/clarity';
 const projectId = "rqrymu68ha"
 
 Clarity.init(projectId);
-Clarity.consent();
 
 
 // Register GSAP plugins
