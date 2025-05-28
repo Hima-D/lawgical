@@ -1,12 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import services from "@/components/services";
+import React, { use, useState } from 'react';
 
-// Icons
 import {
   Calendar,
   Clock,
@@ -18,11 +12,20 @@ import {
   CheckCircle,
   ArrowLeft,
   Briefcase,
-  Users
-} from "lucide-react";
+  Users,
+  Home
+} from 'lucide-react';
+
+// Mock services data
+const services = [
+  { id: 'immigration', name: 'Immigration Law', title: 'Immigration Law' },
+  { id: 'corporate', name: 'Corporate Law', title: 'Corporate Law' },
+  { id: 'family', name: 'Family Law', title: 'Family Law' },
+  { id: 'criminal', name: 'Criminal Law', title: 'Criminal Law' },
+  { id: 'personal-injury', name: 'Personal Injury', title: 'Personal Injury' }
+];
 
 const BookServicePage = () => {
-  const router = useRouter();
   const [formState, setFormState] = useState({
     service: "",
     attorney: "",
@@ -66,12 +69,19 @@ const BookServicePage = () => {
 
   const timeSlots = generateTimeSlots();
 
-  // Helper function to format phone number
+  // Helper function to format phone number for WhatsApp
   const formatPhoneNumber = (phone) => {
-    if (!phone.startsWith("whatsapp:")) {
-      return `whatsapp:${phone}`;
+    // Remove all non-digits
+    const cleanPhone = phone.replace(/\D/g, '');
+    
+    // Add country code if not present (assuming US +1)
+    let formattedPhone = cleanPhone;
+    if (!cleanPhone.startsWith('1') && cleanPhone.length === 10) {
+      formattedPhone = '1' + cleanPhone;
     }
-    return phone;
+    
+    // Ensure it starts with whatsapp: prefix
+    return `whatsapp:+${formattedPhone}`;
   };
 
   const handleChange = (e) => {
@@ -94,18 +104,25 @@ const BookServicePage = () => {
       if (!formState.date) newErrors.date = "Please select a date";
       if (!formState.time) newErrors.time = "Please select a time";
     } else if (step === 3) {
-      if (!formState.name) newErrors.name = "Please enter your full name";
-      if (!formState.email) {
+      if (!formState.name.trim()) newErrors.name = "Please enter your full name";
+      if (!formState.email.trim()) {
         newErrors.email = "Please enter your email";
-      } else if (!/\S+@\S+\.\S+/.test(formState.email)) {
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formState.email)) {
         newErrors.email = "Please enter a valid email address";
       }
-      if (!formState.phone) {
+      if (!formState.phone.trim()) {
         newErrors.phone = "Please enter your phone number";
-      } else if (!/^\d{10,}$/.test(formState.phone.replace(/\D/g, ''))) {
-        newErrors.phone = "Phone number must have at least 10 digits";
+      } else {
+        const cleanPhone = formState.phone.replace(/\D/g, '');
+        if (cleanPhone.length < 10) {
+          newErrors.phone = "Phone number must have at least 10 digits";
+        }
       }
-      if (!formState.description) newErrors.description = "Please describe your legal issue";
+      if (!formState.description.trim()) {
+        newErrors.description = "Please describe your legal issue";
+      } else if (formState.description.trim().length < 10) {
+        newErrors.description = "Please provide more details (at least 10 characters)";
+      }
     }
     
     setFormErrors(newErrors);
@@ -133,7 +150,7 @@ const BookServicePage = () => {
     setErrorMessage("");
     setSuccessMessage("");
 
-    // Format phone number
+    // Format phone number for WhatsApp
     const formattedPhone = formatPhoneNumber(formState.phone);
 
     // Prepare form data to be sent
@@ -143,6 +160,7 @@ const BookServicePage = () => {
     };
 
     try {
+      // Simulate API call (replace with actual endpoint)
       const response = await fetch("/api/bookservice", {
         method: "POST",
         headers: {
@@ -179,14 +197,32 @@ const BookServicePage = () => {
     }
   };
 
-  // Get attorneys based on selected service (this would be replaced with real data)
+  // Get attorneys based on selected service
   const getAttorneys = () => {
-    // For this example, just return dummy data
-    return [
-      { id: "attorney1", name: "Jessica Rodriguez", specialty: "Immigration Law" },
-      { id: "attorney2", name: "Michael Chang", specialty: "Corporate Law" },
-      { id: "attorney3", name: "Sarah Williams", specialty: "Family Law" }
-    ];
+    const attorneyMap = {
+      'Immigration Law': [
+        { id: "attorney1", name: "Jessica Rodriguez", specialty: "Immigration Law" },
+        { id: "attorney2", name: "Carlos Martinez", specialty: "Immigration Law" }
+      ],
+      'Corporate Law': [
+        { id: "attorney3", name: "Michael Chang", specialty: "Corporate Law" },
+        { id: "attorney4", name: "David Kim", specialty: "Corporate Law" }
+      ],
+      'Family Law': [
+        { id: "attorney5", name: "Sarah Williams", specialty: "Family Law" },
+        { id: "attorney6", name: "Emma Johnson", specialty: "Family Law" }
+      ],
+      'Criminal Law': [
+        { id: "attorney7", name: "Robert Brown", specialty: "Criminal Law" },
+        { id: "attorney8", name: "Lisa Davis", specialty: "Criminal Law" }
+      ],
+      'Personal Injury': [
+        { id: "attorney9", name: "James Wilson", specialty: "Personal Injury" },
+        { id: "attorney10", name: "Maria Garcia", specialty: "Personal Injury" }
+      ]
+    };
+
+    return attorneyMap[formState.service] || [];
   };
 
   // Render progress steps
@@ -243,12 +279,11 @@ const BookServicePage = () => {
           } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
         >
           <option value="">Choose a service</option>
-          {Array.isArray(services) &&
-            services.map((serviceItem) => (
-              <option key={serviceItem.id} value={serviceItem.name}>
-                {serviceItem.title}
-              </option>
-            ))}
+          {services.map((serviceItem) => (
+            <option key={serviceItem.id} value={serviceItem.name}>
+              {serviceItem.title}
+            </option>
+          ))}
         </select>
         {formErrors.service && (
           <p className="mt-2 text-sm text-red-500 flex items-center">
@@ -270,13 +305,18 @@ const BookServicePage = () => {
           name="attorney"
           value={formState.attorney}
           onChange={handleChange}
+          disabled={!formState.service}
           className={`mt-2 block w-full px-4 py-3 bg-gray-800 text-white border ${
             formErrors.attorney ? "border-red-500" : "border-gray-600"
-          } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+          } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+            !formState.service ? "opacity-50 cursor-not-allowed" : ""
+          }`}
         >
-          <option value="">Select an attorney</option>
+          <option value="">
+            {!formState.service ? "Select a service first" : "Select an attorney"}
+          </option>
           {getAttorneys().map((attorney) => (
-            <option key={attorney.id} value={attorney.id}>
+            <option key={attorney.id} value={attorney.name}>
               {attorney.name} - {attorney.specialty}
             </option>
           ))}
@@ -448,6 +488,9 @@ const BookServicePage = () => {
             formErrors.phone ? "border-red-500" : "border-gray-600"
           } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
         />
+        <p className="mt-1 text-xs text-gray-400">
+          We'll send booking confirmation via WhatsApp to this number
+        </p>
         {formErrors.phone && (
           <p className="mt-2 text-sm text-red-500 flex items-center">
             <AlertCircle size={16} className="mr-1" /> {formErrors.phone}
@@ -472,7 +515,10 @@ const BookServicePage = () => {
           className={`mt-2 block w-full px-4 py-3 bg-gray-800 text-white border ${
             formErrors.description ? "border-red-500" : "border-gray-600"
           } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
-        ></textarea>
+        />
+        <p className="mt-1 text-xs text-gray-400">
+          {formState.description.length}/500 characters
+        </p>
         {formErrors.description && (
           <p className="mt-2 text-sm text-red-500 flex items-center">
             <AlertCircle size={16} className="mr-1" /> {formErrors.description}
@@ -504,7 +550,19 @@ const BookServicePage = () => {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <Header />
+      {/* Header */}
+      <header className="bg-gray-900 border-b border-gray-800">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+          <div className="flex items-center">
+            <h1 className="text-xl font-bold text-white">Legal Services</h1>
+          </div>
+          <nav className="flex items-center space-x-6">
+            <a href="#" className="text-gray-300 hover:text-white transition-colors">Services</a>
+            <a href="#" className="text-gray-300 hover:text-white transition-colors">About</a>
+            <a href="#" className="text-gray-300 hover:text-white transition-colors">Contact</a>
+          </nav>
+        </div>
+      </header>
 
       <div className="max-w-5xl mx-auto p-6">
         <h1 className="text-4xl font-bold text-center mb-2">Book a Legal Service</h1>
@@ -520,10 +578,13 @@ const BookServicePage = () => {
               <p className="font-medium text-lg">{successMessage}</p>
               <p className="mt-2">We'll be in touch with you shortly to confirm your appointment.</p>
               <button 
-                onClick={() => router.push('/')} 
+                onClick={() => {
+                  setSuccessMessage("");
+                  setCurrentStep(1);
+                }} 
                 className="mt-4 bg-white text-green-700 px-4 py-2 rounded font-medium hover:bg-gray-100 transition-colors"
               >
-                Return to Homepage
+                Book Another Appointment
               </button>
             </div>
           </div>
@@ -544,25 +605,30 @@ const BookServicePage = () => {
         {!successMessage && renderProgressSteps()}
 
         {/* Form Steps */}
-        <form className="mt-8">
+        <div className="mt-8">
           {currentStep === 1 && renderStep1()}
           {currentStep === 2 && renderStep2()}
           {currentStep === 3 && renderStep3()}
-        </form>
+        </div>
 
         {/* Bottom Navigation */}
         <div className="mt-12 flex justify-center">
-          <Link 
-            href="/services" 
-            className="text-blue-500 hover:text-blue-400 flex items-center transition-colors"
-          >
+          <button className="text-blue-500 hover:text-blue-400 flex items-center transition-colors">
             <ArrowLeft size={16} className="mr-2" />
             View All Legal Services
-          </Link>
+          </button>
         </div>
       </div>
 
-      <Footer />
+      {/* Footer */}
+      <footer className="bg-gray-900 border-t border-gray-800 mt-20">
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <div className="text-center text-gray-400">
+            <p>&copy; 2025 Legal Services. All rights reserved.</p>
+            <p className="mt-2">Professional legal consultation and representation.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
