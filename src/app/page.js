@@ -10,6 +10,10 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Clarity from '@microsoft/clarity';
 const projectId = "rqrymu68ha"
+import Head from "next/head";
+
+// Initialize Clarity for performance monitoring
+
 
 Clarity.init(projectId);
 

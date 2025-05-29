@@ -1,5 +1,7 @@
 "use client";
 import React, { use, useState } from 'react';
+import Header from '@/components/header';
+import Footer from '@/components/footer';
 
 import {
   Calendar,
@@ -550,19 +552,8 @@ const BookServicePage = () => {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* Header */}
-      <header className="bg-gray-900 border-b border-gray-800">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center">
-            <h1 className="text-xl font-bold text-white">Legal Services</h1>
-          </div>
-          <nav className="flex items-center space-x-6">
-            <a href="#" className="text-gray-300 hover:text-white transition-colors">Services</a>
-            <a href="#" className="text-gray-300 hover:text-white transition-colors">About</a>
-            <a href="#" className="text-gray-300 hover:text-white transition-colors">Contact</a>
-          </nav>
-        </div>
-      </header>
+      {/* Use Header Component */}
+      <Header />
 
       <div className="max-w-5xl mx-auto p-6">
         <h1 className="text-4xl font-bold text-center mb-2">Book a Legal Service</h1>
@@ -620,15 +611,8 @@ const BookServicePage = () => {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 border-t border-gray-800 mt-20">
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <div className="text-center text-gray-400">
-            <p>&copy; 2025 Legal Services. All rights reserved.</p>
-            <p className="mt-2">Professional legal consultation and representation.</p>
-          </div>
-        </div>
-      </footer>
+      {/* Use Footer Component */}
+      <Footer />
     </div>
   );
 };
