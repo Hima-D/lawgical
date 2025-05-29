@@ -1,12 +1,10 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
-import { GoogleAnalytics } from '@next/third-parties/google'
-import { SpeedInsights } from '@vercel/speed-insights/next';
+import { GoogleAnalytics } from "@next/third-parties/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@/components/theme-provider";
 
-
-// Google Fonts
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -17,12 +15,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Metadata
 export const metadata = {
   title: "Lawgical - Legal Services & Case Management",
   description: "Lawgical connects clients with legal professionals. Manage cases, discussions, and access trusted legal services.",
   keywords: "lawgical, lawyer, legal services, case management, legal portal, lawyer portal, legal advice, law firm",
-  author: "Chahat Siwach", // Replace with actual author
+  author: "Chahat Siwach",
   viewport: "width=device-width, initial-scale=1.0",
   openGraph: {
     title: "Lawgical - Legal Services & Case Management",
@@ -34,7 +31,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Lawgical - Legal Services & Case Management",
     description: "Lawgical connects clients with legal professionals. Manage cases, discussions, and access trusted legal services.",
-    creator: "@chahat_siwach", // Replace with Twitter handle
+    creator: "@chahat_siwach",
     image: "/twitter-card.jpg",
   },
   robots: "index, follow",
@@ -87,6 +84,21 @@ export default function RootLayout({ children }) {
           `}
         </script>
         
+        {/* HubSpot Tracking Code */}
+        <script
+          type="text/javascript"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(d, s, i, r) {
+                if (d.getElementById(i)) {return;}
+                var n = d.createElement(s), e = d.getElementsByTagName(s)[0];
+                n.id = i;n.src = '//js.hs-scripts.com/242916761.js';
+                e.parentNode.insertBefore(n, e);
+              })(document, "script", "hs-script-loader");
+            `,
+          }}
+        />
+
         {/* Favicon */}
         <link rel="icon" href="/favicon.ico" />
         
@@ -109,13 +121,13 @@ export default function RootLayout({ children }) {
         {/* Add Google Analytics */}
         <GoogleAnalytics gaId="G-4H1WL5DLNM" />
         <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
