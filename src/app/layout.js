@@ -77,7 +77,7 @@ export default function RootLayout({ children }) {
                 "availableLanguage": "English"
               },
               "sameAs": [
-                "https://twitter.com/chahat_siwach", 
+                "https://twitter.com/chahat_Siwach", 
                 "https://www.linkedin.com/in/chahat-siwach/"
               ]
             }
