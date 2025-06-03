@@ -445,6 +445,8 @@ export default function Home() {
               Join a dynamic community of legal professionals, collaborate on
               cases, and access the resources you need to elevate your practice.
             </p>
+            <div id="hubspot-form-container" className="my-8" />
+
             
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
               <Link 
