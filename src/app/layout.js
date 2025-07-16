@@ -27,7 +27,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Lawgical - Legal Services & Case Management",
     description:
-      "Lawgical connects clients with legal professionals. Manage cases, discussions, and access trusted legal services.",
+      "Lawgical connects clients with legal professionals.",
     creator: "@chahat_siwach",
     image: "/twitter-card.jpg",
   },
@@ -43,21 +43,9 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" dir="ltr" className="light">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {/* Analytics */}
-        <Analytics />
-        <SpeedInsights />
-        <GoogleAnalytics gaId="G-4H1WL5DLNM" />
-
-        {/* Theme Provider */}
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+      <head>
+        {/* Preconnects */}
+        <link rel="preconnect" href="https://personalize.relevic.com" />
 
         {/* Animate.css */}
         <link
@@ -67,6 +55,20 @@ export default function RootLayout({ children }) {
           crossOrigin="anonymous"
           referrerPolicy="no-referrer"
         />
+      </head>
+
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {/* Providers */}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          {children}
+        </ThemeProvider>
+
+        {/* Vercel Analytics */}
+        <Analytics />
+        <SpeedInsights />
+
+        {/* Google Analytics */}
+        <GoogleAnalytics gaId="G-4H1WL5DLNM" />
 
         {/* Segment Analytics */}
         <Script
@@ -104,7 +106,7 @@ export default function RootLayout({ children }) {
           }}
         />
 
-        {/* HubSpot Loader */}
+        {/* HubSpot */}
         <Script
           id="hubspot-loader"
           strategy="afterInteractive"
@@ -139,18 +141,22 @@ export default function RootLayout({ children }) {
           }}
         />
 
-        {/* Relevic Scripts */}
-        <link rel="preconnect" href="https://personalize.relevic.com" />
+        {/* Relevic Anti-Flicker */}
         <Script
           id="relevic-anti-flicker"
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
           src="https://personalize.relevic.com/workspaces/anti-flicker/686cec69f6c7cf4012717161.js"
           data-relevic-id="anti-flicker"
-          data-relevic-anti-flicker-background="transparent"
+          data-relevic-anti-flicker-background="rgba(255, 255, 255, 1)"
+          type="text/javascript"
         />
+
+        {/* Relevic Main Script */}
         <Script
-          data-relevic-script="686cec69f6c7cf4012717161"
+          id="relevic-script"
+          strategy="afterInteractive"
           src="https://personalize.relevic.com/workspaces/686cec69f6c7cf4012717161.js"
+          data-relevic-script="686cec69f6c7cf4012717161"
           type="text/javascript"
           async
         />
