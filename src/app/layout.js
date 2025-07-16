@@ -5,8 +5,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import Script from "next/script";
-import { ThemeProvider } from "@/components/theme-provider";
-
+import { ThemeProvider } from "next-themes";
 const geistSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
 
@@ -37,7 +36,7 @@ export const metadata = {
   icons: { icon: "/favicon.ico" },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }, { children: React,ReactNode }) {
   return (
     <html lang="en" dir="ltr" className="light">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
@@ -106,6 +105,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             `,
           }}
         />
+        <link rel="preconnect" href="https://personalize.relevic.com" />
+<Script
+  id="relevic-anti-flicker"
+  strategy="afterInteractive"
+  src="https://personalize.relevic.com/workspaces/anti-flicker/686cec69f6c7cf4012717161.js"
+  data-relevic-id="anti-flicker"
+  data-relevic-anti-flicker-background="transparent"
+/>
+<script data-relevic-script="686cec69f6c7cf4012717161" src="https://personalize.relevic.com/workspaces/686cec69f6c7cf4012717161.js" type="text/javascript" async></script>
+
 
         {/* Animate.css CDN */}
         <link

@@ -618,7 +618,7 @@ export default function Home() {
           <div className="relative z-10">
             <h2 className="text-2xl lg:text-3xl font-bold mb-4">Ready to Transform Your Legal Practice?</h2>
             <p className="text-gray-300 mb-8 max-w-xl mx-auto leading-relaxed">
-              Join thousands of legal professionals who've enhanced their practice with our comprehensive platform.
+              Join thousands of legal professionals who&apos;ve enhanced their practice with our comprehensive platform.
             </p>
             <div className="flex gap-4 items-center justify-center flex-col sm:flex-row">
               <Link href="/contact">

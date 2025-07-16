@@ -88,7 +88,7 @@ const Testimonial = ({
           <div className="flex flex-col flex-grow">
             {/* Testimonial text */}
             <blockquote className="text-lg md:text-xl relative mb-6 text-gray-100 leading-relaxed italic">
-              "{testimonial}"
+              &quot;{testimonial}&quot;
             </blockquote>
             
             {/* Author details with animated accent line */}
