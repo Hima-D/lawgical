@@ -26,8 +26,7 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Lawgical - Legal Services & Case Management",
-    description:
-      "Lawgical connects clients with legal professionals.",
+    description: "Lawgical connects clients with legal professionals.",
     creator: "@chahat_siwach",
     image: "/twitter-card.jpg",
   },
@@ -44,10 +43,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" dir="ltr" className="light">
       <head>
-        {/* Preconnects */}
         <link rel="preconnect" href="https://personalize.relevic.com" />
-
-        {/* Animate.css */}
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
@@ -56,57 +52,23 @@ export default function RootLayout({ children }) {
           referrerPolicy="no-referrer"
         />
       </head>
-
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {/* Providers */}
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}
         </ThemeProvider>
 
-        {/* Vercel Analytics */}
         <Analytics />
         <SpeedInsights />
-
-        {/* Google Analytics */}
         <GoogleAnalytics gaId="G-4H1WL5DLNM" />
 
-        {/* Segment Analytics */}
         <Script
           id="segment-analytics"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
-            __html: `
-              !function(){var i="analytics",analytics=window[i]=window[i]||[];
-              if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");
-              else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm",
-              "pageview","identify","reset","group","track","ready","alias","debug","page","screen","once",
-              "off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId",
-              "addDestinationMiddleware","register"];
-              analytics.factory=function(e){return function(){
-              if(window[i].initialized)return window[i][e].apply(window[i],arguments);
-              var n=Array.prototype.slice.call(arguments);
-              if(["track","screen","alias","group","page","identify"].indexOf(e)>-1){
-              var c=document.querySelector("link[rel='canonical']");
-              n.push({__t:"bpc",c:c&&c.getAttribute("href")||void 0,p:location.pathname,
-              u:location.href,s:location.search,t:document.title,r:document.referrer})}
-              n.unshift(e);analytics.push(n);return analytics}};
-              for(var n=0;n<analytics.methods.length;n++){
-              var key=analytics.methods[n];analytics[key]=analytics.factory(key)}
-              analytics.load=function(key,n){
-              var t=document.createElement("script");t.type="text/javascript";t.async=!0;
-              t.setAttribute("data-global-segment-analytics-key",i);
-              t.src="https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js";
-              var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(t,r);
-              analytics._loadOptions=n};
-              analytics._writeKey="PyMX8kMqFLV9aHo7i6k6oFgcDzmntCjT";
-              analytics.SNIPPET_VERSION="5.2.0";
-              analytics.load("PyMX8kMqFLV9aHo7i6k6oFgcDzmntCjT");
-              analytics.page();}}();
-            `,
+            __html: `!function(){var i="analytics",analytics=window[i]=window[i]||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","screen","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware","register"];analytics.factory=function(e){return function(){if(window[i].initialized)return window[i][e].apply(window[i],arguments);var n=Array.prototype.slice.call(arguments);if(["track","screen","alias","group","page","identify"].indexOf(e)>-1){var c=document.querySelector("link[rel='canonical']");n.push({__t:"bpc",c:c&&c.getAttribute("href")||void 0,p:location.pathname,u:location.href,s:location.search,t:document.title,r:document.referrer})}n.unshift(e);analytics.push(n);return analytics}};for(var n=0;n<analytics.methods.length;n++){var key=analytics.methods[n];analytics[key]=analytics.factory(key)}analytics.load=function(key,n){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.setAttribute("data-global-segment-analytics-key",i);t.src="https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(t,r);analytics._loadOptions=n};analytics._writeKey="PyMX8kMqFLV9aHo7i6k6oFgcDzmntCjT";analytics.SNIPPET_VERSION="5.2.0";analytics.load("PyMX8kMqFLV9aHo7i6k6oFgcDzmntCjT");analytics.page();}}();`,
           }}
         />
 
-        {/* HubSpot */}
         <Script
           id="hubspot-loader"
           strategy="afterInteractive"
@@ -141,7 +103,6 @@ export default function RootLayout({ children }) {
           }}
         />
 
-        {/* Relevic Anti-Flicker */}
         <Script
           id="relevic-anti-flicker"
           strategy="beforeInteractive"
@@ -151,7 +112,6 @@ export default function RootLayout({ children }) {
           type="text/javascript"
         />
 
-        {/* Relevic Main Script */}
         <Script
           id="relevic-script"
           strategy="afterInteractive"
@@ -159,6 +119,24 @@ export default function RootLayout({ children }) {
           data-relevic-script="686cec69f6c7cf4012717161"
           type="text/javascript"
           async
+        />
+
+        <Script
+          id="tawk-to"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+              (function(){
+              var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+              s1.async=true;
+              s1.src='https://embed.tawk.to/6877a38b63bcc7190cb0179a/1j09ldn1b';
+              s1.charset='UTF-8';
+              s1.setAttribute('crossorigin','*');
+              s0.parentNode.insertBefore(s1,s0);
+              })();
+            `,
+          }}
         />
       </body>
     </html>
