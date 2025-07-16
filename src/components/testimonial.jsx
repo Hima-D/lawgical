@@ -11,8 +11,7 @@ const Testimonial = ({
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isInView, setIsInView] = useState(false);
-  
-  // Detect when testimonial comes into view for animation
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -23,19 +22,19 @@ const Testimonial = ({
       },
       { threshold: 0.2 }
     );
-    
+
     const currentElement = document.querySelector('.testimonial-wrapper');
     if (currentElement) {
       observer.observe(currentElement);
     }
-    
+
     return () => {
       if (currentElement) {
         observer.unobserve(currentElement);
       }
     };
   }, []);
-  
+
   return (
     <div
       className={`testimonial-wrapper relative ${
@@ -49,12 +48,12 @@ const Testimonial = ({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Decorative accent elements */}
+        {/* Background accents */}
         <div className="absolute -top-16 -left-16 w-40 h-40 bg-blue-500/10 rounded-full blur-xl" />
         <div className="absolute -bottom-20 -right-20 w-60 h-60 bg-purple-500/10 rounded-full blur-xl" />
         <div className={`absolute top-4 right-4 w-32 h-32 bg-white/5 rounded-full transition-transform duration-500 ${isHovered ? 'scale-125' : ''}`} />
-        
-        {/* Quote marks */}
+
+        {/* Quote mark icon */}
         <svg 
           className="w-12 h-12 text-blue-400/20 absolute top-6 left-6" 
           viewBox="0 0 24 24" 
@@ -62,10 +61,9 @@ const Testimonial = ({
         >
           <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
         </svg>
-        
-        {/* Testimonial content */}
+
+        {/* Content */}
         <div className="relative z-10 flex flex-col md:flex-row gap-6 md:gap-8 items-center">
-          {/* Author image with animation */}
           <div 
             className={`relative flex-shrink-0 transition-all duration-300 ${
               isHovered ? 'transform scale-105' : ''
@@ -83,15 +81,11 @@ const Testimonial = ({
               />
             </div>
           </div>
-          
-          {/* Content column */}
+
           <div className="flex flex-col flex-grow">
-            {/* Testimonial text */}
             <blockquote className="text-lg md:text-xl relative mb-6 text-gray-100 leading-relaxed italic">
               &quot;{testimonial}&quot;
             </blockquote>
-            
-            {/* Author details with animated accent line */}
             <div className="mt-auto relative">
               <div className={`h-0.5 w-12 bg-blue-400 mb-3 transition-all duration-300 ${isHovered ? 'w-20 bg-blue-300' : ''}`}></div>
               <h4 className="font-bold text-xl text-white">{authorName}</h4>
@@ -100,8 +94,8 @@ const Testimonial = ({
           </div>
         </div>
       </div>
-      
-      {/* Add a subtle animation trigger for the testimonial when hovered */}
+
+      {/* Animation styles */}
       <style jsx>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(10px); }
