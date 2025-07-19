@@ -2,653 +2,469 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
-import Testimonial from "@/components/testimonial";
-import Services from "@/components/service";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Clarity from '@microsoft/clarity';
-const projectId = "rqrymu68ha"
-import Head from "next/head";
 
-// Initialize Clarity for performance monitoring
+// Service categories inspired by VakilSearch
+const SERVICE_CATEGORIES = [
+  {
+    id: 1,
+    title: "Business Setup",
+    icon: "🏢",
+    description: "Complete business registration and incorporation services",
+    services: ["Company Registration", "LLP Registration", "Partnership Firm", "Sole Proprietorship", "Section 8 Company"],
+    color: "from-blue-500 to-blue-700"
+  },
+  {
+    id: 2,
+    title: "Legal Consultation",
+    icon: "⚖️",
+    description: "Expert legal advice from qualified professionals",
+    services: ["Civil Lawyer", "Criminal Lawyer", "Corporate Lawyer", "Family Lawyer", "Property Lawyer"],
+    color: "from-green-500 to-green-700"
+  },
+  {
+    id: 3,
+    title: "Tax & Compliance",
+    icon: "📊",
+    description: "Comprehensive tax planning and compliance solutions",
+    services: ["GST Registration", "Income Tax Filing", "TDS Returns", "Annual Filings", "Tax Planning"],
+    color: "from-purple-500 to-purple-700"
+  },
+  {
+    id: 4,
+    title: "Trademark & IP",
+    icon: "©️",
+    description: "Protect your intellectual property rights",
+    services: ["Trademark Registration", "Copyright Registration", "Patent Filing", "Design Registration", "IP Licensing"],
+    color: "from-orange-500 to-orange-700"
+  },
+  {
+    id: 5,
+    title: "Documentation",
+    icon: "📄",
+    description: "Legal document drafting and review services",
+    services: ["Contracts", "Agreements", "Legal Notices", "Wills", "Power of Attorney"],
+    color: "from-red-500 to-red-700"
+  },
+  {
+    id: 6,
+    title: "Licenses & Permits",
+    icon: "🏆",
+    description: "Obtain necessary licenses for your business",
+    services: ["FSSAI License", "Trade License", "Professional Tax", "ESI & PF", "Labor License"],
+    color: "from-indigo-500 to-indigo-700"
+  }
+];
 
+const CALCULATORS = [
+  { name: "GST Calculator", icon: "📊", link: "/calculators/gst" },
+  { name: "Income Tax Calculator", icon: "💰", link: "/calculators/income-tax" },
+  { name: "EMI Calculator", icon: "🏦", link: "/calculators/emi" },
+  { name: "Salary Calculator", icon: "💼", link: "/calculators/salary" }
+];
 
-Clarity.init(projectId);
-
-
-// Register GSAP plugins
-gsap.registerPlugin(ScrollTrigger);
-
-// Constants
-const ANIMATION_TIMINGS = {
-  wordChange: 3500,
-  testimonialAuto: 8000,
-  transitionDuration: 0.6,
-};
-
-const ACTION_WORDS = ["Connect", "Collaborate", "Grow", "Succeed"];
+const EXPERT_CONSULTATION = [
+  { title: "Talk to a Lawyer", subtitle: "Get expert legal advice", icon: "⚖️", color: "bg-blue-500" },
+  { title: "Talk to a CA", subtitle: "Chartered Accountant consultation", icon: "📊", color: "bg-green-500" },
+  { title: "Talk to a CS", subtitle: "Company Secretary guidance", icon: "📋", color: "bg-purple-500" }
+];
 
 const TESTIMONIALS = [
   {
     id: 1,
-    testimonial: "This platform has been an indispensable resource for my legal practice. It not only connects me with fellow attorneys, but it also allows me to access key legal resources and share insights.",
-    authorName: "Jason Perez",
-    authorPosition: "Corporate Lawyer",
+    testimonial: "Lawgical helped me register my startup in just 7 days. Their team was incredibly professional and guided me through every step of the process.",
+    authorName: "Priya Sharma",
+    authorPosition: "Founder, TechStart Solutions",
     authorImage: "https://picsum.photos/100/100?random=1",
+    rating: 5
   },
   {
     id: 2,
-    testimonial: "I wholeheartedly recommend this platform for any legal professional. It provides an excellent space for networking, learning, and accessing expert legal advice.",
-    authorName: "Jane Smith",
-    authorPosition: "Family Law Attorney",
+    testimonial: "The trademark registration process was seamless. I got regular updates and the entire process was completed faster than expected.",
+    authorName: "Rajesh Kumar",
+    authorPosition: "Business Owner",
     authorImage: "https://picsum.photos/100/100?random=2",
+    rating: 5
   },
   {
     id: 3,
-    testimonial: "This platform is an essential tool for collaboration. The legal resources offered have significantly streamlined my practice and increased efficiency.",
-    authorName: "Robert Brown",
-    authorPosition: "Criminal Defense Attorney",
-    authorImage: "https://picsum.photos/100/100?random=3",
-  },
-  {
-    id: 4,
-    testimonial: "The platform has truly transformed how I interact with clients and fellow professionals. The resources are top-notch, and the community is incredibly supportive.",
-    authorName: "Arvind Kumar",
-    authorPosition: "Corporate Lawyer",
-    authorImage: "https://picsum.photos/100/100?random=4",
-  },
-  {
-    id: 5,
-    testimonial: "As a family lawyer, this platform has provided me with a network of like-minded professionals and valuable insights. Highly recommend it for any legal practitioner.",
-    authorName: "Priya Desai",
-    authorPosition: "Family Lawyer",
-    authorImage: "https://picsum.photos/100/100?random=5",
-  },
-  {
-    id: 6,
-    testimonial: "I've found this platform to be a game changer for criminal law cases. The tools provided here have helped me prepare better and stay ahead in my field.",
-    authorName: "Rajesh Gupta",
-    authorPosition: "Criminal Defense Attorney",
-    authorImage: "https://picsum.photos/100/100?random=6",
-  },
-  {
-    id: 7,
-    testimonial: "This platform has helped me connect with professionals across the country. The resources provided are indispensable for anyone in the legal field.",
+    testimonial: "Excellent legal consultation service. The lawyer was very knowledgeable and helped me resolve my property dispute efficiently.",
     authorName: "Anjali Mehta",
-    authorPosition: "Civil Lawyer",
-    authorImage: "https://picsum.photos/100/100?random=7",
-  },
-  {
-    id: 8,
-    testimonial: "I've been able to grow my network significantly thanks to this platform. It has made collaboration easier and more efficient, especially with the legal tools provided.",
-    authorName: "Suresh Iyer",
-    authorPosition: "Tax Consultant",
-    authorImage: "https://picsum.photos/100/100?random=8",
-  },
-  {
-    id: 9,
-    testimonial: "The resources and networking options available on this platform have been incredibly helpful. As an intellectual property lawyer, this platform has significantly improved my practice.",
-    authorName: "Meera Reddy",
-    authorPosition: "Intellectual Property Lawyer",
-    authorImage: "https://picsum.photos/100/100?random=9",
-  },
-  {
-    id: 10,
-    testimonial: "I am so glad I joined this platform. It's easy to use, and the resources provided are always up-to-date and relevant to my practice in environmental law.",
-    authorName: "Vikram Sharma",
-    authorPosition: "Environmental Lawyer",
-    authorImage: "https://picsum.photos/100/100?random=10",
-  },
+    authorPosition: "Property Investor",
+    authorImage: "https://picsum.photos/100/100?random=3",
+    rating: 5
+  }
 ];
 
-const QUICK_LINKS = [
-  {
-    id: 1,
-    title: "Manage Ongoing Legal Cases",
-    description: "Track, manage, and efficiently handle all your active legal cases, all from one intuitive platform.",
-    link: "/cases",
-    linkText: "View My Cases",
-    icon: "📁",
-    color: "from-blue-500 to-blue-700",
-  },
-  {
-    id: 2,
-    title: "Explore Legal Insights and Articles",
-    description: "Stay informed with the latest legal insights, trends, and expertly curated resources.",
-    link: "/resources",
-    linkText: "Read Articles",
-    icon: "📚",
-    color: "from-green-500 to-green-700",
-  },
-  {
-    id: 3,
-    title: "Join Our Legal Discussions",
-    description: "Engage with professionals, exchange advice, and keep up with the latest developments in the legal world.",
-    link: "/community",
-    linkText: "Start Discussing",
-    icon: "💬",
-    color: "from-purple-500 to-purple-700",
-  },
-];
-
-// Custom hook for intersection observer
-const useIntersectionObserver = (options = {}) => {
-  const [isIntersecting, setIsIntersecting] = useState(false);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      setIsIntersecting(entry.isIntersecting);
-    }, options);
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => observer.disconnect();
-  }, [options]);
-
-  return [ref, isIntersecting];
-};
-
-// Custom hook for reduced motion preference
-const useReducedMotion = () => {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mediaQuery.matches);
-
-    const handleChange = (event) => setPrefersReducedMotion(event.matches);
-    mediaQuery.addEventListener('change', handleChange);
-
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
-
-  return prefersReducedMotion;
-};
-
-export default function Home() {
-  // State management
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [isVisible, setIsVisible] = useState(false);
-
-  // Refs
-  const heroRef = useRef(null);
-  const servicesRef = useRef(null);
-  const testimonialRef = useRef(null);
-  const scrollButtonRef = useRef(null);
-  const heroActionRef = useRef(null);
-  const heroLawgicalRef = useRef(null);
-  const quickLinksRef = useRef(null);
-  const ctaRef = useRef(null);
-  const timelineRef = useRef(null);
-
-  // Custom hooks
-  const prefersReducedMotion = useReducedMotion();
-  const [heroIntersectionRef, isHeroVisible] = useIntersectionObserver({ threshold: 0.1 });
-
-  // Memoized values
-  const currentTestimonial = useMemo(() => TESTIMONIALS[currentIndex], [currentIndex]);
-  
-  // Testimonial navigation functions
-  const nextTestimonial = useCallback(() => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % TESTIMONIALS.length);
-  }, []);
-
-  const prevTestimonial = useCallback(() => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
-  }, []);
-
-  const goToTestimonial = useCallback((index) => {
-    setCurrentIndex(index);
-    setIsAutoPlaying(false);
-    // Resume auto-playing after 10 seconds
-    setTimeout(() => setIsAutoPlaying(true), 10000);
-  }, []);
+export default function LawgicalHomepage() {
+  const [activeCategory, setActiveCategory] = useState(null);
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
   // Auto-advance testimonials
   useEffect(() => {
-    if (!isAutoPlaying || prefersReducedMotion) return;
-
-    const autoAdvanceInterval = setInterval(() => {
-      nextTestimonial();
-    }, ANIMATION_TIMINGS.testimonialAuto);
-    
-    return () => clearInterval(autoAdvanceInterval);
-  }, [nextTestimonial, isAutoPlaying, prefersReducedMotion]);
-
-  // Enhanced word animation with better performance
-  const setupEnhancedWordAnimation = useCallback(() => {
-    if (prefersReducedMotion) return null;
-
-    let index = 0;
-    
-    const animatePhrase = () => {
-      if (!heroActionRef.current || !heroLawgicalRef.current) return;
-
-      const tl = gsap.timeline();
-      
-      tl.to(heroActionRef.current, {
-        opacity: 0,
-        y: -20,
-        duration: ANIMATION_TIMINGS.transitionDuration,
-        ease: "power3.out"
-      });
-      
-      tl.to(heroLawgicalRef.current, {
-        opacity: 0,
-        y: -20,
-        duration: ANIMATION_TIMINGS.transitionDuration,
-        ease: "power3.out",
-      }, "-=0.4");
-      
-      tl.call(() => {
-        if (heroActionRef.current) {
-          heroActionRef.current.textContent = ACTION_WORDS[index];
-          index = (index + 1) % ACTION_WORDS.length;
-        }
-      });
-      
-      tl.to(heroActionRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: ANIMATION_TIMINGS.transitionDuration,
-        ease: "power2.inOut"
-      });
-      
-      tl.to(heroLawgicalRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: ANIMATION_TIMINGS.transitionDuration,
-        ease: "power2.inOut"
-      }, "-=0.3");
-    };
-    
-    animatePhrase();
-    return setInterval(animatePhrase, ANIMATION_TIMINGS.wordChange);
-  }, [prefersReducedMotion]);
-
-  // Main animation setup with performance optimizations
-  useEffect(() => {
-    if (prefersReducedMotion) {
-      // Set immediate visibility for reduced motion users
-      setIsVisible(true);
-      return;
-    }
-
-    // Create main timeline
-    const ctx = gsap.context(() => {
-      const mainTl = gsap.timeline({
-        onComplete: () => setIsVisible(true)
-      });
-      
-      // Hero section animations
-      if (heroRef.current) {
-        mainTl.from(heroRef.current, { 
-          opacity: 0, 
-          y: -30, 
-          duration: 1,
-          ease: "power3.out",
-        });
-      }
-      
-      mainTl.from(".hero-logo", { 
-        opacity: 0, 
-        x: -30, 
-        duration: 0.8,
-        ease: "power3.out",
-      }, "-=0.6");
-      
-      mainTl.from(".hero-description", {
-        opacity: 0,
-        y: 20,
-        duration: 0.8,
-        ease: "power2.out",
-      }, "-=0.4");
-
-      // Quick links animation
-      if (quickLinksRef.current) {
-        mainTl.from(quickLinksRef.current, { 
-          opacity: 0,
-          y: 30,
-          duration: 0.8,
-          ease: "power2.out",
-        }, "-=0.2");
-      }
-
-      // Service cards with ScrollTrigger
-      gsap.from(".service-card", {
-        opacity: 0,
-        y: 40,
-        scale: 0.95,
-        stagger: 0.15,
-        duration: 0.8,
-        ease: "back.out(1.4)",
-        scrollTrigger: {
-          trigger: ".service-card",
-          start: "top bottom-=100",
-          toggleActions: "play none none none"
-        }
-      });
-
-      // Scroll-triggered animations
-      [servicesRef, testimonialRef, ctaRef].forEach(ref => {
-        if (ref.current) {
-          gsap.from(ref.current, { 
-            opacity: 0, 
-            y: 40, 
-            duration: 0.8,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: ref.current,
-              start: "top bottom-=50",
-              toggleActions: "play none none none"
-            }
-          });
-        }
-      });
-
-      // Scroll button animation
-      if (scrollButtonRef.current) {
-        gsap.from(scrollButtonRef.current, {
-          opacity: 0,
-          y: 20,
-          duration: 0.6,
-          scrollTrigger: {
-            trigger: "main",
-            start: "10% center",
-            toggleActions: "play none none reverse",
-          },
-        });
-      }
-
-      timelineRef.current = mainTl;
-    });
-
-    // Start word animation
-    const wordInterval = setupEnhancedWordAnimation();
-
-    return () => {
-      ctx.revert();
-      if (wordInterval) clearInterval(wordInterval);
-    };
-  }, [setupEnhancedWordAnimation, prefersReducedMotion]);
-
-  // Testimonial transition animation
-  useEffect(() => {
-    if (prefersReducedMotion) return;
-
-    gsap.from(".testimonial-content", {
-      opacity: 0,
-      x: -20,
-      duration: 0.5,
-      ease: "power2.out",
-    });
-  }, [currentIndex, prefersReducedMotion]);
-
-  // Scroll to top function
-  const scrollToTop = useCallback(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    const interval = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % TESTIMONIALS.length);
+    }, 5000);
+    return () => clearInterval(interval);
   }, []);
 
-  // Keyboard navigation for testimonials
-  const handleKeyNavigation = useCallback((event) => {
-    if (event.key === 'ArrowLeft') {
-      prevTestimonial();
-      setIsAutoPlaying(false);
-    } else if (event.key === 'ArrowRight') {
-      nextTestimonial();
-      setIsAutoPlaying(false);
-    }
-  }, [nextTestimonial, prevTestimonial]);
-
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-black via-gray-900 to-black text-white">
-      <Header />
-
-      <main className="flex flex-col items-center justify-center p-6 sm:p-12 lg:p-16 gap-8 flex-grow">
-        {/* Hero Section */}
-        <section
-          className="hero-section w-full max-w-6xl flex flex-col md:flex-row items-center justify-between gap-8 mb-16 py-8"
-          ref={(el) => {
-            heroRef.current = el;
-            heroIntersectionRef.current = el;
-          }}
-          aria-label="Hero section"
-        >
-          <div className="flex flex-col text-center md:text-left max-w-2xl">
-            <Image
-              className="hero-logo mx-auto md:mx-0 mb-6"
-              src="/next.svg"
-              alt="Lawgical Logo"
-              width={180}
-              height={38}
-              priority
-            />
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 flex flex-wrap justify-center md:justify-start gap-2">
-              <span 
-                ref={heroActionRef} 
-                className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600"
-                aria-live="polite"
-              >
-                Connect
-              </span>
-              <span ref={heroLawgicalRef} className="text-white">
-                with Lawgical
-              </span>
-            </h1>
-            <p className="hero-description text-base md:text-lg font-medium text-gray-300 max-w-lg leading-relaxed">
-              Join a dynamic community of legal professionals, collaborate on
-              cases, and access the resources you need to elevate your practice.
-            </p>
-            <div id="hubspot-form-container" className="my-8" />
-
-            
-            <div className="mt-8 flex flex-col sm:flex-row gap-4">
-              <Link 
-                href="/signup" 
-                className="inline-block px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-full hover:from-blue-600 hover:to-blue-800 transform hover:scale-105 transition-all duration-300 shadow-lg font-medium text-center"
-              >
-                Join Our Community
-              </Link>
-              <Link 
-                href="/demo" 
-                className="inline-block px-8 py-3 bg-transparent border border-white/30 text-white rounded-full hover:bg-white/10 transition-all duration-300 transform hover:scale-105 font-medium text-center"
-              >
-                Watch Demo
-              </Link>
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100">
+      {/* Header */}
+      <header className="bg-white shadow-sm sticky top-0 z-50 border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+          <div className="flex items-center space-x-2">
+            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-lg">L</span>
             </div>
+            <span className="text-2xl font-bold text-gray-900">Lawgical</span>
           </div>
           
-          <div className="hidden md:block relative w-full max-w-sm">
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-500/20 via-purple-600/20 to-indigo-600/20 rounded-xl blur-lg animate-pulse"></div>
-            <div className="relative z-10 p-6">
-              <div className="bg-gradient-to-br from-gray-800 to-gray-700 rounded-xl p-8 shadow-2xl border border-gray-600">
+          <nav className="hidden md:flex space-x-8">
+            <Link href="/services" className="text-gray-700 hover:text-blue-600 transition-colors">Services</Link>
+            <Link href="/calculators" className="text-gray-700 hover:text-blue-600 transition-colors">Calculators</Link>
+            <Link href="/resources" className="text-gray-700 hover:text-blue-600 transition-colors">Resources</Link>
+            <Link href="/about" className="text-gray-700 hover:text-blue-600 transition-colors">About</Link>
+          </nav>
+          
+          <div className="flex items-center space-x-4">
+            <Link href="/login" className="text-gray-700 hover:text-blue-600 transition-colors">Login</Link>
+            <Link href="/contact" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+              Talk to Expert
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-blue-50 via-white to-purple-50 py-16 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="text-center lg:text-left">
+              <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
+                India's Leading <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Legal & Compliance</span> Platform
+              </h1>
+              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+                Simplifying legal, tax, and compliance services for individuals and businesses. 
+                Trusted by over 1 million+ clients across India.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                <Link href="/get-started" className="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg">
+                  Get Started Today
+                </Link>
+                <Link href="/consultation" className="border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-600 hover:text-white transition-all">
+                  Free Consultation
+                </Link>
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="flex flex-wrap justify-center lg:justify-start gap-8 text-sm text-gray-500">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>1M+ Happy Clients</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>500+ Legal Experts</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                  <span>15+ Years Experience</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="relative">
+              <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">Start Your Legal Journey</h3>
                 <div className="space-y-4">
-                  <div className="h-4 bg-gradient-to-r from-blue-400 to-blue-600 rounded w-3/4"></div>
-                  <div className="h-4 bg-gradient-to-r from-gray-400 to-gray-500 rounded w-1/2"></div>
-                  <div className="h-4 bg-gradient-to-r from-gray-400 to-gray-500 rounded w-2/3"></div>
-                  <div className="flex gap-2 mt-6">
-                    <div className="h-10 w-10 bg-gradient-to-r from-green-400 to-green-600 rounded-full"></div>
-                    <div className="h-10 w-10 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full"></div>
-                    <div className="h-10 w-10 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full"></div>
+                  <div className="flex items-center p-4 bg-blue-50 rounded-lg border border-blue-100">
+                    <span className="text-2xl mr-4">📋</span>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Quick Registration</h4>
+                      <p className="text-sm text-gray-600">Get your business registered in 7-15 days</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center p-4 bg-green-50 rounded-lg border border-green-100">
+                    <span className="text-2xl mr-4">⚡</span>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Expert Support</h4>
+                      <p className="text-sm text-gray-600">24/7 support from legal professionals</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center p-4 bg-purple-50 rounded-lg border border-purple-100">
+                    <span className="text-2xl mr-4">🛡️</span>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">100% Secure</h4>
+                      <p className="text-sm text-gray-600">Your data is safe and confidential</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Quick Access Links */}
-        <section 
-          className="quick-links w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 my-16"
-          ref={quickLinksRef}
-          aria-label="Quick access links"
-        >
-          {QUICK_LINKS.map(({ id, title, description, link, linkText, icon, color }) => (
-            <article
-              key={id}
-              className="service-card group bg-gray-800/80 backdrop-blur-sm p-6 lg:p-8 rounded-xl shadow-lg hover:shadow-2xl border border-gray-700 hover:border-blue-500/50 transition-all duration-300 transform hover:scale-102 hover:translate-y-[-5px]"
-            >
-              <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300" role="img" aria-label={title}>
-                {icon}
-              </div>
-              <h3 className="text-xl font-semibold text-blue-400 mb-3">{title}</h3>
-              <p className="text-gray-300 mb-6 text-sm lg:text-base leading-relaxed">{description}</p>
-              <Link
-                href={link}
-                className={`inline-flex items-center bg-gradient-to-r ${color} text-white px-4 py-2 rounded-full font-medium hover:shadow-lg transition-all duration-300 group-hover:scale-105`}
-              >
-                {linkText}
-                <svg className="w-4 h-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                </svg>
-              </Link>
-            </article>
-          ))}
-        </section>
-
-        {/* Services Section */}
-        <section 
-          className="service-section w-full max-w-6xl" 
-          ref={servicesRef}
-          aria-label="Our services"
-        >
-          <Services />
-        </section>
-
-        {/* Testimonial Section */}
-        <section
-          className="testimonial-section w-full max-w-6xl my-16 py-8"
-          ref={testimonialRef}
-          aria-label="Client testimonials"
-          onKeyDown={handleKeyNavigation}
-          tabIndex={0}
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-2">
-            What Legal Professionals <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">Say About Us</span>
-          </h2>
-          <p className="text-center text-gray-400 mb-12 max-w-xl mx-auto">
-            Trusted by thousands of legal professionals across the country
-          </p>
-          
-          <div className="relative overflow-hidden bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 shadow-xl border border-gray-700">
-            <div
-              className="flex transition-transform duration-500 ease-in-out testimonial-content"
-              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-              role="region"
-              aria-live="polite"
-              aria-label="Testimonial carousel"
-            >
-              {TESTIMONIALS.map((testimonial) => (
-                <div key={testimonial.id} className="w-full flex-shrink-0">
-                  <Testimonial {...testimonial} />
+      {/* Expert Consultation Banner */}
+      <section className="bg-gradient-to-r from-blue-600 to-purple-600 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-3 gap-6">
+            {EXPERT_CONSULTATION.map((expert, index) => (
+              <Link key={index} href="/consultation" className="flex items-center justify-center p-6 bg-white/10 backdrop-blur rounded-lg hover:bg-white/20 transition-all group">
+                <span className="text-3xl mr-4">{expert.icon}</span>
+                <div className="text-white">
+                  <h3 className="font-semibold text-lg group-hover:text-yellow-200 transition-colors">{expert.title}</h3>
+                  <p className="text-sm opacity-90">{expert.subtitle}</p>
                 </div>
-              ))}
-            </div>
-
-            {/* Navigation Arrows */}
-            <button
-              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-blue-500/80 hover:bg-blue-500 text-white p-3 rounded-full transition-all duration-300 shadow-lg backdrop-blur-sm"
-              onClick={prevTestimonial}
-              aria-label="Previous testimonial"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
-              </svg>
-            </button>
-            <button
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500/80 hover:bg-blue-500 text-white p-3 rounded-full transition-all duration-300 shadow-lg backdrop-blur-sm"
-              onClick={nextTestimonial}
-              aria-label="Next testimonial"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
-              </svg>
-            </button>
-            
-            {/* Pagination Dots */}
-            <div className="flex justify-center gap-2 mt-6" role="tablist" aria-label="Testimonial navigation">
-              {TESTIMONIALS.map((_, index) => (
-                <button
-                  key={index}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    currentIndex === index 
-                      ? "bg-blue-500 w-6 shadow-lg" 
-                      : "bg-gray-500 opacity-50 hover:opacity-75 hover:bg-gray-400"
-                  }`}
-                  onClick={() => goToTestimonial(index)}
-                  aria-label={`Go to testimonial ${index + 1}`}
-                  role="tab"
-                  aria-selected={currentIndex === index}
-                />
-              ))}
-            </div>
-
-            {/* Auto-play toggle */}
-            <button
-              className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors duration-300"
-              onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-              aria-label={isAutoPlaying ? "Pause auto-play" : "Resume auto-play"}
-            >
-              {isAutoPlaying ? (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-              ) : (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-7 4h3m4 0h3m-6 4h3m1-9V8a2 2 0 012-2h2a2 2 0 012 2v1"></path>
-                </svg>
-              )}
-            </button>
+              </Link>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Call-to-Action Section */}
-        <section 
-          ref={ctaRef}
-          className="w-full max-w-4xl bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-indigo-600/20 backdrop-blur-sm rounded-xl p-8 lg:p-12 mb-12 text-center border border-blue-500/30 shadow-xl relative overflow-hidden"
-          aria-label="Call to action"
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 animate-pulse"></div>
-          <div className="relative z-10">
-            <h2 className="text-2xl lg:text-3xl font-bold mb-4">Ready to Transform Your Legal Practice?</h2>
-            <p className="text-gray-300 mb-8 max-w-xl mx-auto leading-relaxed">
-              Join thousands of legal professionals who&apos;ve enhanced their practice with our comprehensive platform.
+      {/* Service Categories */}
+      <section className="py-16 lg:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Comprehensive Legal Services
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              From business registration to legal consultation, we provide end-to-end solutions for all your legal needs
             </p>
-            <div className="flex gap-4 items-center justify-center flex-col sm:flex-row">
-              <Link href="/contact">
-                <button className="px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-full hover:from-blue-600 hover:to-blue-800 transition-all duration-300 shadow-lg transform hover:scale-105 font-medium">
-                  Get Legal Support
-                </button>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {SERVICE_CATEGORIES.map((category) => (
+              <div
+                key={category.id}
+                className="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 overflow-hidden cursor-pointer transform hover:scale-105"
+                onMouseEnter={() => setActiveCategory(category.id)}
+                onMouseLeave={() => setActiveCategory(null)}
+              >
+                <div className={`h-2 bg-gradient-to-r ${category.color}`}></div>
+                <div className="p-8">
+                  <div className="text-4xl mb-4">{category.icon}</div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                    {category.title}
+                  </h3>
+                  <p className="text-gray-600 mb-6">{category.description}</p>
+                  
+                  <div className={`space-y-2 overflow-hidden transition-all duration-300 ${
+                    activeCategory === category.id ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
+                  }`}>
+                    {category.services.map((service, index) => (
+                      <Link 
+                        key={index} 
+                        href={`/services/${service.toLowerCase().replace(/\s+/g, '-')}`}
+                        className="block text-sm text-blue-600 hover:text-blue-800 transition-colors hover:underline"
+                      >
+                        • {service}
+                      </Link>
+                    ))}
+                  </div>
+                  
+                  <Link
+                    href={`/services/${category.title.toLowerCase().replace(/\s+/g, '-')}`}
+                    className="inline-flex items-center mt-4 text-blue-600 hover:text-blue-800 font-semibold transition-colors group-hover:translate-x-1"
+                  >
+                    View All Services
+                    <svg className="w-4 h-4 ml-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Calculators & Tools */}
+      <section className="py-16 bg-gradient-to-br from-slate-50 to-blue-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Free Calculators & Tools
+            </h2>
+            <p className="text-lg text-gray-600">
+              Make informed financial and legal decisions with our free tools
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {CALCULATORS.map((calc, index) => (
+              <Link
+                key={index}
+                href={calc.link}
+                className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 text-center group border border-gray-100"
+              >
+                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">{calc.icon}</div>
+                <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                  {calc.name}
+                </h3>
+                <div className="mt-4 text-blue-600 group-hover:translate-x-1 transition-transform">
+                  Calculate Now →
+                </div>
               </Link>
-              <Link href="/learn-more">
-                <button className="px-8 py-4 bg-transparent border border-white/30 text-white rounded-full hover:bg-white/10 hover:border-white/50 transition-all duration-300 transform hover:scale-105 mt-4 sm:mt-0">
-                  Learn More
-                </button>
-              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-16 lg:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              What Our Clients Say
+            </h2>
+            <p className="text-xl text-gray-600">
+              Trusted by thousands of businesses and individuals across India
+            </p>
+          </div>
+
+          <div className="relative bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 lg:p-12">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center">
+                <div className="flex justify-center mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <svg key={i} className="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                  ))}
+                </div>
+                
+                <blockquote className="text-xl lg:text-2xl text-gray-900 font-medium mb-8 leading-relaxed">
+                  "{TESTIMONIALS[currentTestimonial].testimonial}"
+                </blockquote>
+                
+                <div className="flex items-center justify-center">
+                  <Image
+                    src={TESTIMONIALS[currentTestimonial].authorImage}
+                    alt={TESTIMONIALS[currentTestimonial].authorName}
+                    width={64}
+                    height={64}
+                    className="w-16 h-16 rounded-full mr-4 border-4 border-white shadow-lg"
+                  />
+                  <div>
+                    <div className="font-semibold text-gray-900 text-lg">
+                      {TESTIMONIALS[currentTestimonial].authorName}
+                    </div>
+                    <div className="text-gray-600">
+                      {TESTIMONIALS[currentTestimonial].authorPosition}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Pagination dots */}
+                <div className="flex justify-center mt-8 space-x-2">
+                  {TESTIMONIALS.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentTestimonial(index)}
+                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                        currentTestimonial === index 
+                          ? 'bg-blue-600 w-8' 
+                          : 'bg-gray-300 hover:bg-gray-400'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
-        </section>
-      </main>
+        </div>
+      </section>
 
-      <Footer />
+      {/* CTA Section */}
+      <section className="py-16 bg-gradient-to-r from-blue-600 to-purple-700">
+        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+          <h2 className="text-4xl font-bold text-white mb-6">
+            Ready to Get Started?
+          </h2>
+          <p className="text-xl text-blue-100 mb-8 leading-relaxed">
+            Join over 1 million+ satisfied clients who trust Lawgical for their legal and compliance needs
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/get-started"
+              className="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg"
+            >
+              Start Your Legal Journey
+            </Link>
+            <Link
+              href="/consultation"
+              className="border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-600 transition-all"
+            >
+              Book Free Consultation
+            </Link>
+          </div>
+          
+          <div className="mt-8 text-blue-100 text-sm">
+            <span>✓ No hidden fees</span>
+            <span className="mx-4">✓ Expert guidance</span>
+            <span>✓ 100% secure</span>
+          </div>
+        </div>
+      </section>
 
-      {/* Scroll to Top Button */}
-      <button
-        className="fixed bottom-6 right-6 bg-blue-500/80 backdrop-blur-sm text-white p-3 rounded-full shadow-xl hover:bg-blue-500 hover:shadow-2xl transition-all duration-300 ease-in-out z-50 group"
-        ref={scrollButtonRef}
-        onClick={scrollToTop}
-        aria-label="Scroll to top"
-      >
-        <svg className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
-        </svg>
-      </button>
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold">L</span>
+                </div>
+                <span className="text-xl font-bold">Lawgical</span>
+              </div>
+              <p className="text-gray-400 mb-4">
+                Making legal, tax, and compliance simple for everyone.
+              </p>
+              <div className="text-sm text-gray-500">
+                © 2025 Lawgical. All rights reserved.
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="font-semibold mb-4">Services</h3>
+              <div className="space-y-2 text-sm text-gray-400">
+                <Link href="/business-setup" className="block hover:text-white transition-colors">Business Setup</Link>
+                <Link href="/legal-consultation" className="block hover:text-white transition-colors">Legal Consultation</Link>
+                <Link href="/tax-compliance" className="block hover:text-white transition-colors">Tax & Compliance</Link>
+                <Link href="/trademark-ip" className="block hover:text-white transition-colors">Trademark & IP</Link>
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="font-semibold mb-4">Resources</h3>
+              <div className="space-y-2 text-sm text-gray-400">
+                <Link href="/calculators" className="block hover:text-white transition-colors">Calculators</Link>
+                <Link href="/blog" className="block hover:text-white transition-colors">Blog</Link>
+                <Link href="/guides" className="block hover:text-white transition-colors">Legal Guides</Link>
+                <Link href="/templates" className="block hover:text-white transition-colors">Document Templates</Link>
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="font-semibold mb-4">Support</h3>
+              <div className="space-y-2 text-sm text-gray-400">
+                <Link href="/contact" className="block hover:text-white transition-colors">Contact Us</Link>
+                <Link href="/help" className="block hover:text-white transition-colors">Help Center</Link>
+                <Link href="/privacy" className="block hover:text-white transition-colors">Privacy Policy</Link>
+                <Link href="/terms" className="block hover:text-white transition-colors">Terms of Service</Link>
+              </div>
+            </div>
+          </div>
+          
+          <div className="border-t border-gray-800 mt-12 pt-8 text-center text-sm text-gray-500">
+            <p>Legal disclaimer: We are a facilitating platform connecting you with reliable professionals. We do not provide legal services ourselves.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
