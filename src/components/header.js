@@ -40,7 +40,7 @@ const servicesList = [
 const navigationItems = [
   { name: "Home", href: "/" },
   { name: "Service", href: "/service" },
-  { name: "Consultation", href: "/Consultation" },
+  { name: "Consultation", href: "/consultation" },
 ];
 
 const Header = () => {
