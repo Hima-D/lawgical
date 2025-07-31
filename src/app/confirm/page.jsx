@@ -73,7 +73,7 @@ const ConfirmEmail = () => {
         {!loading && !error && (
           <div className="bg-green-600 text-white p-4 rounded-md text-center shadow-md">
             <p className="font-semibold">Your email has been successfully confirmed!</p>
-            <p>You can now sign in and start using the Lawyer Portal.</p>
+            <p>You can now sign in and start using lawgical.</p>
             <button
               onClick={() => router.push("/signin")}
               className="mt-4 w-full py-2 bg-black text-white rounded-md hover:bg-gray-800 focus:outline-none transition-all duration-200"
@@ -84,7 +84,7 @@ const ConfirmEmail = () => {
         )}
 
         <div className="mt-8 text-center text-sm text-gray-500">
-          <p>Need help? Contact our support team at <a href="mailto:support@lawyer-portal.com" className="text-black hover:underline">support@lawyer-portal.com</a></p>
+          <p>Need help? Contact our support team at <a href="mailto:support@lawgical.io" className="text-black hover:underline">support@lawgical.io</a></p>
         </div>
       </div>
     </div>
