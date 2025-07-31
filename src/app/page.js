@@ -146,7 +146,7 @@ export default function LawgicalHomepage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-center lg:text-left">
               <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
-                India's Leading <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Legal & Compliance</span> Platform
+                India&apos;s Leading <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Legal & Compliance</span> Platform
               </h1>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
                 Simplifying legal, tax, and compliance services for individuals and businesses. 

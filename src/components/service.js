@@ -561,7 +561,7 @@ const Services = () => {
                   className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed"
                   variants={itemVariants}
                 >
-                  Schedule a confidential consultation with our expert legal team. We'll analyze your situation and provide strategic guidance tailored to your specific needs.
+                  Schedule a confidential consultation with our expert legal team. We&#39;ll analyze your situation and provide strategic guidance tailored to your specific needs.
                 </motion.p>
                 
                 <motion.div 
