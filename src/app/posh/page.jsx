@@ -29,9 +29,10 @@ import {
   Briefcase,
   Globe,
 } from "lucide-react";
+import { Slot } from "@radix-ui/react-slot"; // For asChild support
 
 // shadcn/ui component implementations
-const Button = ({ children, variant = "default", size = "default", className = "", ...props }) => {
+const Button = ({ children, variant = "default", size = "default", className = "", asChild = false, ...props }) => {
   const baseClasses =
     "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background";
 
@@ -51,13 +52,15 @@ const Button = ({ children, variant = "default", size = "default", className = "
     icon: "h-10 w-10",
   };
 
+  const Comp = asChild ? Slot : "button";
+
   return (
-    <button
+    <Comp
       className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`}
       {...props}
     >
       {children}
-    </button>
+    </Comp>
   );
 };
 
@@ -130,10 +133,6 @@ const Badge = ({ children, variant = "default", className = "" }) => {
   );
 };
 
-
-
-
-
 const POSH = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -152,6 +151,7 @@ const POSH = () => {
 
   // Animate counters
   useEffect(() => {
+    console.log("POSH page rendered, starting counter animation");
     const animateCounter = (target, key, suffix = "") => {
       let current = 0;
       const increment = target / 100;
@@ -251,7 +251,7 @@ const POSH = () => {
       icon: Briefcase,
     },
   ];
-  
+
   const testimonials = [
     {
       name: "Priya Sharma",
@@ -285,8 +285,8 @@ const POSH = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Handle form submission logic here
+    console.log("Contact form submitted:", formData);
+    // Handle form submission logic here (e.g., send to API)
   };
 
   return (
@@ -317,18 +317,19 @@ const POSH = () => {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 mb-8 justify-center lg:justify-start">
-                <Button
+              <Button
+                  variant="outline"
                   size="lg"
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg transform hover:scale-105 shadow-lg"
-                  aschild
+                  className="border-2 border-blue-600 text-blue-600 px-8 py-4 text-lg hover:bg-blue-600 hover:text-white"
+                  asChild
                 >
-                  <Link href="/posh/register">Register Now</Link>
+                  <Link href="/posh/register">Register</Link>
                 </Button>
                 <Button
                   variant="outline"
                   size="lg"
                   className="border-2 border-blue-600 text-blue-600 px-8 py-4 text-lg hover:bg-blue-600 hover:text-white"
-                  aschild
+                  asChild
                 >
                   <Link href="#contact">Request Call Back</Link>
                 </Button>
@@ -640,9 +641,7 @@ const POSH = () => {
                   </div>
                   <div className="flex items-start space-x-3">
                     <MapPin className="h-5 w-5 text-primary mt-0.5" />
-                    <span>
-                      lawgical, Gurgaon
-                    </span>
+                    <span>lawgical, Gurgaon</span>
                   </div>
                 </div>
 
@@ -739,7 +738,7 @@ const POSH = () => {
               className="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg"
               asChild
             >
-              <Link href="#register">Start Your Journey</Link>
+              <Link href="/posh/register">Start Your Journey</Link>
             </Button>
             <Button
               variant="outline"

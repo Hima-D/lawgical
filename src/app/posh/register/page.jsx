@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -199,12 +200,12 @@ const RegisterPage = () => {
         body: JSON.stringify(formData),
       });
 
+      const responseData = await response.json();
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Registration failed");
+        throw new Error(responseData.message || "Registration failed");
       }
 
-      setSubmitMessage("Registration successful! We'll contact you soon with confirmation details.");
+      setSubmitMessage(responseData.message);
       setShowConfirmation(true);
       setFormData({
         fullName: "",
@@ -226,24 +227,17 @@ const RegisterPage = () => {
   };
 
   const handleSubmitClick = () => {
-    console.log("Submit button clicked");
+    console.log("Form submit button clicked");
   };
 
   const closeConfirmation = () => {
     setShowConfirmation(false);
   };
 
-  // Animation for hero section
-  useEffect(() => {
-    const hero = document.getElementById("hero-section");
-    if (hero) {
-      hero.classList.add("animate-fade-in");
-    }
-  }, []);
-
-  // Debug logging
+  // Debug logging for rendering
   useEffect(() => {
     console.log("RegisterPage rendered, formData:", formData);
+    console.log("Form and submit button rendering check");
   }, [formData]);
 
   return (
@@ -265,7 +259,7 @@ const RegisterPage = () => {
         {/* Hero Section */}
         <section
           id="hero-section"
-          className="bg-gradient-to-br from-blue-50 via-white to-purple-50 py-16 lg:py-24 opacity-0 transition-opacity duration-1000"
+          className="bg-gradient-to-br from-blue-50 via-white to-purple-50 py-16 lg:py-24"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
@@ -468,14 +462,16 @@ const RegisterPage = () => {
 
                     <Button
                       type="submit"
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white text-lg py-6 shadow-lg"
+                      variant="outline"
+                      size="lg"
+                      className="w-full border-2 border-blue-600 text-blue-600 px-8 py-4 text-lg hover:bg-blue-600 hover:text-white shadow-lg"
                       disabled={isSubmitting}
                       onClick={handleSubmitClick}
                     >
                       {isSubmitting ? (
                         <span className="flex items-center">
                           <svg
-                            className="animate-spin h-5 w-5 mr-2 text-white"
+                            className="animate-spin h-5 w-5 mr-2 text-blue-600"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
@@ -559,7 +555,7 @@ const RegisterPage = () => {
                 </div>
                 <Button
                   variant="outline"
-                  className="w-full border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white text-lg py-6"
+                  className="w-full border-2 border-blue-600 text-blue-600 px-8 py-4 text-lg hover:bg-blue-600 hover:text-white shadow-lg"
                   asChild
                 >
                   <Link href="/posh#contact">Contact Us for More Details</Link>
@@ -598,14 +594,15 @@ const RegisterPage = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
-                className="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg"
+                size="lg"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg transform hover:scale-105 shadow-lg"
                 asChild
               >
                 <Link href="#register">Register Now</Link>
               </Button>
               <Button
                 variant="outline"
-                className="border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-600 transition-all"
+                className="border-2 border-white text-white px-8 py-4 text-lg font-semibold hover:bg-white hover:text-blue-600 transition-all"
                 asChild
               >
                 <Link href="/posh">Learn More</Link>
@@ -621,13 +618,6 @@ const RegisterPage = () => {
 
         <Footer />
       </div>
-
-      {/* CSS for Animation */}
-      <style jsx>{`
-        .animate-fade-in {
-          opacity: 1 !important;
-        }
-      `}</style>
     </ErrorBoundary>
   );
 };
