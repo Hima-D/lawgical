@@ -322,7 +322,7 @@ const POSH = () => {
                   className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg transform hover:scale-105 shadow-lg"
                   aschild
                 >
-                  <Link href="#register">Register Now</Link>
+                  <Link href="/posh/register">Register Now</Link>
                 </Button>
                 <Button
                   variant="outline"
