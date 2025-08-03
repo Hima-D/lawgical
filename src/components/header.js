@@ -41,6 +41,8 @@ const navigationItems = [
   { name: "Home", href: "/" },
   { name: "Service", href: "/service" },
   { name: "Consultation", href: "/consultation" },
+  { name: "payment", href: "/payment" },
+
 ];
 
 const Header = () => {
