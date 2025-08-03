@@ -1,8 +1,16 @@
-"use client";
-import React, { useState } from 'react';
+'use client';
+
+import { useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
-import services from '@/components/services';
+
 import {
   Calendar,
   Clock,
@@ -15,33 +23,59 @@ import {
   ArrowLeft,
   Briefcase,
   Users,
-  Home,
-  Star,
   Shield,
   Zap,
-  Award
+  Award,
+  Star,
+  MapPin,
+  GraduationCap,
 } from 'lucide-react';
 
 const Consultation = () => {
-  const [formState, setFormState] = useState({
-    service: "",
-    attorney: "",
-    date: "",
-    time: "",
-    name: "",
-    email: "",
-    phone: "",
-    description: ""
+  const { control, handleSubmit, watch, setValue, trigger, reset, formState: { errors } } = useForm({
+    mode: 'onChange',
+    defaultValues: {
+      service: '',
+      attorney: '',
+      date: '',
+      time: '',
+      name: '',
+      email: '',
+      phone: '',
+      description: '',
+    },
   });
-  
-  const [formErrors, setFormErrors] = useState({});
+
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [currentStep, setCurrentStep] = useState(1);
 
+  const watchedService = watch('service');
+  const watchedAttorney = watch('attorney');
+
   // Get today's date and format it as yyyy-mm-dd
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toISOString().split('T')[0];
+
+  // Services data
+  const services = [
+    { id: 1, title: 'Company Incorporation' },
+    { id: 2, title: 'GST Registration and Returns' },
+    { id: 3, title: 'Intellectual Property' },
+    { id: 4, title: 'FSSAI Registration' },
+    { id: 5, title: 'Digital Signatures' },
+    { id: 6, title: 'ISO Certifications' },
+    { id: 7, title: 'GeM Portal Registration' },
+    { id: 8, title: 'Bookkeeping and Accounting' },
+    { id: 9, title: 'MSME and Startup India Registration' },
+    { id: 10, title: 'Shop Act Registration' },
+    { id: 11, title: 'Trade License' },
+    { id: 12, title: 'Import Export Code (IE Code)' },
+    { id: 13, title: 'IPO, Mergers, and Valuations' },
+    { id: 14, title: 'Legal Metrology Act Registration' },
+    { id: 15, title: 'POSH Training and Compliance' },
+    { id: 16, title: 'Other Professional Services' },
+  ];
 
   // Generate time slots from 9 AM to 5 PM in half-hour increments
   const generateTimeSlots = (startHour = 9, endHour = 17) => {
@@ -52,12 +86,10 @@ const Consultation = () => {
     while (currentTime.getHours() < endHour) {
       const hours = currentTime.getHours();
       const minutes = currentTime.getMinutes();
-      const timeSlot = `${hours % 12 || 12}:${minutes === 0 ? "00" : "30"} ${
-        hours >= 12 ? "PM" : "AM"
+      const timeSlot = `${hours % 12 || 12}:${minutes === 0 ? '00' : '30'} ${
+        hours >= 12 ? 'PM' : 'AM'
       }`;
       timeSlots.push(timeSlot);
-
-      // Move to the next half-hour slot
       currentTime = new Date(currentTime.setMinutes(currentTime.getMinutes() + 30));
     }
 
@@ -66,53 +98,153 @@ const Consultation = () => {
 
   const timeSlots = generateTimeSlots();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormState(prev => ({ ...prev, [name]: value }));
-    
-    // Clear error for this field when user starts typing
-    if (formErrors[name]) {
-      setFormErrors(prev => ({ ...prev, [name]: "" }));
+  const getAttorneys = () => {
+    const attorneyMap = {
+      'Company Incorporation': [
+        { 
+          id: 'attorney1', 
+          name: 'Jessica Rodriguez', 
+          specialty: 'Company Incorporation', 
+          rating: 4.9, 
+          experience: '8 Years',
+          location: 'Mumbai',
+          cases: '250+ Cases',
+          education: 'Harvard Law School'
+        },
+        { 
+          id: 'attorney2', 
+          name: 'Carlos Martinez', 
+          specialty: 'Company Incorporation', 
+          rating: 4.8, 
+          experience: '12 Years',
+          location: 'Delhi',
+          cases: '400+ Cases',
+          education: 'Delhi University'
+        },
+      ],
+      'GST Registration and Returns': [
+        { 
+          id: 'attorney3', 
+          name: 'Michael Chang', 
+          specialty: 'GST Registration and Returns', 
+          rating: 4.9, 
+          experience: '10 Years',
+          location: 'Bangalore',
+          cases: '300+ Cases',
+          education: 'NLS Bangalore'
+        },
+        { 
+          id: 'attorney4', 
+          name: 'David Kim', 
+          specialty: 'GST Registration and Returns', 
+          rating: 4.7, 
+          experience: '15 Years',
+          location: 'Chennai',
+          cases: '500+ Cases',
+          education: 'Madras University'
+        },
+      ],
+      'Intellectual Property': [
+        { 
+          id: 'attorney5', 
+          name: 'Sarah Williams', 
+          specialty: 'Intellectual Property', 
+          rating: 4.8, 
+          experience: '9 Years',
+          location: 'Pune',
+          cases: '200+ Cases',
+          education: 'Columbia Law'
+        },
+        { 
+          id: 'attorney6', 
+          name: 'Emma Johnson', 
+          specialty: 'Intellectual Property', 
+          rating: 4.9, 
+          experience: '11 Years',
+          location: 'Hyderabad',
+          cases: '350+ Cases',
+          education: 'NALSAR University'
+        },
+      ],
+      'FSSAI Registration': [
+        { 
+          id: 'attorney7', 
+          name: 'Robert Brown', 
+          specialty: 'FSSAI Registration', 
+          rating: 4.9, 
+          experience: '13 Years',
+          location: 'Mumbai',
+          cases: '400+ Cases',
+          education: 'Government Law College'
+        },
+        { 
+          id: 'attorney8', 
+          name: 'Lisa Davis', 
+          specialty: 'FSSAI Registration', 
+          rating: 4.8, 
+          experience: '7 Years',
+          location: 'Delhi',
+          cases: '180+ Cases',
+          education: 'Faculty of Law, DU'
+        },
+      ],
+      'Digital Signatures': [
+        { 
+          id: 'attorney9', 
+          name: 'James Wilson', 
+          specialty: 'Digital Signatures', 
+          rating: 4.7, 
+          experience: '14 Years',
+          location: 'Bangalore',
+          cases: '450+ Cases',
+          education: 'Christ University'
+        },
+        { 
+          id: 'attorney10', 
+          name: 'Maria Garcia', 
+          specialty: 'Digital Signatures', 
+          rating: 4.9, 
+          experience: '6 Years',
+          location: 'Gurgaon',
+          cases: '150+ Cases',
+          education: 'Jindal Global Law School'
+        },
+      ],
+    };
+
+    return attorneyMap[watchedService] || [];
+  };
+
+  const onSubmit = async (data) => {
+    setIsSubmitting(true);
+    setErrorMessage('');
+    setSuccessMessage('');
+
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      setSuccessMessage(
+        'Your consultation has been booked successfully! We will contact you shortly to confirm the details.'
+      );
+      reset();
+      setCurrentStep(1);
+      window.scrollTo(0, 0);
+    } catch (error) {
+      setErrorMessage('There was an error submitting your form. Please try again later.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const validateStep = (step) => {
-    const newErrors = {};
+  const nextStep = async () => {
+    const stepFields = {
+      1: ['service', 'attorney'],
+      2: ['date', 'time'],
+      3: ['name', 'email', 'phone', 'description'],
+    };
     
-    if (step === 1) {
-      if (!formState.service) newErrors.service = "Please select a service";
-      if (!formState.attorney) newErrors.attorney = "Please select an attorney";
-    } else if (step === 2) {
-      if (!formState.date) newErrors.date = "Please select a date";
-      if (!formState.time) newErrors.time = "Please select a time";
-    } else if (step === 3) {
-      if (!formState.name.trim()) newErrors.name = "Please enter your full name";
-      if (!formState.email.trim()) {
-        newErrors.email = "Please enter your email";
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formState.email)) {
-        newErrors.email = "Please enter a valid email address";
-      }
-      if (!formState.phone.trim()) {
-        newErrors.phone = "Please enter your phone number";
-      } else {
-        const cleanPhone = formState.phone.replace(/\D/g, '');
-        if (cleanPhone.length < 10) {
-          newErrors.phone = "Phone number must have at least 10 digits";
-        }
-      }
-      if (!formState.description.trim()) {
-        newErrors.description = "Please describe your legal issue";
-      } else if (formState.description.trim().length < 10) {
-        newErrors.description = "Please provide more details (at least 10 characters)";
-      }
-    }
-    
-    setFormErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const nextStep = () => {
-    if (validateStep(currentStep)) {
+    const isValid = await trigger(stepFields[currentStep]);
+    if (isValid) {
       setCurrentStep(currentStep + 1);
       window.scrollTo(0, 0);
     }
@@ -123,451 +255,474 @@ const Consultation = () => {
     window.scrollTo(0, 0);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!validateStep(3)) return;
-    
-    setIsSubmitting(true);
-    setErrorMessage("");
-    setSuccessMessage("");
-
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      setSuccessMessage("Your consultation has been booked successfully! We'll contact you shortly to confirm the details.");
-      setFormState({
-        service: "",
-        attorney: "",
-        date: "",
-        time: "",
-        name: "",
-        email: "",
-        phone: "",
-        description: ""
-      });
-      setCurrentStep(1);
-      window.scrollTo(0, 0);
-    } catch (error) {
-      setErrorMessage("There was an error submitting your form. Please try again later.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  // Get attorneys based on selected service
-  const getAttorneys = () => {
-    const attorneyMap = {
-      'Immigration Law': [
-        { id: "attorney1", name: "Jessica Rodriguez", specialty: "Immigration Law", rating: 4.9, experience: "8 Years" },
-        { id: "attorney2", name: "Carlos Martinez", specialty: "Immigration Law", rating: 4.8, experience: "12 Years" }
-      ],
-      'Corporate Law': [
-        { id: "attorney3", name: "Michael Chang", specialty: "Corporate Law", rating: 4.9, experience: "10 Years" },
-        { id: "attorney4", name: "David Kim", specialty: "Corporate Law", rating: 4.7, experience: "15 Years" }
-      ],
-      'Family Law': [
-        { id: "attorney5", name: "Sarah Williams", specialty: "Family Law", rating: 4.8, experience: "9 Years" },
-        { id: "attorney6", name: "Emma Johnson", specialty: "Family Law", rating: 4.9, experience: "11 Years" }
-      ],
-      'Criminal Law': [
-        { id: "attorney7", name: "Robert Brown", specialty: "Criminal Law", rating: 4.9, experience: "13 Years" },
-        { id: "attorney8", name: "Lisa Davis", specialty: "Criminal Law", rating: 4.8, experience: "7 Years" }
-      ],
-      'Personal Injury': [
-        { id: "attorney9", name: "James Wilson", specialty: "Personal Injury", rating: 4.7, experience: "14 Years" },
-        { id: "attorney10", name: "Maria Garcia", specialty: "Personal Injury", rating: 4.9, experience: "6 Years" }
-      ]
-    };
-
-    return attorneyMap[formState.service] || [];
-  };
-
-  // Render progress steps
   const renderProgressSteps = () => {
     const steps = [
-      { number: 1, title: "Choose Service", icon: Briefcase },
-      { number: 2, title: "Schedule", icon: Calendar },
-      { number: 3, title: "Your Details", icon: User }
+      { number: 1, title: 'Choose Service', icon: Briefcase },
+      { number: 2, title: 'Schedule', icon: Calendar },
+      { number: 3, title: 'Your Details', icon: User },
     ];
 
     return (
       <div className="flex justify-center items-center mb-12">
         <div className="flex items-center w-full max-w-3xl">
-          {steps.map((step, index) => {
-            const Icon = step.icon;
-            return (
-              <div key={step.number} className="flex flex-1 items-center">
-                <div className={`flex flex-col items-center ${index < steps.length - 1 ? 'flex-1' : ''}`}>
-                  <div className={`flex items-center justify-center w-14 h-14 rounded-full border-2 transition-all duration-300 ${
+          {steps.map((step, index) => (
+            <div key={step.number} className="flex flex-1 items-center">
+              <div className={`flex flex-col items-center ${index < steps.length - 1 ? 'flex-1' : ''}`}>
+                <div
+                  className={`flex items-center justify-center w-14 h-14 rounded-full border-2 transition-all duration-300 ${
                     currentStep === step.number
-                      ? "bg-gradient-to-r from-blue-500 to-purple-600 border-transparent text-white shadow-lg scale-110"
+                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 border-transparent text-white shadow-lg scale-110'
                       : currentStep > step.number
-                      ? "bg-gradient-to-r from-green-400 to-green-600 border-transparent text-white shadow-lg"
-                      : "bg-white border-gray-300 text-gray-400 shadow-sm"
-                  }`}>
-                    {currentStep > step.number ? <CheckCircle size={20} /> : <Icon size={20} />}
-                  </div>
-                  <div className={`mt-3 text-center transition-colors duration-300 ${
-                    currentStep >= step.number ? "text-gray-900" : "text-gray-400"
-                  }`}>
-                    <div className="text-sm font-semibold">{step.title}</div>
-                    <div className="text-xs">Step {step.number}</div>
-                  </div>
+                      ? 'bg-gradient-to-r from-green-400 to-green-600 border-transparent text-white shadow-lg'
+                      : 'bg-white border-gray-300 text-gray-400 shadow-sm'
+                  }`}
+                >
+                  {currentStep > step.number ? <CheckCircle size={20} /> : <step.icon size={20} />}
                 </div>
-                {index < steps.length - 1 && (
-                  <div className={`flex-1 h-0.5 mx-4 transition-colors duration-300 ${
-                    currentStep > step.number ? "bg-gradient-to-r from-green-400 to-green-600" : "bg-gray-200"
-                  }`}></div>
-                )}
+                <div
+                  className={`mt-3 text-center transition-colors duration-300 ${
+                    currentStep >= step.number ? 'text-gray-900' : 'text-gray-400'
+                  }`}
+                >
+                  <div className="text-sm font-semibold">{step.title}</div>
+                  <div className="text-xs">Step {step.number}</div>
+                </div>
               </div>
-            );
-          })}
+              {index < steps.length - 1 && (
+                <div
+                  className={`flex-1 h-0.5 mx-4 transition-colors duration-300 ${
+                    currentStep > step.number ? 'bg-gradient-to-r from-green-400 to-green-600' : 'bg-gray-200'
+                  }`}
+                ></div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     );
   };
 
-  // Step 1: Select Service and Attorney
   const renderStep1 = () => (
     <div className="space-y-8">
       {/* Service Selection */}
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 border-b border-gray-100">
+      <Card className="bg-white shadow-lg border border-gray-100">
+        <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50">
           <div className="flex items-center">
             <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-white mr-4">
               <Briefcase size={24} />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-gray-900">Select Legal Service</h3>
-              <p className="text-gray-600">Choose the area of law you need assistance with</p>
+              <CardTitle className="text-xl text-gray-900">Select Legal Service</CardTitle>
+              <CardDescription className="text-gray-600">Choose the area of law you need assistance with</CardDescription>
             </div>
           </div>
-        </div>
-        <div className="p-6">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {services.map((serviceItem) => (
-              <button
-                key={serviceItem.id}
-                onClick={() => handleChange({ target: { name: 'service', value: serviceItem.name } })}
-                className={`p-4 rounded-xl border-2 text-left transition-all duration-300 hover:shadow-lg ${
-                  formState.service === serviceItem.name
-                    ? "border-blue-500 bg-gradient-to-br from-blue-50 to-purple-50 shadow-lg"
-                    : "border-gray-200 bg-white hover:border-blue-300"
-                }`}
-              >
-                <div className="text-3xl mb-2">{serviceItem.icon}</div>
-                <div className="font-semibold text-gray-900">{serviceItem.title}</div>
-                <div className="text-sm text-gray-600 mt-1">Expert legal guidance</div>
-              </button>
-            ))}
-          </div>
-          {formErrors.service && (
-            <p className="mt-4 text-sm text-red-500 flex items-center bg-red-50 p-3 rounded-lg">
-              <AlertCircle size={16} className="mr-2" /> {formErrors.service}
-            </p>
-          )}
-        </div>
-      </div>
+        </CardHeader>
+        <CardContent className="pt-6">
+          <Controller
+            name="service"
+            control={control}
+            rules={{ required: 'Please select a service' }}
+            render={({ field }) => (
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Legal Service</label>
+                <select
+                  {...field}
+                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
+                >
+                  <option value="">Select a service</option>
+                  {services.map((service) => (
+                    <option key={service.id} value={service.title}>
+                      {service.title}
+                    </option>
+                  ))}
+                </select>
+                {errors.service && (
+                  <p className="text-red-500 text-sm">{errors.service.message}</p>
+                )}
+              </div>
+            )}
+          />
+        </CardContent>
+      </Card>
 
       {/* Attorney Selection */}
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-        <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 border-b border-gray-100">
+      <Card className="bg-white shadow-lg border border-gray-100">
+        <CardHeader className="bg-gradient-to-r from-green-50 to-blue-50">
           <div className="flex items-center">
             <div className="p-3 bg-gradient-to-r from-green-500 to-blue-600 rounded-xl text-white mr-4">
               <Users size={24} />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-gray-900">Choose Your Attorney</h3>
-              <p className="text-gray-600">Select from our expert legal professionals</p>
+              <CardTitle className="text-xl text-gray-900">Choose Your Attorney</CardTitle>
+              <CardDescription className="text-gray-600">Select from our expert legal professionals</CardDescription>
             </div>
           </div>
-        </div>
-        <div className="p-6">
-          {!formState.service ? (
-            <div className="text-center py-8">
-              <div className="text-gray-400 text-lg mb-2">👨‍💼</div>
-              <p className="text-gray-500">Please select a service first to see available attorneys</p>
+        </CardHeader>
+        <CardContent className="pt-6">
+          {!watchedService ? (
+            <div className="text-center py-12">
+              <div className="text-gray-400 text-6xl mb-4">👨‍💼</div>
+              <p className="text-gray-500 text-lg">Please select a service first to see available attorneys</p>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 gap-4">
-              {getAttorneys().map((attorney) => (
-                <button
-                  key={attorney.id}
-                  onClick={() => handleChange({ target: { name: 'attorney', value: attorney.name } })}
-                  className={`p-4 rounded-xl border-2 text-left transition-all duration-300 hover:shadow-lg ${
-                    formState.attorney === attorney.name
-                      ? "border-green-500 bg-gradient-to-br from-green-50 to-blue-50 shadow-lg"
-                      : "border-gray-200 bg-white hover:border-green-300"
-                  }`}
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="font-semibold text-gray-900">{attorney.name}</div>
-                    <div className="flex items-center text-yellow-500">
-                      <Star size={14} fill="currentColor" />
-                      <span className="text-sm ml-1">{attorney.rating}</span>
-                    </div>
+            <Controller
+              name="attorney"
+              control={control}
+              rules={{ required: 'Please select an attorney' }}
+              render={({ field }) => (
+                <div className="space-y-4">
+                  <label className="text-sm font-medium text-gray-700">Select Attorney</label>
+                  <div className="grid gap-4">
+                    {getAttorneys().map((attorney) => (
+                      <Card 
+                        key={attorney.id}
+                        className={`cursor-pointer transition-all duration-300 hover:shadow-lg ${
+                          field.value === attorney.name
+                            ? 'ring-2 ring-blue-500 bg-blue-50 border-blue-200'
+                            : 'border-gray-200 hover:border-blue-300'
+                        }`}
+                        onClick={() => field.onChange(attorney.name)}
+                      >
+                        <CardContent className="p-6">
+                          <div className="flex items-start justify-between mb-4">
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between mb-2">
+                                <h3 className="text-lg font-semibold text-gray-900">{attorney.name}</h3>
+                                <div className="flex items-center text-yellow-500">
+                                  <Star size={16} fill="currentColor" />
+                                  <span className="text-sm font-medium ml-1">{attorney.rating}</span>
+                                </div>
+                              </div>
+                              <p className="text-blue-600 font-medium mb-3">{attorney.specialty}</p>
+                              
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm text-gray-600">
+                                <div className="flex items-center">
+                                  <Award size={14} className="mr-2 text-purple-500" />
+                                  <span>{attorney.experience}</span>
+                                </div>
+                                <div className="flex items-center">
+                                  <MapPin size={14} className="mr-2 text-green-500" />
+                                  <span>{attorney.location}</span>
+                                </div>
+                                <div className="flex items-center">
+                                  <Briefcase size={14} className="mr-2 text-orange-500" />
+                                  <span>{attorney.cases}</span>
+                                </div>
+                              </div>
+                              
+                              <div className="flex items-center mt-2 text-sm text-gray-600">
+                                <GraduationCap size={14} className="mr-2 text-indigo-500" />
+                                <span>{attorney.education}</span>
+                              </div>
+                            </div>
+                            
+                            {field.value === attorney.name && (
+                              <div className="ml-4">
+                                <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                                  <CheckCircle size={16} className="text-white" />
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
                   </div>
-                  <div className="text-sm text-gray-600">{attorney.specialty}</div>
-                  <div className="text-xs text-gray-500 mt-1 flex items-center">
-                    <Award size={12} className="mr-1" />
-                    {attorney.experience} Experience
-                  </div>
-                </button>
-              ))}
-            </div>
+                  {errors.attorney && (
+                    <p className="text-red-500 text-sm">{errors.attorney.message}</p>
+                  )}
+                </div>
+              )}
+            />
           )}
-          {formErrors.attorney && (
-            <p className="mt-4 text-sm text-red-500 flex items-center bg-red-50 p-3 rounded-lg">
-              <AlertCircle size={16} className="mr-2" /> {formErrors.attorney}
-            </p>
-          )}
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       <div className="flex justify-end">
-        <button
+        <Button
           type="button"
           onClick={nextStep}
-          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-4 px-8 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
+          size="lg"
+          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
         >
           Continue to Schedule
-        </button>
+        </Button>
       </div>
     </div>
   );
 
-  // Step 2: Date and Time Selection
   const renderStep2 = () => (
     <div className="space-y-8">
       <div className="grid md:grid-cols-2 gap-8">
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 border-b border-gray-100">
+        <Card className="bg-white shadow-lg border border-gray-100">
+          <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
             <div className="flex items-center">
               <div className="p-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl text-white mr-4">
                 <Calendar size={24} />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-gray-900">Select Date</h3>
-                <p className="text-gray-600">Choose your preferred consultation date</p>
+                <CardTitle className="text-xl text-gray-900">Select Date</CardTitle>
+                <CardDescription className="text-gray-600">Choose your preferred consultation date</CardDescription>
               </div>
             </div>
-          </div>
-          <div className="p-6">
-            <input
-              type="date"
-              id="date"
+          </CardHeader>
+          <CardContent className="pt-6">
+            <Controller
               name="date"
-              value={formState.date}
-              onChange={handleChange}
-              className={`w-full px-4 py-4 bg-gray-50 text-gray-900 border-2 ${
-                formErrors.date ? "border-red-300" : "border-gray-200"
-              } rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300`}
-              min={today}
+              control={control}
+              rules={{ required: 'Please select a date' }}
+              render={({ field }) => (
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Consultation Date</label>
+                  <Input
+                    type="date"
+                    min={today}
+                    {...field}
+                    className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  {errors.date && (
+                    <p className="text-red-500 text-sm">{errors.date.message}</p>
+                  )}
+                </div>
+              )}
             />
-            {formErrors.date && (
-              <p className="mt-3 text-sm text-red-500 flex items-center bg-red-50 p-3 rounded-lg">
-                <AlertCircle size={16} className="mr-2" /> {formErrors.date}
-              </p>
-            )}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-          <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 border-b border-gray-100">
+        <Card className="bg-white shadow-lg border border-gray-100">
+          <CardHeader className="bg-gradient-to-r from-purple-50 to-pink-50">
             <div className="flex items-center">
               <div className="p-3 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl text-white mr-4">
                 <Clock size={24} />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-gray-900">Select Time</h3>
-                <p className="text-gray-600">Pick your preferred time slot</p>
+                <CardTitle className="text-xl text-gray-900">Select Time</CardTitle>
+                <CardDescription className="text-gray-600">Pick your preferred time slot</CardDescription>
               </div>
             </div>
-          </div>
-          <div className="p-6">
-            <div className="grid grid-cols-2 gap-3 max-h-64 overflow-y-auto">
-              {timeSlots.map((slot, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleChange({ target: { name: 'time', value: slot } })}
-                  className={`p-3 rounded-lg border-2 text-sm font-medium transition-all duration-300 ${
-                    formState.time === slot
-                      ? "border-purple-500 bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700"
-                      : "border-gray-200 bg-white text-gray-700 hover:border-purple-300 hover:bg-purple-50"
-                  }`}
-                >
-                  {slot}
-                </button>
-              ))}
-            </div>
-            {formErrors.time && (
-              <p className="mt-3 text-sm text-red-500 flex items-center bg-red-50 p-3 rounded-lg">
-                <AlertCircle size={16} className="mr-2" /> {formErrors.time}
-              </p>
-            )}
-          </div>
-        </div>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <Controller
+              name="time"
+              control={control}
+              rules={{ required: 'Please select a time' }}
+              render={({ field }) => (
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Time Slot</label>
+                  <div className="grid grid-cols-2 gap-3 max-h-64 overflow-y-auto">
+                    {timeSlots.map((slot, index) => (
+                      <Button
+                        key={index}
+                        type="button"
+                        variant={field.value === slot ? 'default' : 'outline'}
+                        className={`p-3 text-sm font-medium ${
+                          field.value === slot
+                            ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white'
+                            : 'border-gray-200 bg-white hover:border-purple-300 hover:bg-purple-50 text-gray-700'
+                        }`}
+                        onClick={() => field.onChange(slot)}
+                      >
+                        {slot}
+                      </Button>
+                    ))}
+                  </div>
+                  {errors.time && (
+                    <p className="text-red-500 text-sm">{errors.time.message}</p>
+                  )}
+                </div>
+              )}
+            />
+          </CardContent>
+        </Card>
       </div>
 
       <div className="flex justify-between">
-        <button
+        <Button
           type="button"
           onClick={prevStep}
-          className="bg-gray-100 hover:bg-gray-200 text-gray-700 py-4 px-8 rounded-xl font-semibold transition-all duration-300 flex items-center"
+          variant="outline"
+          size="lg"
+          className="border-gray-300 text-gray-700 hover:bg-gray-100"
         >
           <ArrowLeft size={18} className="mr-2" /> Previous Step
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           onClick={nextStep}
-          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-4 px-8 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
+          size="lg"
+          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
         >
           Continue to Details
-        </button>
+        </Button>
       </div>
     </div>
   );
 
-  // Step 3: Personal Details
   const renderStep3 = () => (
-    <div className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div className="grid md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-          <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 border-b border-gray-100">
+        <Card className="bg-white shadow-lg border border-gray-100">
+          <CardHeader className="bg-gradient-to-r from-green-50 to-emerald-50">
             <div className="flex items-center">
               <User className="mr-3 text-green-600" size={20} />
-              <label htmlFor="name" className="font-semibold text-gray-900">Full Name</label>
+              <CardTitle className="text-lg">Full Name</CardTitle>
             </div>
-          </div>
-          <div className="p-4">
-            <input
-              type="text"
-              id="name"
+          </CardHeader>
+          <CardContent className="pt-4">
+            <Controller
               name="name"
-              value={formState.name}
-              onChange={handleChange}
-              placeholder="Enter your full name"
-              className={`w-full px-4 py-3 bg-gray-50 text-gray-900 border-2 ${
-                formErrors.name ? "border-red-300" : "border-gray-200"
-              } rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-300`}
+              control={control}
+              rules={{ required: 'Please enter your full name' }}
+              render={({ field }) => (
+                <div className="space-y-2">
+                  <Input
+                    placeholder="Enter your full name"
+                    {...field}
+                    className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                  />
+                  {errors.name && (
+                    <p className="text-red-500 text-sm">{errors.name.message}</p>
+                  )}
+                </div>
+              )}
             />
-            {formErrors.name && (
-              <p className="mt-2 text-sm text-red-500 flex items-center">
-                <AlertCircle size={14} className="mr-1" /> {formErrors.name}
-              </p>
-            )}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-4 border-b border-gray-100">
+        <Card className="bg-white shadow-lg border border-gray-100">
+          <CardHeader className="bg-gradient-to-r from-blue-50 to-cyan-50">
             <div className="flex items-center">
               <Mail className="mr-3 text-blue-600" size={20} />
-              <label htmlFor="email" className="font-semibold text-gray-900">Email Address</label>
+              <CardTitle className="text-lg">Email Address</CardTitle>
             </div>
-          </div>
-          <div className="p-4">
-            <input
-              type="email"
-              id="email"
+          </CardHeader>
+          <CardContent className="pt-4">
+            <Controller
               name="email"
-              value={formState.email}
-              onChange={handleChange}
-              placeholder="your.email@example.com"
-              className={`w-full px-4 py-3 bg-gray-50 text-gray-900 border-2 ${
-                formErrors.email ? "border-red-300" : "border-gray-200"
-              } rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300`}
+              control={control}
+              rules={{
+                required: 'Please enter your email',
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: 'Please enter a valid email address',
+                },
+              }}
+              render={({ field }) => (
+                <div className="space-y-2">
+                  <Input
+                    type="email"
+                    placeholder="your.email@example.com"
+                    {...field}
+                    className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  {errors.email && (
+                    <p className="text-red-500 text-sm">{errors.email.message}</p>
+                  )}
+                </div>
+              )}
             />
-            {formErrors.email && (
-              <p className="mt-2 text-sm text-red-500 flex items-center">
-                <AlertCircle size={14} className="mr-1" /> {formErrors.email}
-              </p>
-            )}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-        <div className="bg-gradient-to-r from-purple-50 to-indigo-50 p-4 border-b border-gray-100">
+      <Card className="bg-white shadow-lg border border-gray-100">
+        <CardHeader className="bg-gradient-to-r from-purple-50 to-indigo-50">
           <div className="flex items-center">
             <Phone className="mr-3 text-purple-600" size={20} />
-            <label htmlFor="phone" className="font-semibold text-gray-900">Phone Number</label>
+            <CardTitle className="text-lg">Phone Number</CardTitle>
           </div>
-        </div>
-        <div className="p-4">
-          <input
-            type="tel"
-            id="phone"
+        </CardHeader>
+        <CardContent className="pt-4">
+          <Controller
             name="phone"
-            value={formState.phone}
-            onChange={handleChange}
-            placeholder="(123) 456-7890"
-            className={`w-full px-4 py-3 bg-gray-50 text-gray-900 border-2 ${
-              formErrors.phone ? "border-red-300" : "border-gray-200"
-            } rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300`}
+            control={control}
+            rules={{
+              required: 'Please enter your phone number',
+              pattern: {
+                value: /^\d{10,}$/,
+                message: 'Phone number must have at least 10 digits',
+              },
+            }}
+            render={({ field }) => (
+              <div className="space-y-2">
+                <Input
+                  type="tel"
+                  placeholder="(123) 456-7890"
+                  {...field}
+                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                />
+                <p className="text-xs text-gray-500 flex items-center">
+                  <Shield size={12} className="mr-1" />
+                  We will send booking confirmation via WhatsApp to this number
+                </p>
+                {errors.phone && (
+                  <p className="text-red-500 text-sm">{errors.phone.message}</p>
+                )}
+              </div>
+            )}
           />
-          <p className="mt-2 text-xs text-gray-500 flex items-center">
-            <Shield size={12} className="mr-1" />
-            We'll send booking confirmation via WhatsApp to this number
-          </p>
-          {formErrors.phone && (
-            <p className="mt-2 text-sm text-red-500 flex items-center">
-              <AlertCircle size={14} className="mr-1" /> {formErrors.phone}
-            </p>
-          )}
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-        <div className="bg-gradient-to-r from-orange-50 to-red-50 p-4 border-b border-gray-100">
+      <Card className="bg-white shadow-lg border border-gray-100">
+        <CardHeader className="bg-gradient-to-r from-orange-50 to-red-50">
           <div className="flex items-center">
             <FileText className="mr-3 text-orange-600" size={20} />
-            <label htmlFor="description" className="font-semibold text-gray-900">Brief Description of Your Legal Issue</label>
+            <CardTitle className="text-lg">Brief Description of Your Legal Issue</CardTitle>
           </div>
-        </div>
-        <div className="p-4">
-          <textarea
-            id="description"
+        </CardHeader>
+        <CardContent className="pt-4">
+          <Controller
             name="description"
-            value={formState.description}
-            onChange={handleChange}
-            placeholder="Please provide details about your legal issue so we can better assist you..."
-            rows={5}
-            className={`w-full px-4 py-3 bg-gray-50 text-gray-900 border-2 ${
-              formErrors.description ? "border-red-300" : "border-gray-200"
-            } rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300`}
+            control={control}
+            rules={{
+              required: 'Please describe your legal issue',
+              minLength: {
+                value: 10,
+                message: 'Please provide more details (at least 10 characters)',
+              },
+            }}
+            render={({ field }) => (
+              <div className="space-y-2">
+                <Textarea
+                  placeholder="Please provide details about your legal issue so we can better assist you..."
+                  rows={5}
+                  {...field}
+                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 resize-none"
+                />
+                <div className="flex justify-between items-center">
+                  <p className="text-xs text-gray-500">
+                    {field.value?.length || 0}/500 characters
+                  </p>
+                  <div className="flex items-center text-xs text-gray-500">
+                    <Shield size={12} className="mr-1" />
+                    Your information is secure and confidential
+                  </div>
+                </div>
+                {errors.description && (
+                  <p className="text-red-500 text-sm">{errors.description.message}</p>
+                )}
+              </div>
+            )}
           />
-          <div className="flex justify-between items-center mt-2">
-            <p className="text-xs text-gray-500">
-              {formState.description.length}/500 characters
-            </p>
-            <div className="flex items-center text-xs text-gray-500">
-              <Shield size={12} className="mr-1" />
-              Your information is secure and confidential
-            </div>
-          </div>
-          {formErrors.description && (
-            <p className="mt-2 text-sm text-red-500 flex items-center">
-              <AlertCircle size={14} className="mr-1" /> {formErrors.description}
-            </p>
-          )}
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       <div className="flex justify-between">
-        <button
+        <Button
           type="button"
           onClick={prevStep}
-          className="bg-gray-100 hover:bg-gray-200 text-gray-700 py-4 px-8 rounded-xl font-semibold transition-all duration-300 flex items-center"
+          variant="outline"
+          size="lg"
+          className="border-gray-300 text-gray-700 hover:bg-gray-100"
         >
           <ArrowLeft size={18} className="mr-2" /> Previous Step
-        </button>
-        <button
+        </Button>
+        <Button
           type="submit"
-          onClick={handleSubmit}
-          className={`bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-4 px-8 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center ${
-            isSubmitting ? "opacity-75 cursor-not-allowed" : ""
+          size="lg"
+          className={`bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white flex items-center ${
+            isSubmitting ? 'opacity-75 cursor-not-allowed' : ''
           }`}
           disabled={isSubmitting}
         >
@@ -582,27 +737,31 @@ const Consultation = () => {
               Book Your Consultation
             </>
           )}
-        </button>
+        </Button>
       </div>
-    </div>
+    </form>
   );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100">
-      <Header />
 
+      <Header />
+      
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-50 via-white to-purple-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-              Book Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Legal Consultation</span>
+              Book Your{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+                Legal Consultation
+              </span>
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-              Get expert legal advice from our experienced attorneys. Connect with qualified professionals 
-              who understand your needs and provide personalized solutions.
+              Get expert legal advice from our experienced attorneys. Connect with qualified professionals who understand
+              your needs and provide personalized solutions.
             </p>
-            
+
             {/* Trust indicators */}
             <div className="flex flex-wrap justify-center gap-8 text-sm text-gray-600 mb-8">
               <div className="flex items-center gap-2">
@@ -631,52 +790,48 @@ const Consultation = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Success Message */}
         {successMessage && (
-          <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-800 p-6 rounded-2xl mb-8 shadow-lg">
-            <div className="flex items-start">
-              <div className="p-2 bg-green-100 rounded-full mr-4">
-                <CheckCircle className="w-6 h-6 text-green-600" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-bold text-lg mb-2">Consultation Booked Successfully!</h3>
-                <p className="mb-4">{successMessage}</p>
-                <div className="flex flex-wrap gap-4">
-                  <button 
+          <Alert className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-800 mb-8">
+            <CheckCircle className="w-6 h-6" />
+            <AlertDescription className="ml-3">
+              <h3 className="text-lg font-semibold">Consultation Booked Successfully!</h3>
+              <div className="mt-2 text-sm">
+                <p>{successMessage}</p>
+                <div className="flex flex-wrap gap-4 mt-4">
+                  <Button
                     onClick={() => {
-                      setSuccessMessage("");
+                      setSuccessMessage('');
                       setCurrentStep(1);
-                    }} 
-                    className="bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors"
+                    }}
+                    className="bg-green-600 text-white hover:bg-green-700"
                   >
                     Book Another Consultation
-                  </button>
-                  <button className="bg-white text-green-700 border border-green-300 px-6 py-2 rounded-lg font-medium hover:bg-green-50 transition-colors">
+                  </Button>
+                  <Button variant="outline" className="border-green-300 text-green-700 hover:bg-green-50">
                     View Booking Details
-                  </button>
+                  </Button>
                 </div>
               </div>
-            </div>
-          </div>
+            </AlertDescription>
+          </Alert>
         )}
 
         {/* Error Message */}
         {errorMessage && (
-          <div className="bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 text-red-800 p-6 rounded-2xl mb-8 shadow-lg">
-            <div className="flex items-start">
-              <div className="p-2 bg-red-100 rounded-full mr-4">
-                <AlertCircle className="w-6 h-6 text-red-600" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-bold text-lg mb-2">Booking Failed</h3>
-                <p className="mb-4">{errorMessage}</p>
-                <button 
-                  onClick={() => setErrorMessage("")}
-                  className="bg-red-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors"
+          <Alert className="bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 text-red-800 mb-8">
+            <AlertCircle className="w-6 h-6" />
+            <AlertDescription className="ml-3">
+              <h3 className="text-lg font-semibold">Booking Failed</h3>
+              <div className="mt-2 text-sm">
+                <p>{errorMessage}</p>
+                <Button
+                  onClick={() => setErrorMessage('')}
+                  className="bg-red-600 text-white hover:bg-red-700 mt-4"
                 >
                   Try Again
-                </button>
+                </Button>
               </div>
-            </div>
-          </div>
+            </AlertDescription>
+          </Alert>
         )}
 
         {/* Progress Steps */}
@@ -691,41 +846,40 @@ const Consultation = () => {
 
         {/* Features Section */}
         <div className="mt-16 grid md:grid-cols-3 gap-8">
-          <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl">
-            <div className="p-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl text-white w-fit mx-auto mb-4">
-              <Shield size={24} />
-            </div>
-            <h4 className="font-bold text-gray-900 mb-2">Secure & Confidential</h4>
-            <p className="text-gray-600 text-sm">Your information is protected with bank-level security</p>
-          </div>
-          
-          <div className="text-center p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl">
-            <div className="p-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl text-white w-fit mx-auto mb-4">
-              <Zap size={24} />
-            </div>
-            <h4 className="font-bold text-gray-900 mb-2">Quick Response</h4>
-            <p className="text-gray-600 text-sm">Get connected with an attorney within 24 hours</p>
-          </div>
-          
-          <div className="text-center p-6 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl">
-            <div className="p-3 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl text-white w-fit mx-auto mb-4">
-              <Award size={24} />
-            </div>
-            <h4 className="font-bold text-gray-900 mb-2">Expert Attorneys</h4>
-            <p className="text-gray-600 text-sm">Work with qualified and experienced legal professionals</p>
-           </div>
-        </div>
+          <Card className="text-center p-6 bg-gradient-to-br from-blue-50 to-indigo-50">
+            <CardContent className="pt-0">
+              <div className="p-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl text-white w-fit mx-auto mb-4">
+                <Shield size={24} />
+              </div>
+              <h4 className="font-bold text-gray-900 mb-2">Secure & Confidential</h4>
+              <p className="text-gray-600 text-sm">Your information is protected with bank-level security</p>
+            </CardContent>
+          </Card>
 
-        {/* Bottom Navigation */}
-        <div className="mt-12 text-center">
-          <button className="text-blue-600 hover:text-blue-700 flex items-center mx-auto transition-colors font-medium">
-            <ArrowLeft size={16} className="mr-2" />
-            Back to Legal Services
-          </button>
+          <Card className="text-center p-6 bg-gradient-to-br from-green-50 to-emerald-50">
+            <CardContent className="pt-0">
+              <div className="p-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl text-white w-fit mx-auto mb-4">
+                <Zap size={24} />
+              </div>
+              <h4 className="font-bold text-gray-900 mb-2">Quick Response</h4>
+              <p className="text-gray-600 text-sm">Get connected with an attorney within 24 hours</p>
+            </CardContent>
+          </Card>
+
+          <Card className="text-center p-6 bg-gradient-to-br from-purple-50 to-pink-50">
+            <CardContent className="pt-0">
+              <div className="p-3 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl text-white w-fit mx-auto mb-4">
+                <Award size={24} />
+              </div>
+              <h4 className="font-bold text-gray-900 mb-2">Expert Attorneys</h4>
+              <p className="text-gray-600 text-sm">Work with qualified and experienced legal professionals</p>
+            </CardContent>
+          </Card>
         </div>
       </div>
-
-      <Footer />
+      {/* Footer */}
+      <Footer className="mt-16 bg-white shadow-lg border-t border-gray-200" />
+      {/* Header */}
     </div>
   );
 };
