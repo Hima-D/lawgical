@@ -64,12 +64,7 @@ const Card = ({ children, className = "", ...props }) => (
   </div>
 );
 
-const CALCULATORS = [
-  { name: "GST Calculator", icon: "📊", link: "/calculators/gst" },
-  { name: "Income Tax Calculator", icon: "💰", link: "/calculators/income-tax" },
-  { name: "EMI Calculator", icon: "🏦", link: "/calculators/emi" },
-  { name: "Salary Calculator", icon: "💼", link: "/calculators/salary" },
-];
+
 
 const EXPERT_CONSULTATION = [
   { title: "Talk to a Lawyer", subtitle: "Get expert legal advice", icon: "⚖️", color: "bg-blue-500" },
@@ -136,8 +131,8 @@ const FEATURES = [
     color: "from-red-500 to-red-600",
   },
   {
-    title: "Pan-India Service",
-    description: "Services available across all states",
+    title: "Delhi-NCR Focus",
+    description: "Specialized services for Delhi-NCR businesses",
     icon: "🌍",
     color: "from-indigo-500 to-indigo-600",
   },
@@ -146,7 +141,7 @@ const FEATURES = [
 const STATS = [
   { number: "1M+", label: "Happy Clients", icon: Users },
   { number: "500+", label: "Expert Professionals", icon: Shield },
-  { number: "15+", label: "Years Experience", icon: FileText },
+  { number: "2+", label: "Years Experience", icon: FileText },
   { number: "99%", label: "Success Rate", icon: CheckCircle },
 ];
 
@@ -183,7 +178,7 @@ const FAQS = [
   {
     question: "Do you serve clients outside major cities?",
     answer:
-      "Absolutely, Lawgical provides pan-India services, covering all states and union territories, with seamless online and offline support.",
+      "Certainly! While we specialize in Delhi-NCR, our services are available across India. We can assist clients in remote areas through online consultations and digital documentation.",
   },
 ];
 
@@ -547,35 +542,7 @@ export default function LawgicalHomepage() {
           </div>
         </section>
 
-        {/* Calculators & Tools */}
-        <section id="calculators" className="py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Free Calculators & Tools</h2>
-              <p className="text-lg text-gray-600">Make informed financial and legal decisions with our free tools</p>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {CALCULATORS.map((calc, index) => (
-                <Button
-                  key={index}
-                  variant="ghost"
-                  className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 text-center group border border-blue-100"
-                  asChild
-                >
-                  <Link href={calc.link}>
-                    <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">{calc.icon}</div>
-                    <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                      {calc.name}
-                    </h3>
-                    <div className="mt-4 text-blue-600 group-hover:translate-x-1 transition-transform">
-                      Calculate Now →
-                    </div>
-                  </Link>
-                </Button>
-              ))}
-            </div>
-          </div>
-        </section>
+   
 
         {/* FAQ Section */}
         <section id="faq" className="py-16 bg-gradient-to-br from-slate-50 to-blue-50">

@@ -41,7 +41,7 @@ const navigationItems = [
   { name: "Home", href: "/" },
   { name: "Service", href: "/service" },
   { name: "Consultation", href: "/consultation" },
-  { name: "payment", href: "/payment" },
+  { name: "Payment", href: "/payment" },
 
 ];
 
@@ -76,7 +76,7 @@ const Header = () => {
                 variant="ghost"
                 className="text-black hover:text-blue-600 hover:bg-transparent p-0 h-auto font-normal"
               >
-                Services <ChevronDown className="w-4 h-4 ml-1" />
+                Explore <ChevronDown className="w-4 h-4 ml-1" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -102,7 +102,6 @@ const Header = () => {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <ThemeToggle />
         </nav>
 
         {/* Mobile Navigation */}
