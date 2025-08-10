@@ -1,0 +1,92 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  userType     String
+  createdAt    DateTime @default(now())
+  displayName  String?
+  photoUrl     String?
+  phoneNumber  String?
+
+  // Relations
+  lawyerProfile LawyerProfile?
+  appointments  Appointment[] @relation("ClientAppointments")
+}
+
+model LawyerProfile {
+  id             Int      @id @default(autoincrement())
+  userId         Int      @unique
+  bio            String
+  specialization String
+  licenseNumber  String
+  createdAt      DateTime @default(now())
+  firmName       String?
+  address        String?
+  websiteUrl     String?
+  hourlyRate     Float?
+
+  // Relations
+  user          User        @relation(fields: [userId], references: [id])
+  services      Service[]
+  availability  AvailabilitySlot[]
+  appointments  Appointment[] @relation("LawyerAppointments")
+}
+
+model Service {
+  id              Int      @id @default(autoincrement())
+  lawyerProfileId Int
+  name            String
+  description     String
+  price           Float
+  durationMinutes Int
+  createdAt       DateTime @default(now())
+  category        String?
+
+  lawyerProfile   LawyerProfile @relation(fields: [lawyerProfileId], references: [id])
+  appointments    Appointment[]
+}
+
+model AvailabilitySlot {
+  id              Int      @id @default(autoincrement())
+  lawyerProfileId Int
+  startTime       String
+  endTime         String
+  date            DateTime
+  isBooked        Boolean
+  createdAt       DateTime @default(now())
+  notes           String?
+
+  lawyerProfile   LawyerProfile @relation(fields: [lawyerProfileId], references: [id])
+  appointments    Appointment[]
+}
+
+model Appointment {
+  id                 Int      @id @default(autoincrement())
+  clientId           Int
+  lawyerProfileId    Int
+  serviceId          Int
+  availabilitySlotId Int
+  appointmentDate    DateTime
+  appointmentTime    String
+  status             String
+  createdAt          DateTime @default(now())
+  clientNotes        String?
+  lawyerNotes        String?
+
+  client          User            @relation("ClientAppointments", fields: [clientId], references: [id])
+  lawyerProfile   LawyerProfile   @relation("LawyerAppointments", fields: [lawyerProfileId], references: [id])
+  service         Service         @relation(fields: [serviceId], references: [id])
+  availabilitySlot AvailabilitySlot @relation(fields: [availabilitySlotId], references: [id])
+}

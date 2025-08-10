@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -14,22 +13,37 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Slot } from "@radix-ui/react-slot";
-import { Star, CheckCircle, FileText, Gavel, Users, Shield } from "lucide-react";
+import {
+  Star,
+  CheckCircle,
+  FileText,
+  Gavel,
+  Users,
+  Shield,
+} from "lucide-react";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel"
+} from "@/components/ui/carousel";
 // shadcn/ui Components
-const Button = ({ children, variant = "default", size = "default", className = "", asChild = false, ...props }) => {
+const Button = ({
+  children,
+  variant = "default",
+  size = "default",
+  className = "",
+  asChild = false,
+  ...props
+}) => {
   const baseClasses =
     "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background";
 
   const variants = {
     default: "bg-primary text-primary-foreground hover:bg-primary/90",
-    destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+    destructive:
+      "bg-destructive text-destructive-foreground hover:bg-destructive/90",
     outline: "border border-input hover:bg-accent hover:text-accent-foreground",
     secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
     ghost: "hover:bg-accent hover:text-accent-foreground",
@@ -64,31 +78,47 @@ const Card = ({ children, className = "", ...props }) => (
   </div>
 );
 
-
-
 const EXPERT_CONSULTATION = [
-  { title: "Talk to a Lawyer", subtitle: "Get expert legal advice", icon: "⚖️", color: "bg-blue-500" },
-  { title: "Talk to a CA", subtitle: "Chartered Accountant consultation", icon: "📊", color: "bg-green-500" },
-  { title: "Talk to a CS", subtitle: "Company Secretary guidance", icon: "📋", color: "bg-purple-500" },
+  {
+    title: "Talk to a Lawyer",
+    subtitle: "Get expert legal advice",
+    icon: "⚖️",
+    color: "bg-blue-500",
+  },
+  {
+    title: "Talk to a CA",
+    subtitle: "Chartered Accountant consultation",
+    icon: "📊",
+    color: "bg-green-500",
+  },
+  {
+    title: "Talk to a CS",
+    subtitle: "Company Secretary guidance",
+    icon: "📋",
+    color: "bg-purple-500",
+  },
 ];
 
 const PROCESS_STEPS = [
   {
     step: "01",
     title: "Choose Your Service",
-    description: "Select from our comprehensive range of legal and compliance services",
+    description:
+      "Select from our comprehensive range of legal and compliance services",
     icon: "🎯",
   },
   {
     step: "02",
     title: "Get Expert Consultation",
-    description: "Connect with our qualified professionals for personalized guidance",
+    description:
+      "Connect with our qualified professionals for personalized guidance",
     icon: "👥",
   },
   {
     step: "03",
     title: "Documentation & Filing",
-    description: "We handle all paperwork and regulatory filings on your behalf",
+    description:
+      "We handle all paperwork and regulatory filings on your behalf",
     icon: "📋",
   },
   {
@@ -146,10 +176,22 @@ const STATS = [
 ];
 
 const INDUSTRIES = [
-  { name: "Startups", icon: "🚀", description: "End-to-end startup legal solutions" },
+  {
+    name: "Startups",
+    icon: "🚀",
+    description: "End-to-end startup legal solutions",
+  },
   { name: "E-commerce", icon: "🛒", description: "Online business compliance" },
-  { name: "Healthcare", icon: "🏥", description: "Medical practice regulations" },
-  { name: "Education", icon: "🎓", description: "Educational institution setup" },
+  {
+    name: "Healthcare",
+    icon: "🏥",
+    description: "Medical practice regulations",
+  },
+  {
+    name: "Education",
+    icon: "🎓",
+    description: "Educational institution setup",
+  },
   { name: "Real Estate", icon: "🏢", description: "Property legal services" },
   { name: "Manufacturing", icon: "🏭", description: "Industrial compliance" },
 ];
@@ -199,8 +241,12 @@ const ErrorBoundary = ({ children }) => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="text-center p-8 bg-white rounded-lg shadow-lg">
-          <h2 className="text-2xl font-bold text-red-600 mb-4">Something went wrong</h2>
-          <p className="text-gray-600 mb-4">Please refresh the page or try again later.</p>
+          <h2 className="text-2xl font-bold text-red-600 mb-4">
+            Something went wrong
+          </h2>
+          <p className="text-gray-600 mb-4">
+            Please refresh the page or try again later.
+          </p>
           <button
             className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
             onClick={() => window.location.reload()}
@@ -217,7 +263,12 @@ const ErrorBoundary = ({ children }) => {
 
 export default function LawgicalHomepage() {
   const [activeFeature, setActiveFeature] = useState(0);
-  const [counters, setCounters] = useState({ clients: 0, experts: 0, experience: 0, success: 0 });
+  const [counters, setCounters] = useState({
+    clients: 0,
+    experts: 0,
+    experience: 0,
+    success: 0,
+  });
 
   // Animate counters
   useEffect(() => {
@@ -261,7 +312,9 @@ export default function LawgicalHomepage() {
     <ErrorBoundary>
       <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100">
         <Head>
-          <title>Lawgical | India's Leading Legal & Compliance Platform</title>
+          <title>
+            Lawgical | India&apos;s Leading Legal & Compliance Platform
+          </title>
           <meta
             name="description"
             content="Simplify your legal, tax, and compliance needs with Lawgical. Trusted by over 1M+ clients with expert lawyers, CAs, and CS professionals."
@@ -277,7 +330,10 @@ export default function LawgicalHomepage() {
         <Header />
 
         {/* Hero Section */}
-        <section id="home" className="bg-gradient-to-br from-blue-50 via-white to-purple-50 py-16 lg:py-24">
+        <section
+          id="home"
+          className="bg-gradient-to-br from-blue-50 via-white to-purple-50 py-16 lg:py-24"
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div className="text-center lg:text-left">
@@ -289,17 +345,11 @@ export default function LawgicalHomepage() {
                   Platform
                 </h1>
                 <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                  Simplifying legal, tax, and compliance services for individuals and businesses. Trusted by over 1 million+ clients across India.
+                  Simplifying legal, tax, and compliance services for
+                  individuals and businesses. Trusted by over 1 million+ clients
+                  across India.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                  <Button
-                    size="lg"
-                    className="bg-blue-600 text-white px-8 py-4 text-lg font-semibold hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg"
-                    asChild
-                    onClick={handleGetStartedClick}
-                  >
-                    <Link href="/get-started">Get Started Today</Link>
-                  </Button>
                   <Button
                     variant="outline"
                     size="lg"
@@ -326,27 +376,41 @@ export default function LawgicalHomepage() {
               </div>
               <div className="relative">
                 <Card className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-6">Start Your Legal Journey</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                    Start Your Legal Journey
+                  </h3>
                   <div className="space-y-4">
                     <div className="flex items-center p-4 bg-blue-50 rounded-lg border border-blue-100">
                       <FileText className="h-8 w-8 text-blue-600 mr-4" />
                       <div>
-                        <h4 className="font-semibold text-gray-900">Quick Registration</h4>
-                        <p className="text-sm text-gray-600">Get your business registered in 7-15 days</p>
+                        <h4 className="font-semibold text-gray-900">
+                          Quick Registration
+                        </h4>
+                        <p className="text-sm text-gray-600">
+                          Get your business registered in 7-15 days
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center p-4 bg-green-50 rounded-lg border border-green-100">
                       <Users className="h-8 w-8 text-green-600 mr-4" />
                       <div>
-                        <h4 className="font-semibold text-gray-900">Expert Support</h4>
-                        <p className="text-sm text-gray-600">24/7 support from legal professionals</p>
+                        <h4 className="font-semibold text-gray-900">
+                          Expert Support
+                        </h4>
+                        <p className="text-sm text-gray-600">
+                          24/7 support from legal professionals
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center p-4 bg-purple-50 rounded-lg border border-purple-100">
                       <Shield className="h-8 w-8 text-purple-600 mr-4" />
                       <div>
-                        <h4 className="font-semibold text-gray-900">100% Secure</h4>
-                        <p className="text-sm text-gray-600">Your data is safe and confidential</p>
+                        <h4 className="font-semibold text-gray-900">
+                          100% Secure
+                        </h4>
+                        <p className="text-sm text-gray-600">
+                          Your data is safe and confidential
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -395,10 +459,10 @@ export default function LawgicalHomepage() {
                     {index === 0
                       ? counters.clients
                       : index === 1
-                      ? counters.experts
-                      : index === 2
-                      ? counters.experience
-                      : counters.success}
+                        ? counters.experts
+                        : index === 2
+                          ? counters.experience
+                          : counters.success}
                   </div>
                   <div className="text-gray-600 font-medium">{stat.label}</div>
                 </div>
@@ -408,12 +472,18 @@ export default function LawgicalHomepage() {
         </section>
 
         {/* How It Works */}
-        <section id="process" className="py-16 lg:py-24 bg-gradient-to-br from-slate-50 to-blue-50">
+        <section
+          id="process"
+          className="py-16 lg:py-24 bg-gradient-to-br from-slate-50 to-blue-50"
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">How Lawgical Works</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                How Lawgical Works
+              </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Simple, transparent process to get your legal work done efficiently
+                Simple, transparent process to get your legal work done
+                efficiently
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -421,14 +491,28 @@ export default function LawgicalHomepage() {
                 <div key={index} className="relative text-center">
                   <Card className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100">
                     <div className="text-5xl mb-4">{step.icon}</div>
-                    <div className="text-2xl font-bold text-blue-600 mb-2">{step.step}</div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-4">{step.title}</h3>
+                    <div className="text-2xl font-bold text-blue-600 mb-2">
+                      {step.step}
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                      {step.title}
+                    </h3>
                     <p className="text-gray-600">{step.description}</p>
                   </Card>
                   {index < PROCESS_STEPS.length - 1 && (
                     <div className="hidden lg:block absolute top-1/2 -right-4 transform -translate-y-1/2">
-                      <svg className="w-8 h-8 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                      <svg
+                        className="w-8 h-8 text-blue-300"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M9 5l7 7-7 7"
+                        ></path>
                       </svg>
                     </div>
                   )}
@@ -442,9 +526,12 @@ export default function LawgicalHomepage() {
         <section id="features" className="py-16 lg:py-24 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Choose Lawgical</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                Why Choose Lawgical
+              </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                We make legal services accessible, affordable, and efficient for everyone
+                We make legal services accessible, affordable, and efficient for
+                everyone
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -466,7 +553,13 @@ export default function LawgicalHomepage() {
                   >
                     {feature.title}
                   </h3>
-                  <p className={activeFeature === index ? "text-blue-100" : "text-gray-600"}>
+                  <p
+                    className={
+                      activeFeature === index
+                        ? "text-blue-100"
+                        : "text-gray-600"
+                    }
+                  >
                     {feature.description}
                   </p>
                 </Card>
@@ -476,43 +569,66 @@ export default function LawgicalHomepage() {
         </section>
 
         {/* Testimonials Section */}
-        <section id="testimonials" className="py-16 bg-gradient-to-br from-slate-50 to-blue-50">
+        <section
+          id="testimonials"
+          className="py-16 bg-gradient-to-br from-slate-50 to-blue-50"
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">What Our Clients Say</h2>
-              <p className="text-xl text-gray-600">Hear from those who trust us with their legal and compliance needs.</p>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">
+                What Our Clients Say
+              </h2>
+              <p className="text-xl text-gray-600">
+                Hear from those who trust us with their legal and compliance
+                needs.
+              </p>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
               {[
                 {
                   name: "Priya Sharma",
                   role: "Startup Founder",
-                  content: "Lawgical made our business registration seamless and provided expert legal advice.",
+                  content:
+                    "Lawgical made our business registration seamless and provided expert legal advice.",
                   rating: 5,
                 },
                 {
                   name: "Rahul Mehta",
                   role: "E-commerce Entrepreneur",
-                  content: "Their tax filing services saved us time and ensured compliance with all regulations.",
+                  content:
+                    "Their tax filing services saved us time and ensured compliance with all regulations.",
                   rating: 5,
                 },
                 {
                   name: "Sneha Gupta",
                   role: "HR Manager",
-                  content: "The POSH training was comprehensive and helped us create a safer workplace.",
+                  content:
+                    "The POSH training was comprehensive and helped us create a safer workplace.",
                   rating: 5,
                 },
               ].map((testimonial, index) => (
-                <Card key={index} className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all">
+                <Card
+                  key={index}
+                  className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all"
+                >
                   <div className="flex items-center space-x-1 mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                      <Star
+                        key={i}
+                        className="h-5 w-5 fill-yellow-400 text-yellow-400"
+                      />
                     ))}
                   </div>
-                  <p className="text-gray-600 italic mb-6">"{testimonial.content}"</p>
+                  <p className="text-gray-600 italic mb-6">
+                    &quot;{testimonial.content}&quot;
+                  </p>
                   <div className="border-t pt-4">
-                    <div className="font-semibold text-gray-900">{testimonial.name}</div>
-                    <div className="text-sm text-gray-500">{testimonial.role}</div>
+                    <div className="font-semibold text-gray-900">
+                      {testimonial.name}
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {testimonial.role}
+                    </div>
                   </div>
                 </Card>
               ))}
@@ -521,11 +637,18 @@ export default function LawgicalHomepage() {
         </section>
 
         {/* Industries We Serve */}
-        <section id="industries" className="py-16 bg-gradient-to-br from-slate-50 to-purple-50">
+        <section
+          id="industries"
+          className="py-16 bg-gradient-to-br from-slate-50 to-purple-50"
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Industries We Serve</h2>
-              <p className="text-lg text-gray-600">Specialized legal solutions for every industry</p>
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                Industries We Serve
+              </h2>
+              <p className="text-lg text-gray-600">
+                Specialized legal solutions for every industry
+              </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {INDUSTRIES.map((industry, index) => (
@@ -533,24 +656,34 @@ export default function LawgicalHomepage() {
                   key={index}
                   className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 text-center group border border-gray-100"
                 >
-                  <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">{industry.icon}</div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{industry.name}</h3>
-                  <p className="text-gray-600 text-sm">{industry.description}</p>
+                  <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">
+                    {industry.icon}
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    {industry.name}
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    {industry.description}
+                  </p>
                 </Card>
               ))}
             </div>
           </div>
         </section>
 
-   
-
         {/* FAQ Section */}
-        <section id="faq" className="py-16 bg-gradient-to-br from-slate-50 to-blue-50">
+        <section
+          id="faq"
+          className="py-16 bg-gradient-to-br from-slate-50 to-blue-50"
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">
+                Frequently Asked Questions
+              </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Get answers to common questions about our legal and compliance services
+                Get answers to common questions about our legal and compliance
+                services
               </p>
             </div>
             <div className="max-w-3xl mx-auto">
@@ -575,11 +708,17 @@ export default function LawgicalHomepage() {
         </section>
 
         {/* CTA Section */}
-        <section id="cta" className="py-16 bg-gradient-to-r from-blue-600 to-purple-700">
+        <section
+          id="cta"
+          className="py-16 bg-gradient-to-r from-blue-600 to-purple-700"
+        >
           <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-            <h2 className="text-4xl font-bold text-white mb-6">Ready to Get Started?</h2>
+            <h2 className="text-4xl font-bold text-white mb-6">
+              Ready to Get Started?
+            </h2>
             <p className="text-xl text-blue-100 mb-8 leading-relaxed">
-              Join over 1 million+ satisfied clients who trust Lawgical for their legal and compliance needs
+              Join over 1 million+ satisfied clients who trust Lawgical for
+              their legal and compliance needs
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
