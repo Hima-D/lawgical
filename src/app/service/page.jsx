@@ -167,7 +167,7 @@ export default function ServicesPage() {
                   <span className="text-lg text-gray-400 line-through">{service.originalPrice}</span>
                 </div>
                 
-                <Link href={`/services/${service.name.toLowerCase().replace(/\s+/g, '-')}`} 
+                <Link href="/signin" 
                       className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-all text-center block">
                   Get Started
                 </Link>
@@ -263,7 +263,7 @@ export default function ServicesPage() {
                           
                           <div className="mt-4 md:mt-0 md:ml-6 flex flex-col gap-2">
                             <Link
-                              href={`/services/${service.name.toLowerCase().replace(/\s+/g, '-')}`}
+                              href="/signin"
                               className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all text-center"
                             >
                               Get Started
