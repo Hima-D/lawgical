@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 export async function POST(request) {
   try {
-    const { email, password, userType, displayName } = await request.json();
+    const { email, password, userType, displayName, phoneNumber } = await request.json();
 
     // Basic validation
     if (!email || !password) {
@@ -34,7 +34,7 @@ export async function POST(request) {
       );
     }
 
-    // Validate user type
+    // Validate user type - note: schema shows "lawyer" | "client" in comments
     const validUserTypes = ['client', 'lawyer'];
     if (userType && !validUserTypes.includes(userType)) {
       return Response.json(
@@ -65,12 +65,19 @@ export async function POST(request) {
         passwordHash: hashedPassword,
         userType: userType || 'client',
         displayName: displayName || null,
+        phoneNumber: phoneNumber || null,
+        // New fields with defaults from schema
+        isActive: true,
+        emailVerified: false,
       },
       select: {
         id: true,
         email: true,
         userType: true,
         displayName: true,
+        phoneNumber: true,
+        isActive: true,
+        emailVerified: true,
         createdAt: true,
       }
     });
@@ -91,7 +98,7 @@ export async function POST(request) {
     }
 
     return Response.json(
-      { 
+      {
         message: 'User created successfully',
         user,
         emailSent
