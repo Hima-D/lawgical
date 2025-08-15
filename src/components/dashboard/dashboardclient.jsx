@@ -49,7 +49,7 @@ export default function DashboardClient({ user, isLawyer, stats }) {
             ) : (
               <>
                 <RecommendedLawyers />
-                <LegalResources />
+                {/* <LegalResources /> */}
               </>
             )}
           </div>

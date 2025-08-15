@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Header from '@/components/header';
@@ -16,8 +16,8 @@ const Card = ({ children, className = "", ...props }) => (
   </div>
 );
 
-// Button component matching main page style
-const Button = ({ children, variant = "default", size = "default", className = "", disabled = false, ...props }) => {
+// Button component matching main page style - FIXED to handle asChild prop
+const Button = ({ children, variant = "default", size = "default", className = "", disabled = false, asChild = false, ...props }) => {
   const baseClasses =
     "inline-flex items-center justify-center rounded-lg text-sm font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
 
@@ -32,9 +32,22 @@ const Button = ({ children, variant = "default", size = "default", className = "
     lg: "h-14 px-8 py-4 text-lg",
   };
 
+  const finalClassName = `${baseClasses} ${variants[variant]} ${sizes[size]} ${className} ${disabled ? 'transform-none hover:scale-100' : ''}`;
+
+  // If asChild is true, clone the first child and apply the button styles to it
+  if (asChild && children) {
+    const child = React.Children.only(children);
+    return React.cloneElement(child, {
+      className: `${child.props.className || ''} ${finalClassName}`,
+      disabled: disabled || child.props.disabled,
+      ...props
+    });
+  }
+
+  // Otherwise, render as a regular button
   return (
     <button
-      className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${className} ${disabled ? 'transform-none hover:scale-100' : ''}`}
+      className={finalClassName}
       disabled={disabled}
       {...props}
     >
