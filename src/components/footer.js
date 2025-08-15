@@ -21,7 +21,7 @@ const Footer = () => {
         <div className="flex justify-center gap-8 text-sm font-medium flex-wrap text-gray-700">
           <Link href="/aboutus" className="hover:text-blue-600 transition duration-200">About</Link>
           <Link href="/contact" className="hover:text-blue-600 transition duration-200">Contact</Link>
-          <Link href="/Careers" className="hover:text-blue-600 transition duration-200">Career</Link>
+          <Link href="/careers" className="hover:text-blue-600 transition duration-200">Career</Link>
           <Link href="/privacy-policy" className="hover:text-blue-600 transition duration-200">Privacy</Link>
           <Link href="/terms-of-service" className="hover:text-blue-600 transition duration-200">Terms</Link>
         </div>
