@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.lawgical.tech
+
+# Sitemaps
+Sitemap: https://www.lawgical.tech/sitemap.xml
