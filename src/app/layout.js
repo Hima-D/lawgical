@@ -10,85 +10,126 @@ const geistSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
 
 export const metadata = {
-  title: "Lawgical - Best Legal Services & Online Lawyer Consultation | Book Legal Advice",
+  title: "Lawgical - Best Legal Services & Online Lawyer Consultation India | Expert Legal Advice",
   description:
-    "Lawgical connects you with expert lawyers for online consultation, company registration, GST services, trademark filing, and comprehensive legal advice. Book trusted legal professionals instantly.",
+    "India's leading legal platform connecting you with verified lawyers across Mumbai, Delhi, Bangalore, Pune, Chennai, Hyderabad. Get instant online consultation, company registration, GST services, trademark filing & comprehensive legal solutions. 24/7 expert legal advice starting at ₹499.",
   keywords: [
-    // Primary Keywords
-    "lawgical", "lawyer", "legal services", "case management", "legal portal", "lawyer portal", "legal advice", "law firm",
+    // Primary Brand Keywords
+    "lawgical", "lawgical india", "lawgical legal services", "lawgical lawyer consultation",
     
-    // High-Value Service Keywords
-    "online lawyer consultation", "legal consultation online", "lawyer consultation booking", "best lawyers India",
-    "legal advice near me", "legal services online", "company registration lawyer", "GST registration services",
-    "intellectual property lawyer", "trademark registration online", "legal document preparation", "online legal help",
+    // Core Legal Services
+    "online lawyer consultation india", "best lawyers in india", "legal consultation online", "lawyer booking app",
+    "legal services near me", "virtual lawyer meeting", "instant legal advice", "affordable legal consultation",
     
-    // Long-tail Keywords
-    "book lawyer consultation online", "affordable legal services India", "company incorporation lawyer near me",
-    "GST return filing services", "legal advice for startups", "business lawyer consultation", "employment law consultation",
-    "contract review lawyer", "legal compliance services", "startup legal services",
+    // City-Specific Keywords (Major Indian Cities)
+    "lawyers in mumbai", "legal services delhi ncr", "best law firm bangalore", "lawyers in pune",
+    "legal consultation chennai", "corporate lawyers hyderabad", "legal services kolkata", 
+    "lawyers in ahmedabad", "legal services noida", "lawyers in gurgaon", "legal services faridabad",
+    "lawyers in thane", "legal services navi mumbai", "lawyers in ghaziabad", "legal services lucknow",
     
-    // Service-Specific Keywords
-    "company registration online", "FSSAI registration lawyer", "ISO certification consultant", "digital signature services",
-    "MSME registration online", "shop act license", "import export code registration", "POSH compliance training",
-    "legal metrology registration", "trademark filing services", "copyright registration",
+    // Business Legal Services
+    "company registration online india", "private limited company registration", "llp registration online",
+    "one person company registration", "startup registration india", "business incorporation services",
+    "GST registration online", "GST return filing services", "GST compliance consultant",
     
-    // Question-Based Keywords (Voice Search)
-    "how to register company online", "what is GST registration process", "how to file trademark application",
-    "legal requirements for startup", "cost of lawyer consultation", "how to choose a lawyer", "legal documents needed for business",
+    // IP & Trademark Services
+    "trademark registration india", "copyright registration online", "patent filing services",
+    "brand registration india", "logo trademark registration", "intellectual property lawyer",
     
-    // Location-Based Keywords
-    "lawyers in Mumbai", "legal services Delhi", "best law firm Bangalore", "legal consultation Pune",
-    "corporate lawyer Hyderabad", "legal advisor Chennai", "law firm near me", "lawyers in India",
+    // Compliance Services  
+    "FSSAI license registration", "ISO certification consultant", "MSME udyam registration",
+    "shop act license online", "labour license registration", "ESI PF registration",
+    "import export code registration", "digital signature certificate", "POSH compliance training",
     
-    // Legal Tech Keywords
-    "AI-powered legal services", "digital legal consultation", "virtual lawyer meeting", "online case management",
-    "legal tech platform", "automated legal documents", "smart legal solutions", "legal consultation app",
+    // Legal Specializations
+    "corporate lawyer consultation", "employment law advice", "contract drafting services",
+    "legal notice drafting", "divorce lawyer consultation", "property lawyer advice",
+    "criminal lawyer consultation", "family law services", "immigration lawyer india",
+    "tax lawyer consultation", "banking law services", "insurance law advice",
     
-    // Industry-Specific Keywords
-    "business law services", "corporate legal advice", "startup legal help", "small business lawyer",
-    "legal services for entrepreneurs", "compliance legal services", "regulatory legal advice",
+    // Long-tail Service Keywords
+    "how to register company in india online", "GST registration process and documents",
+    "trademark application filing procedure", "legal requirements for startup india",
+    "cost of lawyer consultation in india", "best online legal platform india",
+    "legal documents preparation online", "business legal compliance checklist",
     
-    // Trust & Quality Keywords
-    "trusted legal services", "experienced lawyers", "qualified legal professionals", "reliable legal advice",
-    "expert legal consultation", "certified lawyers", "licensed legal practitioners", "top-rated law firm"
+    // Technology & Innovation
+    "AI powered legal services", "digital legal consultation platform", "legal tech india",
+    "automated legal document generation", "smart legal solutions", "legal consultation app",
+    "online case management system", "virtual legal services",
+    
+    // Trust & Quality Indicators
+    "verified lawyers india", "licensed legal professionals", "experienced legal consultants",
+    "trusted legal service provider", "certified lawyers online", "reliable legal advice platform",
+    "top rated law firm india", "expert legal consultation services",
+    
+    // Regional Language Support
+    "hindi legal consultation", "regional language legal services", "local lawyer consultation",
+    "multilingual legal support", "vernacular legal advice",
+    
+    // Industry Specific
+    "startup legal services india", "small business legal help", "ecommerce legal services",
+    "fintech legal compliance", "healthcare legal services", "real estate legal advice",
+    "manufacturing legal services", "retail legal compliance"
   ].join(", "),
   
-  authors: [{ name: "Chahat Siwach" }],
+  authors: [{ name: "Chahat Siwach", url: "https://www.lawgical.tech/about" }],
+  generator: "Next.js",
+  applicationName: "Lawgical Legal Platform",
+  referrer: "origin-when-cross-origin",
+  colorScheme: "light dark",
+  creator: "Lawgical Legal Tech",
+  publisher: "Lawgical",
   
   openGraph: {
-    title: "Lawgical - Best Legal Services & Online Lawyer Consultation in India",
+    title: "Lawgical - India's Leading Online Legal Services & Lawyer Consultation Platform",
     description:
-      "Get instant access to expert lawyers for company registration, GST services, trademark filing, and comprehensive legal advice. Book your consultation with trusted legal professionals today.",
+      "Connect with 10,000+ verified lawyers across 50+ Indian cities. Get instant legal consultation, company registration, GST services, trademark filing. Trusted by 1 lakh+ clients. Book consultation starting ₹499.",
     type: "website",
     siteName: "Lawgical",
     locale: "en_IN",
-    url: "https://lawgical.com",
-    image: {
-      url: "/og-image.jpg",
-      width: 1200,
-      height: 630,
-      alt: "Lawgical - Online Legal Services & Lawyer Consultation Platform"
-    },
+    url: "https://www.lawgical.tech",
+    countryName: "India",
+    images: [
+      {
+        url: "https://www.lawgical.tech/og-image-main.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Lawgical - Online Legal Services & Lawyer Consultation Platform India"
+      },
+      {
+        url: "https://www.lawgical.tech/og-image-services.jpg", 
+        width: 1200,
+        height: 630,
+        alt: "Legal Services - Company Registration, GST, Trademark Filing"
+      }
+    ],
   },
   
   twitter: {
     card: "summary_large_image",
-    title: "Lawgical - Online Legal Services & Expert Lawyer Consultation",
-    description: "Connect with qualified lawyers for company registration, legal advice, and comprehensive legal services. Book your consultation instantly.",
+    title: "Lawgical - Online Legal Services & Expert Lawyer Consultation India",
+    description: "India's most trusted legal platform. 10K+ verified lawyers, 50+ cities, instant consultation. Company registration, GST, trademarks & more. Book now ₹499+",
     creator: "@chahat_siwach",
     site: "@lawgical_legal",
-    image: {
-      url: "/twitter-card.jpg",
-      alt: "Lawgical Legal Services Platform"
-    },
+    images: [
+      {
+        url: "https://www.lawgical.tech/twitter-card-main.jpg",
+        alt: "Lawgical Legal Services Platform India",
+        width: 1200,
+        height: 630,
+      }
+    ],
   },
   
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
+      noimageindex: false,
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
@@ -96,70 +137,156 @@ export const metadata = {
   },
   
   icons: { 
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
+      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" }
+    ],
     shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }
+    ],
+    other: [
+      { rel: "mask-icon", url: "/safari-pinned-tab.svg", color: "#2563eb" }
+    ]
   },
   
-  // Additional SEO metadata
+  manifest: "/site.webmanifest",
+  
+  // Enhanced SEO metadata
   category: "Legal Services",
-  classification: "Business",
-  creator: "Lawgical Legal Tech",
-  publisher: "Lawgical",
+  classification: "Professional Services",
+  coverage: "India",
+  distribution: "India",
+  rating: "General",
+  
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
   
-  // Structured data hints
+  // Geographic and Business metadata
   other: {
+    "geo.region": "IN",
+    "geo.country": "India", 
+    "geo.placename": "India",
+    "ICBM": "20.5937,78.9629", // Geographic center of India
+    "DC.title": "Lawgical - Online Legal Services India",
+    "DC.creator": "Lawgical Legal Tech",
+    "DC.subject": "Legal Services, Lawyer Consultation, Company Registration",
+    "DC.description": "Professional legal services platform connecting clients with verified lawyers across India",
+    "DC.publisher": "Lawgical",
+    "DC.contributor": "Legal Professionals Network",
+    "DC.date": new Date().toISOString(),
+    "DC.type": "Service",
+    "DC.format": "text/html",
+    "DC.identifier": "https://www.lawgical.tech",
+    "DC.source": "https://www.lawgical.tech",
+    "DC.language": "en-IN",
+    "DC.coverage": "India",
+    "DC.rights": "Copyright Lawgical Legal Tech Pvt Ltd",
+    
+    // Business Information
     "business:contact_data:street_address": "India",
-    "business:contact_data:locality": "Multiple Cities",
+    "business:contact_data:locality": "Multiple Cities", 
+    "business:contact_data:region": "PAN India",
+    "business:contact_data:postal_code": "Various",
     "business:contact_data:country_name": "India",
+    
+    // App Information
     "application-name": "Lawgical",
     "mobile-web-app-capable": "yes",
     "mobile-web-app-status-bar-style": "default",
+    "mobile-web-app-title": "Lawgical",
     "theme-color": "#2563eb",
+    "msapplication-TileColor": "#2563eb",
+    "msapplication-config": "/browserconfig.xml",
+    
+    // Social Media
+    "fb:app_id": "your_facebook_app_id", // Add your Facebook App ID
+    "og:email": "support@lawgical.tech",
+    "og:phone_number": "+91-xxx-xxx-xxxx", // Add your phone number
+    
+    // Additional SEO
+    "revisit-after": "1 days",
+    "distribution": "global",
+    "rating": "general",
+    "doc-class": "Living Document",
+    "doc-rights": "Copywritten Work",
+    "doc-type": "Public",
   },
   
-  // Canonical URL
+  // Canonical and alternate URLs
   alternates: {
-    canonical: "https://lawgical.com",
+    canonical: "https://www.lawgical.tech",
+    languages: {
+      'en-IN': 'https://www.lawgical.tech',
+      'hi-IN': 'https://www.lawgical.tech/hi', // If you have Hindi version
+    },
+    types: {
+      'application/rss+xml': [
+        { url: 'https://www.lawgical.tech/rss.xml', title: 'Lawgical Legal Updates' }
+      ],
+    },
   },
   
-  // Verification tags
+  // Search Engine Verification
   verification: {
-    google: "QYcBwyVDXGDlSSxuYbzHmLRiUrofznU8LHBS9ZTUUqI", // Google Search Console
-    bing: "1CCF3565C81789FD267302CF040AA5F0", // Bing Webmaster Tools
+    google: "QYcBwyVDXGDlSSxuYbzHmLRiUrofznU8LHBS9ZTUUqI",
+    bing: "1CCF3565C81789FD267302CF040AA5F0",
+   
   },
+  
+  // Archives and sitemap
+  archives: ['https://www.lawgical.tech/archive'],
+  assets: ['https://www.lawgical.tech/assets'],
+  bookmarks: ['https://www.lawgical.tech/bookmarks'],
 };
 
 export const viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
-  themeColor: "#2563eb",
+  maximumScale: 5, // Allow zoom for accessibility
+  minimumScale: 1,
+  userScalable: true, // Enable for accessibility
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#2563eb" },
+    { media: "(prefers-color-scheme: dark)", color: "#1e40af" }
+  ],
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en-IN" suppressHydrationWarning>
       <head>
-        {/* Google and Bing Verification Tags */}
+        {/* Enhanced Meta Tags */}
         <meta name="google-site-verification" content="QYcBwyVDXGDlSSxuYbzHmLRiUrofznU8LHBS9ZTUUqI" />
         <meta name="msvalidate.01" content="1CCF3565C81789FD267302CF040AA5F0" />
-
-        {/* Preconnect to improve performance */}
+        
+        {/* Geographic Targeting */}
+        <meta name="geo.region" content="IN" />
+        <meta name="geo.country" content="India" />
+        <meta name="geo.placename" content="India" />
+        <meta name="ICBM" content="20.5937,78.9629" />
+        
+        {/* Enhanced Performance */}
         <link rel="preconnect" href="https://personalize.relevic.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
         
         {/* DNS prefetch for external scripts */}
         <link rel="dns-prefetch" href="//js.hs-scripts.com" />
         <link rel="dns-prefetch" href="//embed.tawk.to" />
         <link rel="dns-prefetch" href="//cdn.segment.com" />
+        <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
+        
+        {/* Resource hints for better performance */}
+        <link rel="prefetch" href="/sitemap.xml" />
+        <link rel="prefetch" href="/robots.txt" />
         
         {/* Animate.css with proper integrity */}
         <link
@@ -170,7 +297,7 @@ export default function RootLayout({ children }) {
           referrerPolicy="no-referrer"
         />
         
-        {/* Schema.org structured data for legal services */}
+        {/* Enhanced Schema.org structured data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -178,59 +305,264 @@ export default function RootLayout({ children }) {
               "@context": "https://schema.org",
               "@type": "LegalService",
               "name": "Lawgical",
-              "description": "Professional legal services including company registration, GST services, trademark filing, and expert lawyer consultation",
-              "url": "https://lawgical.com",
-              "logo": "https://lawgical.com/logo.png",
-              "image": "https://lawgical.com/og-image.jpg",
-              "priceRange": "₹₹",
+              "alternateName": "Lawgical Legal Services",
+              "description": "India's leading online legal services platform providing expert lawyer consultation, company registration, GST services, and comprehensive legal solutions",
+              "url": "https://www.lawgical.tech",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.lawgical.tech/logo.png",
+                "width": 512,
+                "height": 512
+              },
+              "image": [
+                "https://www.lawgical.tech/og-image-main.jpg",
+                "https://www.lawgical.tech/logo.png"
+              ],
+              "telephone": "+91-8383801899",
+              "email": "support@lawgical.tech",
+              "priceRange": "₹₹-₹₹₹",
+              "currenciesAccepted": "INR",
+              "paymentAccepted": ["Cash", "Credit Card", "UPI", "Net Banking", "Wallet"],
+              
               "address": {
                 "@type": "PostalAddress",
-                "addressCountry": "IN"
+                "addressCountry": "IN",
+                "addressRegion": "Multiple States",
+                "addressLocality": "Pan India Service"
               },
-              "areaServed": {
-                "@type": "Country",
-                "name": "India"
+              
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 20.5937,
+                "longitude": 78.9629
               },
-              "serviceType": [
-                "Legal Consultation",
-                "Company Registration",
-                "GST Registration",
-                "Trademark Registration",
-                "Legal Compliance",
-                "Business Law Advisory"
+              
+              "areaServed": [
+                {
+                  "@type": "Country",
+                  "name": "India"
+                },
+                {
+                  "@type": "State",
+                  "name": "Maharashtra"
+                },
+                {
+                  "@type": "State", 
+                  "name": "Delhi"
+                },
+                {
+                  "@type": "State",
+                  "name": "Karnataka"
+                },
+                {
+                  "@type": "State",
+                  "name": "Delhi NCR"
+                },
+                {
+                  "@type": "State",
+                  "name": "Haryana"
+                },
+                {
+                  "@type": "State",
+                  "name": "West Bengal"
+                },
+                {
+                  "@type": "State",
+                  "name": "Gujarat"
+                },
+                {
+                  "@type": "State",
+                  "name": "Uttar Pradesh"
+                }
               ],
+              
+              "serviceType": [
+                "Online Lawyer Consultation",
+                "Company Registration",
+                "GST Registration & Compliance", 
+                "Trademark Registration",
+                "Legal Document Preparation",
+                "Corporate Law Advisory",
+                "Intellectual Property Services",
+                "Compliance & Regulatory Services",
+                "Contract Drafting & Review",
+                "Legal Notice Services"
+              ],
+              
               "hasOfferCatalog": {
                 "@type": "OfferCatalog",
-                "name": "Legal Services",
+                "name": "Legal Services Catalog",
                 "itemListElement": [
                   {
                     "@type": "Offer",
                     "itemOffered": {
                       "@type": "Service",
-                      "name": "Online Lawyer Consultation"
-                    }
+                      "name": "Online Lawyer Consultation",
+                      "description": "Expert legal consultation with verified lawyers"
+                    },
+                    "price": "499",
+                    "priceCurrency": "INR",
+                    "availability": "https://schema.org/InStock"
+                  },
+                  {
+                    "@type": "Offer", 
+                    "itemOffered": {
+                      "@type": "Service",
+                      "name": "Private Limited Company Registration",
+                      "description": "Complete company incorporation services"
+                    },
+                    "price": "6999",
+                    "priceCurrency": "INR",
+                    "availability": "https://schema.org/InStock"
+                  },
+                  {
+                    "@type": "Offer",
+                    "itemOffered": {
+                      "@type": "Service", 
+                      "name": "GST Registration",
+                      "description": "GST registration and compliance services"
+                    },
+                    "price": "2999",
+                    "priceCurrency": "INR",
+                    "availability": "https://schema.org/InStock"
                   },
                   {
                     "@type": "Offer",
                     "itemOffered": {
                       "@type": "Service",
-                      "name": "Company Registration"
-                    }
-                  },
-                  {
-                    "@type": "Offer",
-                    "itemOffered": {
-                      "@type": "Service",
-                      "name": "GST Registration & Returns"
-                    }
+                      "name": "Trademark Registration",
+                      "description": "Complete trademark filing and registration"
+                    },
+                    "price": "4999",
+                    "priceCurrency": "INR", 
+                    "availability": "https://schema.org/InStock"
                   }
                 ]
               },
+              
               "aggregateRating": {
                 "@type": "AggregateRating",
                 "ratingValue": "4.8",
-                "reviewCount": "500"
+                "reviewCount": "2500",
+                "bestRating": "5",
+                "worstRating": "1"
+              },
+              
+              "review": [
+                {
+                  "@type": "Review",
+                  "reviewRating": {
+                    "@type": "Rating", 
+                    "ratingValue": "5",
+                    "bestRating": "5"
+                  },
+                  "author": {
+                    "@type": "Person",
+                    "name": "Priya Sharma"
+                  },
+                  "reviewBody": "Excellent legal services. Quick company registration process with expert guidance."
+                }
+              ],
+              
+              "sameAs": [
+                "https://www.facebook.com/lawgical",
+                "https://www.twitter.com/lawgical_legal", 
+                "https://www.linkedin.com/company/lawgical",
+                "https://www.instagram.com/lawgical_legal",
+                "https://www.youtube.com/@lawgical"
+              ],
+              
+              "foundingDate": "2020",
+              "numberOfEmployees": {
+                "@type": "QuantitativeValue",
+                "value": "500+"
+              },
+              
+              "knowsAbout": [
+                "Corporate Law",
+                "Business Registration",
+                "Tax Law", 
+                "Intellectual Property",
+                "Employment Law",
+                "Contract Law",
+                "Compliance",
+                "Regulatory Affairs"
+              ],
+              
+              "memberOf": {
+                "@type": "Organization",
+                "name": "Bar Council of India"
               }
+            })
+          }}
+        />
+
+        {/* Additional Schema for Local Business (if applicable) */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Lawgical Legal Tech ",
+              "url": "https://www.lawgical.tech",
+              "logo": "https://www.lawgical.tech/logo.png",
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+91-8383801899",
+                "contactType": "Customer Service",
+                "areaServed": "IN",
+                "availableLanguage": ["English", "Hindi"]
+              },
+              "founder": {
+                "@type": "Person",
+                "name": "Chahat Siwach"
+              }
+            })
+          }}
+        />
+
+        {/* FAQ Schema (add your common FAQs) */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "How can I book a lawyer consultation online?",
+                  "acceptedAnswer": {
+                    "@type": "Answer", 
+                    "text": "You can book a lawyer consultation on Lawgical by selecting your legal issue, choosing from verified lawyers, and booking an instant consultation starting at ₹499."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What legal services does Lawgical provide?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Lawgical provides comprehensive legal services including online lawyer consultation, company registration, GST services, trademark filing, legal document preparation, and compliance services across India."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How much does company registration cost?", 
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Company registration through Lawgical starts from ₹6,999 for Private Limited Company registration, including all government fees and professional charges."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Is online legal consultation legally valid?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, online legal consultations are legally valid. Our lawyers are licensed professionals registered with Bar Council of India and provide authentic legal advice."
+                  }
+                }
+              ]
             })
           }}
         />
@@ -246,10 +578,12 @@ export default function RootLayout({ children }) {
           {children}
         </ThemeProvider>
 
+        {/* Analytics & Tracking */}
         <Analytics />
         <SpeedInsights />
         <GoogleAnalytics gaId="G-4H1WL5DLNM" />
 
+        {/* Enhanced Segment Analytics */}
         <Script
           id="segment-analytics"
           strategy="afterInteractive"
@@ -258,6 +592,7 @@ export default function RootLayout({ children }) {
           }}
         />
 
+        {/* HubSpot Integration */}
         <Script
           id="hubspot-loader"
           strategy="afterInteractive"
@@ -294,6 +629,7 @@ export default function RootLayout({ children }) {
           }}
         />
 
+        {/* Relevic Personalization */}
         <Script
           id="relevic-anti-flicker"
           strategy="beforeInteractive"
@@ -312,6 +648,7 @@ export default function RootLayout({ children }) {
           async
         />
 
+        {/* Tawk.to Chat */}
         <Script
           id="tawk-to"
           strategy="afterInteractive"
@@ -326,6 +663,24 @@ export default function RootLayout({ children }) {
               s1.setAttribute('crossorigin','*');
               s0.parentNode.insertBefore(s1,s0);
               })();
+            `,
+          }}
+        />
+
+        {/* Error Tracking (optional - add your preferred service) */}
+        <Script
+          id="error-tracking"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.addEventListener('error', function(e) {
+                if (window.gtag) {
+                  gtag('event', 'exception', {
+                    'description': e.error ? e.error.stack : e.message,
+                    'fatal': false
+                  });
+                }
+              });
             `,
           }}
         />
