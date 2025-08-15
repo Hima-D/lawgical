@@ -206,7 +206,7 @@ export const metadata = {
     // Social Media
     "fb:app_id": "your_facebook_app_id", // Add your Facebook App ID
     "og:email": "support@lawgical.tech",
-    "og:phone_number": "+91-xxx-xxx-xxxx", // Add your phone number
+    "og:phone_number": "+918383801899", // Add your phone number
     
     // Additional SEO
     "revisit-after": "1 days",
