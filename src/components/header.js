@@ -106,7 +106,6 @@ const Header = () => {
 
         {/* Mobile Navigation */}
         <div className="lg:hidden flex items-center gap-2">
-          <ThemeToggle />
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="text-black hover:bg-gray-100">
