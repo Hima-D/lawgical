@@ -358,13 +358,7 @@ const ContractLawPage = () => {
                   Our team provides expert guidance to create, review, and enforce contracts, protecting your interests in personal and professional dealings.
                 </p>
               </div>
-              <div>
-                <img
-                  src="https://picsum.photos/800/400"
-                  alt="Contract Law Illustration"
-                  className="w-full h-auto rounded-xl shadow-lg"
-                />
-              </div>
+              
             </div>
           </div>
         </section>
@@ -411,13 +405,7 @@ const ContractLawPage = () => {
                   </li>
                 </ul>
               </div>
-              <div>
-                <img
-                  src="https://picsum.photos/800/400?random=1"
-                  alt="Types of Contracts"
-                  className="w-full h-auto rounded-xl shadow-lg"
-                />
-              </div>
+              
             </div>
           </div>
         </section>

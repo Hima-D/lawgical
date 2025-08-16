@@ -12,7 +12,7 @@ const About = () => {
     },
     {
       name: "Millit",
-      role: "CS Engineer",
+      role: "Engineer",
       image: "https://picsum.photos/150/150?random=3",
       bio: "Millit is a brilliant CS engineer with exceptional technical skills. Known for his problem-solving abilities and passion for technology, he is an invaluable part of the team."
     }
@@ -50,7 +50,7 @@ const About = () => {
           <div>
             <h2 className="text-4xl font-bold text-gray-800 mb-6">Our Mission</h2>
             <p className="text-lg mb-8 leading-relaxed text-gray-700">
-              At Lawgical, our mission is to provide a seamless platform for legal professionals to connect, collaborate, and access essential resources.
+            "At Lawgical, our mission is to democratize justice by connecting everyone with the legal expertise they need."
             </p>
             <h2 className="text-4xl font-bold text-gray-800 mb-6">Our Core Values</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">

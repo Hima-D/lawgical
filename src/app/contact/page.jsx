@@ -123,7 +123,7 @@ const Contact = () => {
             <div className="flex flex-col gap-6 justify-center text-gray-700">
               <div>
                 <h2 className="text-xl font-semibold mb-2">Email</h2>
-                <p><a href="mailto:advocatechahat@gmail.com" className="text-blue-600 hover:underline">advocatechahat@gmail.com</a></p>
+                <p><a href="mailto:advocatechahat@gmail.com" className="text-blue-600 hover:underline">support@lawgical.tech</a></p>
               </div>
 
               <div>
