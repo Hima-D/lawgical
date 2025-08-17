@@ -5,7 +5,7 @@ module.exports = {
   sitemapSize: 5000,
   changefreq: 'daily',
   priority: 0.7,
-  exclude: ['/secret-page'], // pages you don’t want in sitemap
+  exclude: ['/api'], // pages you don’t want in sitemap
   robotsTxtOptions: {
     policies: [{ userAgent: '*', allow: '/' }],
   },
