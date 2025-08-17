@@ -293,7 +293,6 @@ export default function RootLayout({ children }) {
         
         {/* DNS prefetch for external scripts */}
         <link rel="dns-prefetch" href="//js.hs-scripts.com" />
-        <link rel="dns-prefetch" href="//embed.tawk.to" />
         <link rel="dns-prefetch" href="//cdn.segment.com" />
         <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
         
@@ -669,25 +668,6 @@ export default function RootLayout({ children }) {
           data-relevic-script="686cec69f6c7cf4012717161"
           type="text/javascript"
           async
-        />
-
-        {/* Tawk.to Chat */}
-        <Script
-          id="tawk-to"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-              (function(){
-              var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-              s1.async=true;
-              s1.src='https://embed.tawk.to/6877a38b63bcc7190cb0179a/1j09ldn1b';
-              s1.charset='UTF-8';
-              s1.setAttribute('crossorigin','*');
-              s0.parentNode.insertBefore(s1,s0);
-              })();
-            `,
-          }}
         />
 
         {/* Error Tracking (optional - add your preferred service) */}
