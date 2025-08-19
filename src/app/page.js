@@ -3,7 +3,25 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Head from "next/head";
-import Image from "next/image";
+import {
+  Scale,
+  Shield,
+  FileText,
+  Phone,
+  Mail,
+  CheckCircle,
+  Users,
+  Clock,
+  Award,
+  Star,
+  Gavel,
+  Search,
+  Target,
+  MessageCircle,
+  ArrowRight,
+  X,
+  User,
+} from "lucide-react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import {
@@ -13,28 +31,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Slot } from "@radix-ui/react-slot";
-import {
-  Star,
-  CheckCircle,
-  FileText,
-  Gavel,
-  Users,
-  Shield,
-  X,
-  Phone,
-  Mail,
-  User,
-  MessageCircle,
-} from "lucide-react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import TestimonialsSlider from "@/components/testimonials";
 
-// shadcn/ui Components
+// Simplified shadcn/ui Components to match LitigationHomepage
 const Button = ({
   children,
   variant = "default",
@@ -44,27 +43,19 @@ const Button = ({
   ...props
 }) => {
   const baseClasses =
-    "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background dark:ring-offset-gray-800";
-
+    "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background";
   const variants = {
-    default: "bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white",
-    destructive:
-      "bg-destructive text-destructive-foreground hover:bg-destructive/90 dark:bg-destructive dark:hover:bg-destructive/90",
-    outline: "border border-input hover:bg-accent hover:text-accent-foreground dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-white",
-    secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 dark:bg-secondary dark:hover:bg-secondary/80",
-    ghost: "hover:bg-accent hover:text-accent-foreground dark:hover:bg-gray-700 dark:hover:text-white",
-    link: "underline-offset-4 hover:underline text-blue-600 dark:text-blue-400 dark:hover:text-blue-300",
+    default: "bg-blue-600 text-white hover:bg-blue-700",
+    outline: "border-2 border-input hover:bg-accent hover:text-accent-foreground",
+    ghost: "hover:bg-accent hover:text-accent-foreground",
+    secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200",
   };
-
   const sizes = {
-    default: "h-10 py-2 px-4",
+    default: "h-10 px-4 py-2",
     sm: "h-9 px-3 rounded-md",
-    lg: "h-11 px-6 sm:px-8 rounded-md",
-    icon: "h-10 w-10",
+    lg: "h-12 px-8 text-lg",
   };
-
   const Comp = asChild ? Slot : "button";
-
   return (
     <Comp
       className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`}
@@ -77,12 +68,27 @@ const Button = ({
 
 const Card = ({ children, className = "", ...props }) => (
   <div
-    className={`rounded-lg border bg-card text-card-foreground shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 ${className}`}
+    className={`rounded-lg border bg-white text-card-foreground shadow-sm ${className}`}
     {...props}
   >
     {children}
   </div>
 );
+
+const Badge = ({ children, variant = "default", className = "" }) => {
+  const variants = {
+    default: "bg-blue-100 text-blue-800",
+    secondary: "bg-secondary text-secondary-foreground",
+    outline: "border border-input",
+  };
+  return (
+    <div
+      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors ${variants[variant]} ${className}`}
+    >
+      {children}
+    </div>
+  );
+};
 
 // Consultation Modal Component
 const ConsultationModal = ({ isOpen, onClose }) => {
@@ -228,39 +234,44 @@ const ConsultationModal = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-4 sm:p-6">
-          <div className="flex items-center justify-between mb-4 sm:mb-6">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Free Legal Consultation</h2>
-            <button
+      <Card className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-gray-100">
+        <div className="p-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">Free Legal Consultation</h2>
+            <Button
+              variant="ghost"
               onClick={handleClose}
-              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+              className="text-gray-500 hover:text-gray-700"
               aria-label="Close modal"
             >
-              <X className="h-5 sm:h-6 w-5 sm:w-6" />
-            </button>
+              <X className="h-6 w-6" />
+            </Button>
           </div>
 
           {isSuccess ? (
-            <div className="text-center py-6 sm:py-8">
-              <CheckCircle className="h-12 sm:h-16 w-12 sm:w-16 text-green-500 mx-auto mb-4" />
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            <div className="text-center py-8">
+              <div className="bg-gradient-to-r from-blue-500 to-purple-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">
                 Thank You!
               </h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-4 sm:mb-6 text-sm sm:text-base">
+              <p className="text-gray-600 mb-6">
                 Your consultation request has been submitted successfully. Our legal expert will contact you within 24 hours.
               </p>
-              <div className="space-y-2 mb-4 sm:mb-6">
-                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                  📧 Confirmation email sent to: <strong>{formData.email}</strong>
+              <div className="space-y-2 mb-6">
+                <p className="text-sm text-gray-500">
+                  <Mail className="h-4 w-4 inline mr-2" />
+                  Confirmation email sent to: <strong>{formData.email}</strong>
                 </p>
-                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-gray-500">
+                  <Phone className="h-4 w-4 inline mr-2" />
                   We&apos;ll call you at: <strong>{formData.phone}</strong>
                 </p>
               </div>
               <Button
                 onClick={handleClose}
-                className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
               >
                 Close
               </Button>
@@ -268,15 +279,13 @@ const ConsultationModal = ({ isOpen, onClose }) => {
           ) : (
             <div>
               {submitError && (
-                <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-md">
-                  <div className="flex">
-                    <div className="flex-shrink-0">
-                      <X className="h-5 w-5 text-red-400 dark:text-red-300" />
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-sm text-red-700 dark:text-red-300">{submitError}</p>
-                      <p className="text-xs text-red-600 dark:text-red-400 mt-1">
-                        Please try again or contact us at +91-XXXXXXXXX
+                <div className="mb-6 p-4 bg-red-50 rounded-lg border border-red-200">
+                  <div className="flex items-center">
+                    <X className="h-5 w-5 text-red-500 mr-3" />
+                    <div>
+                      <p className="text-sm text-red-700">{submitError}</p>
+                      <p className="text-xs text-red-600 mt-1">
+                        Please try again or contact us at +91-8383801899
                       </p>
                     </div>
                   </div>
@@ -286,7 +295,10 @@ const ConsultationModal = ({ isOpen, onClose }) => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label
+                      htmlFor="firstName"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
                       First Name *
                     </label>
                     <input
@@ -296,12 +308,15 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                       required
                       value={formData.firstName}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
                       placeholder="John"
                     />
                   </div>
                   <div>
-                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label
+                      htmlFor="lastName"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
                       Last Name *
                     </label>
                     <input
@@ -311,14 +326,17 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                       required
                       value={formData.lastName}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
                       placeholder="Doe"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Email Address *
                   </label>
                   <input
@@ -328,13 +346,16 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                     required
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
                     placeholder="john.doe@example.com"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label
+                    htmlFor="phone"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Phone Number *
                   </label>
                   <input
@@ -344,13 +365,16 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                     required
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
                     placeholder="+91 98765 43210"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="company" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label
+                    htmlFor="company"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Company/Organization
                   </label>
                   <input
@@ -359,13 +383,16 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                     name="company"
                     value={formData.company}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
                     placeholder="Your Company Name"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="serviceType" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label
+                    htmlFor="serviceType"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Service Required *
                   </label>
                   <select
@@ -374,7 +401,7 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                     required
                     value={formData.serviceType}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
                   >
                     <option value="">Select a service</option>
                     <option value="company-registration">Company Registration</option>
@@ -391,37 +418,40 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label
+                    htmlFor="message"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Message
                   </label>
                   <textarea
                     id="message"
                     name="message"
-                    rows="3"
+                    rows="4"
                     value={formData.message}
                     onChange={handleInputChange}
                     placeholder="Tell us about your legal requirements..."
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors resize-none bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
                   ></textarea>
                 </div>
 
-                <div className="bg-blue-50 dark:bg-blue-900/30 p-3 rounded-md">
+                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                   <div className="flex items-start">
-                    <Shield className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 mr-2 flex-shrink-0" />
-                    <div className="text-sm text-blue-800 dark:text-blue-300">
+                    <Shield className="h-5 w-5 text-blue-600 mt-1 mr-3" />
+                    <div className="text-sm text-blue-800">
                       <p className="font-medium">Your information is secure</p>
-                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
+                      <p className="text-xs text-blue-600 mt-1">
                         We use bank-level encryption and never share your data.
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                <div className="flex flex-col sm:flex-row gap-4">
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                    className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:opacity-50"
                   >
                     {isSubmitting ? (
                       <div className="flex items-center justify-center">
@@ -455,19 +485,19 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                     type="button"
                     variant="outline"
                     onClick={handleClose}
-                    className="flex-1 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all"
+                    className="flex-1 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
                   >
                     Cancel
                   </Button>
                 </div>
 
-                <div className="text-center text-xs text-gray-500 dark:text-gray-400 mt-4">
+                <div className="text-center text-xs text-gray-500 mt-4">
                   By submitting this form, you agree to our{" "}
-                  <Link href="/privacy-policy" className="text-blue-600 dark:text-blue-400 hover:underline">
+                  <Link href="/privacy-policy" className="text-blue-600 hover:underline">
                     Privacy Policy
                   </Link>{" "}
                   and{" "}
-                  <Link href="/terms-of-service" className="text-blue-600 dark:text-blue-400 hover:underline">
+                  <Link href="/terms-of-service" className="text-blue-600 hover:underline">
                     Terms of Service
                   </Link>
                 </div>
@@ -475,7 +505,7 @@ const ConsultationModal = ({ isOpen, onClose }) => {
             </div>
           )}
         </div>
-      </div>
+      </Card>
     </div>
   );
 };
@@ -484,20 +514,20 @@ const EXPERT_CONSULTATION = [
   {
     title: "Talk to a Lawyer",
     subtitle: "Expert legal advice",
-    icon: "⚖️",
-    color: "bg-blue-500",
+    icon: Gavel,
+    color: "from-blue-500 to-indigo-500",
   },
   {
     title: "Talk to a CA",
     subtitle: "Chartered Accountant consultation",
-    icon: "📊",
-    color: "bg-green-500",
+    icon: FileText,
+    color: "from-green-500 to-emerald-500",
   },
   {
     title: "Talk to a CS",
     subtitle: "Company Secretary guidance",
-    icon: "📋",
-    color: "bg-purple-500",
+    icon: Users,
+    color: "from-purple-500 to-violet-500",
   },
 ];
 
@@ -506,93 +536,111 @@ const PROCESS_STEPS = [
     step: "01",
     title: "Choose Your Service",
     description: "Select from our range of legal and compliance services",
-    icon: "🎯",
+    icon: Target,
   },
   {
     step: "02",
     title: "Get Expert Consultation",
     description: "Connect with our qualified professionals",
-    icon: "👥",
+    icon: Users,
   },
   {
     step: "03",
     title: "Documentation & Filing",
     description: "We handle all paperwork and filings",
-    icon: "📋",
+    icon: FileText,
   },
   {
     step: "04",
     title: "Completion & Support",
     description: "Receive documents and ongoing support",
-    icon: "✅",
+    icon: CheckCircle,
   },
 ];
 
 const FEATURES = [
   {
+    icon: Users,
     title: "Expert Team",
     description: "500+ qualified lawyers, CAs, and CS professionals",
-    icon: "👨‍💼",
-    color: "from-blue-500 to-blue-600",
+    color: "from-blue-500 to-indigo-500",
   },
   {
+    icon: Clock,
     title: "Quick Turnaround",
     description: "Fast processing with guaranteed timelines",
-    icon: "⚡",
-    color: "from-green-500 to-green-600",
+    color: "from-green-500 to-emerald-500",
   },
   {
+    icon: Award,
     title: "Transparent Pricing",
     description: "No hidden costs, clear pricing structure",
-    icon: "💰",
-    color: "from-purple-500 to-purple-600",
+    color: "from-purple-500 to-violet-500",
   },
   {
+    icon: Shield,
     title: "24/7 Support",
     description: "Round-the-clock customer support",
-    icon: "🔄",
-    color: "from-orange-500 to-orange-600",
+    color: "from-orange-500 to-amber-500",
   },
   {
+    icon: Scale,
     title: "Secure Platform",
     description: "Bank-level security for your data",
-    icon: "🛡️",
-    color: "from-red-500 to-red-600",
+    color: "from-teal-500 to-cyan-500",
   },
   {
+    icon: Search,
     title: "Delhi-NCR Focus",
     description: "Specialized services for Delhi-NCR businesses",
-    icon: "🌍",
-    color: "from-indigo-500 to-indigo-600",
+    color: "from-pink-500 to-rose-500",
   },
 ];
 
 const STATS = [
   { number: "1M+", label: "Happy Clients", icon: Users },
   { number: "500+", label: "Expert Professionals", icon: Shield },
-  { number: "15+", label: "Years Experience", icon: FileText },
+  { number: "15+", label: "Years Experience", icon: Clock },
   { number: "99%", label: "Success Rate", icon: CheckCircle },
 ];
 
 const INDUSTRIES = [
   {
     name: "Startups",
-    icon: "🚀",
+    icon: Target,
     description: "End-to-end startup legal solutions",
+    color: "from-blue-500 to-indigo-500",
   },
-  { name: "E-commerce", icon: "🛒", description: "Online business compliance" },
+  {
+    name: "E-commerce",
+    icon: FileText,
+    description: "Online business compliance",
+    color: "from-purple-500 to-violet-500",
+  },
   {
     name: "Healthcare",
-    icon: "🏥",
+    icon: CheckCircle,
     description: "Medical practice regulations",
+    color: "from-green-500 to-emerald-500",
   },
   {
     name: "Education",
-    icon: "🎓",
+    icon: Users,
     description: "Educational institution setup",
+    color: "from-orange-500 to-amber-500",
   },
-  { name: "Real Estate", icon: "🏢", description: "Property legal services" },
-  { name: "Manufacturing", icon: "🏭", description: "Industrial compliance" },
+  {
+    name: "Real Estate",
+    icon: Scale,
+    description: "Property legal services",
+    color: "from-teal-500 to-cyan-500",
+  },
+  {
+    name: "Manufacturing",
+    icon: Gavel,
+    description: "Industrial compliance",
+    color: "from-pink-500 to-rose-500",
+  },
 ];
 
 const FAQS = [
@@ -638,16 +686,16 @@ const ErrorBoundary = ({ children }) => {
 
   if (hasError) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
-        <div className="text-center p-6 sm:p-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
-          <h2 className="text-xl sm:text-2xl font-bold text-red-600 dark:text-red-400 mb-4">
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="text-center p-8 bg-white rounded-2xl shadow-lg">
+          <h2 className="text-2xl font-bold text-red-600 mb-4">
             Something went wrong
           </h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm sm:text-base">
+          <p className="text-gray-600 mb-4 text-base">
             Please refresh the page or try again later.
           </p>
           <Button
-            className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
+            className="bg-blue-600 text-white hover:bg-blue-700"
             onClick={() => window.location.reload()}
           >
             Refresh
@@ -702,7 +750,7 @@ export default function LawgicalHomepage() {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="min-h-screen bg-gradient-to-b from-white via-white to-slate-100">
         <Head>
           <title>
             Lawgical | India&apos;s Leading Legal & Compliance Platform
@@ -726,90 +774,94 @@ export default function LawgicalHomepage() {
           onClose={() => setIsConsultationOpen(false)}
         />
 
-        {/* Hero Section - Mobile Optimized */}
-        <section
-          id="home"
-          className="bg-gradient-to-br from-blue-50 via-white to-purple-50 pt-16 pb-8 sm:pt-20 sm:pb-12 lg:pt-24 lg:pb-16"
-        >
+        {/* Hero Section */}
+        <section className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
-              <div className="text-center lg:text-left order-1">
-                <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 leading-tight">
-                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
-                    India&apos;s Leading
-                  </span>{" "}
-                  Legal & Compliance Platform
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div className="text-center lg:text-left">
+                <Badge className="mb-6">
+                  ⚖️ Expert Legal Services
+                </Badge>
+                <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                  India&apos;s Leading
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+                    {" "}Legal & Compliance Platform
+                  </span>
                 </h1>
-                <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 mb-4 sm:mb-6 leading-relaxed">
-                  Simplifying legal, tax, and compliance services for individuals and businesses across India.
+                <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+                  Simplifying legal, tax, and compliance services for individuals and businesses across India with expert guidance and seamless processes.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-3 mb-4 sm:mb-6">
+                <div className="flex flex-col sm:flex-row gap-4 mb-8">
                   <Button
                     size="lg"
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all shadow-lg"
                     onClick={() => setIsConsultationOpen(true)}
-                    className="bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-semibold hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg w-full sm:w-auto"
                   >
+                    <Phone className="h-5 w-5 mr-2" />
                     Free Consultation
                   </Button>
                   <Button
                     variant="outline"
                     size="lg"
-                    className="border-2 border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-semibold hover:bg-blue-600 hover:text-white dark:hover:bg-blue-400 dark:hover:text-white transition-all w-full sm:w-auto"
+                    className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
                     asChild
                   >
-                    <Link href="/services">View Services</Link>
+                    <Link href="/services">
+                      View Services
+                      <ArrowRight className="h-5 w-5 ml-2" />
+                    </Link>
                   </Button>
                 </div>
-                <div className="flex flex-wrap justify-center lg:justify-start gap-3 sm:gap-6 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                  <div className="flex items-center gap-2">
+                <div className="flex flex-wrap justify-center lg:justify-start space-x-8 text-sm text-gray-500">
+                  <div className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                     <span>1M+ Happy Clients</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
                     <span>500+ Legal Experts</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
                     <span>15+ Years Experience</span>
                   </div>
                 </div>
               </div>
-              <div className="relative order-2">
-                <Card className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 border border-gray-100 dark:border-gray-700">
-                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
-                    Start Your Legal Journey
-                  </h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg border border-blue-100 dark:border-blue-700">
-                      <FileText className="h-5 sm:h-6 w-5 sm:w-6 text-blue-600 dark:text-blue-400 mr-3 flex-shrink-0" />
+              <div>
+                <Card className="bg-white/80 backdrop-blur rounded-2xl shadow-2xl p-8 border border-gray-100">
+                  <div className="text-center mb-6">
+                    <div className="bg-gradient-to-r from-blue-500 to-purple-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Scale className="h-8 w-8 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900">
+                      Start Your Legal Journey
+                    </h3>
+                    <p className="text-gray-600 mt-2">Simplify your legal needs today</p>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="flex items-center p-4 bg-blue-50 rounded-lg border border-blue-100">
+                      <FileText className="h-8 w-8 text-blue-600 mr-4" />
                       <div>
-                        <h4 className="font-semibold text-gray-900 dark:text-gray-200 text-sm">
-                          Quick Registration
-                        </h4>
-                        <p className="text-xs text-gray-600 dark:text-gray-300">
+                        <h4 className="font-semibold text-gray-900">Quick Registration</h4>
+                        <p className="text-sm text-gray-600">
                           Business registration in 7-15 days
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-100 dark:border-green-700">
-                      <Users className="h-5 sm:h-6 w-5 sm:w-6 text-green-600 dark:text-green-400 mr-3 flex-shrink-0" />
+                    <div className="flex items-center p-4 bg-purple-50 rounded-lg border border-purple-100">
+                      <Users className="h-8 w-8 text-purple-600 mr-4" />
                       <div>
-                        <h4 className="font-semibold text-gray-900 dark:text-gray-200 text-sm">
-                          Expert Support
-                        </h4>
-                        <p className="text-xs text-gray-600 dark:text-gray-300">
+                        <h4 className="font-semibold text-gray-900">Expert Support</h4>
+                        <p className="text-sm text-gray-600">
                           24/7 support from professionals
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center p-3 bg-purple-50 dark:bg-purple-900/30 rounded-lg border border-purple-100 dark:border-purple-700">
-                      <Shield className="h-5 sm:h-6 w-5 sm:w-6 text-purple-600 dark:text-purple-400 mr-3 flex-shrink-0" />
+                    <div className="flex items-center p-4 bg-green-50 rounded-lg border border-green-100">
+                      <Shield className="h-8 w-8 text-green-600 mr-4" />
                       <div>
-                        <h4 className="font-semibold text-gray-900 dark:text-gray-200 text-sm">
-                          100% Secure
-                        </h4>
-                        <p className="text-xs text-gray-600 dark:text-gray-300">
+                        <h4 className="font-semibold text-gray-900">100% Secure</h4>
+                        <p className="text-sm text-gray-600">
                           Your data is safe and confidential
                         </p>
                       </div>
@@ -821,206 +873,136 @@ export default function LawgicalHomepage() {
           </div>
         </section>
 
-        {/* Expert Consultation Banner - Mobile Optimized */}
-        <section className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-700 dark:to-purple-700 py-6 sm:py-8">
+        {/* Expert Consultation Banner */}
+        <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid md:grid-cols-3 gap-8">
               {EXPERT_CONSULTATION.map((expert, index) => (
-                <Button
+                <Card
                   key={index}
-                  variant="ghost"
-                  onClick={() => setIsConsultationOpen(true)}
-                  className="flex items-center justify-center p-4 bg-white/10 dark:bg-white/5 backdrop-blur rounded-lg hover:bg-white/20 dark:hover:bg-white/10 transition-all group"
+                  className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 group"
                 >
-                  <span className="text-xl sm:text-2xl mr-3">{expert.icon}</span>
-                  <div className="text-white text-left">
-                    <h3 className="font-semibold text-sm sm:text-base group-hover:text-yellow-200 dark:group-hover:text-yellow-300 transition-colors">
-                      {expert.title}
-                    </h3>
-                    <p className="text-xs opacity-90">{expert.subtitle}</p>
+                  <div
+                    className={`bg-gradient-to-r ${expert.color} w-12 h-12 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
+                  >
+                    <expert.icon className="h-6 w-6 text-white" />
                   </div>
-                </Button>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{expert.title}</h3>
+                  <p className="text-gray-600 text-sm">{expert.subtitle}</p>
+                  <Button
+                    variant="outline"
+                    className="mt-4 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+                    onClick={() => setIsConsultationOpen(true)}
+                  >
+                    Consult Now
+                  </Button>
+                </Card>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Stats Section - Mobile Optimized */}
-        <section id="stats" className="py-8 sm:py-12 bg-white dark:bg-gray-800">
+        {/* Stats Section */}
+        <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
+            <div className="grid md:grid-cols-4 gap-8">
               {STATS.map((stat, index) => (
                 <div key={index} className="text-center">
-                  <div className="mb-2 sm:mb-3">
-                    <stat.icon className="h-6 sm:h-8 w-6 sm:w-8 text-blue-600 dark:text-blue-400 mx-auto" />
+                  <div className="mb-4">
+                    <div className="bg-gradient-to-r from-blue-500 to-purple-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto">
+                      <stat.icon className="h-8 w-8 text-white" />
+                    </div>
                   </div>
-                  <div className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400 mb-1">
+                  <div className="text-4xl font-bold text-blue-600 mb-2">
                     {index === 0
                       ? counters.clients
                       : index === 1
-                        ? counters.experts
-                        : index === 2
-                          ? counters.experience
-                          : counters.success}
+                      ? counters.experts
+                      : index === 2
+                      ? counters.experience
+                      : counters.success}
                   </div>
-                  <div className="text-gray-600 dark:text-gray-300 font-medium text-xs sm:text-sm">{stat.label}</div>
+                  <div className="text-gray-600 font-medium">{stat.label}</div>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* How It Works - Mobile Optimized */}
-        <section
-          id="process"
-          className="py-8 sm:py-12 lg:py-16 bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-blue-900/30"
-        >
+        {/* How It Works */}
+        <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3">
-                How Lawgical Works
-              </h2>
-              <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">How Lawgical Works</h2>
+              <p className="text-xl text-gray-600 max-w-4xl mx-auto">
                 Simple, transparent process to get your legal work done
               </p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            <div className="grid md:grid-cols-2 gap-8">
               {PROCESS_STEPS.map((step, index) => (
-                <div key={index} className="relative text-center">
-                  <Card className="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700">
-                    <div className="text-3xl sm:text-4xl mb-3">{step.icon}</div>
-                    <div className="text-lg sm:text-xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+                <Card
+                  key={index}
+                  className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group"
+                >
+                  <div className="flex items-start space-x-4">
+                    <div className="bg-gradient-to-r from-blue-500 to-purple-500 w-12 h-12 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0 group-hover:scale-110 transition-transform">
                       {step.step}
                     </div>
-                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                      {step.title}
-                    </h3>
-                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">{step.description}</p>
-                  </Card>
-                  {index < PROCESS_STEPS.length - 1 && (
-                    <div className="hidden lg:block absolute top-1/2 -right-3 transform -translate-y-1/2">
-                      <svg
-                        className="w-6 h-6 text-blue-300 dark:text-blue-600"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M9 5l7 7-7 7"
-                        ></path>
-                      </svg>
+                    <div className="flex-1">
+                      <div className="flex items-center mb-4">
+                        <step.icon className="h-6 w-6 text-blue-600 mr-2" />
+                        <h3 className="text-xl font-semibold text-gray-900">{step.title}</h3>
+                      </div>
+                      <p className="text-gray-600 leading-relaxed">{step.description}</p>
                     </div>
-                  )}
-                </div>
+                  </div>
+                </Card>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Why Choose Lawgical - Mobile Optimized */}
-        <section id="features" className="py-8 sm:py-12 lg:py-16 bg-white dark:bg-gray-800">
+        {/* Why Choose Lawgical */}
+        <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3">
-                Why Choose Lawgical
-              </h2>
-              <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">Why Choose Lawgical</h2>
+              <p className="text-xl text-gray-600 max-w-4xl mx-auto">
                 Accessible, affordable, and efficient legal services
               </p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {FEATURES.map((feature, index) => (
                 <Card
                   key={index}
-                  className={`p-4 sm:p-6 rounded-xl transition-all duration-300 cursor-pointer ${
+                  className={`p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 group ${
                     activeFeature === index
-                      ? "bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 text-white transform scale-105 shadow-2xl"
-                      : "bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 shadow-lg hover:shadow-xl border border-gray-100 dark:border-gray-700"
+                      ? "bg-gradient-to-br from-blue-500 to-purple-600 text-white"
+                      : "bg-white"
                   }`}
                   onMouseEnter={() => setActiveFeature(index)}
                 >
-                  <div className="text-2xl sm:text-3xl mb-3">{feature.icon}</div>
-                  <h3
-                    className={`text-base sm:text-lg font-semibold mb-2 ${
-                      activeFeature === index ? "text-white" : "text-gray-900 dark:text-white"
-                    }`}
-                  >
-                    {feature.title}
-                  </h3>
-                  <p
-                    className={`text-xs sm:text-sm ${
-                      activeFeature === index
-                        ? "text-blue-100"
-                        : "text-gray-600 dark:text-gray-300"
-                    }`}
-                  >
-                    {feature.description}
-                  </p>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Testimonials Section - Mobile Optimized */}
-        <section
-          id="testimonials"
-          className="py-8 sm:py-12 bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-blue-900/30"
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3">
-                What Our Clients Say
-              </h2>
-              <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300">
-                Trusted by clients for their legal and compliance needs
-              </p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {[
-                {
-                  name: "Priya Sharma",
-                  role: "Startup Founder",
-                  content: "Lawgical made our business registration seamless.",
-                  rating: 5,
-                },
-                {
-                  name: "Rahul Mehta",
-                  role: "E-commerce Entrepreneur",
-                  content: "Tax filing services saved us time and ensured compliance.",
-                  rating: 5,
-                },
-                {
-                  name: "Sneha Gupta",
-                  role: "HR Manager",
-                  content: "POSH training helped us create a safer workplace.",
-                  rating: 5,
-                },
-              ].map((testimonial, index) => (
-                <Card
-                  key={index}
-                  className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all border border-gray-100 dark:border-gray-700"
-                >
-                  <div className="flex items-center space-x-1 mb-3">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="h-4 w-4 fill-yellow-400 text-yellow-400"
-                      />
-                    ))}
-                  </div>
-                  <p className="text-gray-600 dark:text-gray-300 italic mb-3 sm:mb-4 text-xs sm:text-sm">
-                    &quot;{testimonial.content}&quot;
-                  </p>
-                  <div className="border-t pt-3">
-                    <div className="font-semibold text-gray-900 dark:text-white text-sm">
-                      {testimonial.name}
+                  <div className="flex items-start space-x-4">
+                    <div
+                      className={`bg-gradient-to-r ${feature.color} w-12 h-12 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
+                    >
+                      <feature.icon className="h-6 w-6 text-white" />
                     </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">
-                      {testimonial.role}
+                    <div>
+                      <h3
+                        className={`text-xl font-semibold mb-4 ${
+                          activeFeature === index ? "text-white" : "text-gray-900"
+                        }`}
+                      >
+                        {feature.title}
+                      </h3>
+                      <p
+                        className={`leading-relaxed ${
+                          activeFeature === index ? "text-blue-100" : "text-gray-600"
+                        }`}
+                      >
+                        {feature.description}
+                      </p>
                     </div>
                   </div>
                 </Card>
@@ -1029,67 +1011,57 @@ export default function LawgicalHomepage() {
           </div>
         </section>
 
-        {/* Industries We Serve - Mobile Optimized */}
-        <section
-          id="industries"
-          className="py-8 sm:py-12 bg-gradient-to-br from-slate-50 to-purple-50 dark:from-gray-900 dark:to-purple-900/30"
-        >
+        {/* Testimonials Section */}
+        <TestimonialsSlider/>
+        {/* Testimonials Slider Component */}
+
+        {/* Industries We Serve */}
+        <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3">
-                Industries We Serve
-              </h2>
-              <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300">
-                Specialized legal solutions for every industry
-              </p>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">Industries We Serve</h2>
+              <p className="text-xl text-gray-600">Specialized legal solutions for every industry</p>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            <div className="grid md:grid-cols-3 gap-8">
               {INDUSTRIES.map((industry, index) => (
                 <Card
                   key={index}
-                  className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 text-center group border border-gray-100 dark:border-gray-700"
+                  className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 group"
                 >
-                  <div className="text-2xl sm:text-3xl mb-2 group-hover:scale-110 transition-transform">
-                    {industry.icon}
+                  <div
+                    className={`bg-gradient-to-r ${industry.color} w-12 h-12 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
+                  >
+                    <industry.icon className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white mb-1">
-                    {industry.name}
-                  </h3>
-                  <p className="text-xs text-gray-600 dark:text-gray-300">
-                    {industry.description}
-                  </p>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{industry.name}</h3>
+                  <p className="text-gray-600 text-sm">{industry.description}</p>
                 </Card>
               ))}
             </div>
           </div>
         </section>
 
-        {/* FAQ Section - Mobile Optimized */}
-        <section
-          id="faq"
-          className="py-8 sm:py-12 bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-blue-900/30"
-        >
+        {/* FAQ Section */}
+        <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3">
-                Frequently Asked Questions
-              </h2>
-              <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+              <p className="text-xl text-gray-600 max-w-4xl mx-auto">
                 Answers to common questions about our services
               </p>
             </div>
-            <div className="max-w-3xl mx-auto">
+            <div className="max-w-4xl mx-auto">
               <Accordion type="single" collapsible className="space-y-3">
                 {FAQS.map((faq, index) => (
                   <AccordionItem
                     key={index}
                     value={`item-${index}`}
-                    className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700"
+                    className="bg-white rounded-xl shadow-lg border border-gray-100"
                   >
-                    <AccordionTrigger className="px-4 py-3 text-sm sm:text-base font-semibold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400">
+                    <AccordionTrigger className="px-6 py-4 text-base font-semibold text-gray-900 hover:text-blue-600">
                       {faq.question}
                     </AccordionTrigger>
-                    <AccordionContent className="px-4 py-3 text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+                    <AccordionContent className="px-6 py-4 text-gray-600">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -1099,39 +1071,61 @@ export default function LawgicalHomepage() {
           </div>
         </section>
 
-        {/* CTA Section - Mobile Optimized */}
-        <section
-          id="cta"
-          className="py-8 sm:py-12 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-700 dark:to-purple-700"
-        >
-          <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">
-              Ready to Get Started?
-            </h2>
-            <p className="text-base sm:text-lg text-blue-100 mb-4 sm:mb-6 leading-relaxed">
-              Join over 1 million+ clients trusting Lawgical for their legal needs
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button
-                size="lg"
-                onClick={() => setIsConsultationOpen(true)}
-                className="bg-blue-600 text-white dark:bg-blue-600 dark:hover:bg-blue-700 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-semibold hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg w-full sm:w-auto"
-              >
-                Start Your Legal Journey
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={() => setIsConsultationOpen(true)}
-                className="border-2 border-white text-white px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-semibold hover:bg-white hover:text-blue-600 dark:hover:bg-gray-100 dark:hover:text-blue-600 transition-all w-full sm:w-auto"
-              >
-                Book Free Consultation
-              </Button>
+        {/* CTA Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">Ready to Get Started?</h2>
+              <p className="text-xl text-gray-600 max-w-4xl mx-auto">
+                Join over 1 million+ clients trusting Lawgical for their legal needs
+              </p>
             </div>
-            <div className="mt-4 sm:mt-6 text-blue-100 text-xs sm:text-sm">
-              <span>✓ No hidden fees</span>
-              <span className="mx-3 sm:mx-4">✓ Expert guidance</span>
-              <span>✓ 100% secure</span>
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 p-8 rounded-xl border border-blue-200 text-center">
+                <div className="bg-gradient-to-r from-blue-500 to-indigo-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Phone className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">24/7 Legal Hotline</h3>
+                <a
+                  href="tel:+918383801899"
+                  className="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors"
+                >
+                  +91 8383801899
+                </a>
+                <p className="text-sm text-gray-600 mt-2">(Immediate Response)</p>
+              </Card>
+              <Card className="bg-gradient-to-br from-purple-50 to-pink-50 p-8 rounded-xl border border-purple-200 text-center">
+                <div className="bg-gradient-to-r from-purple-500 to-pink-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Mail className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Email Consultation</h3>
+                <a
+                  href="mailto:support@lawgical.tech"
+                  className="text-2xl font-bold text-purple-600 hover:text-purple-700 transition-colors"
+                >
+                  support@lawgical.tech
+                </a>
+                <p className="text-sm text-gray-600 mt-2">(Free Case Review)</p>
+              </Card>
+              <Card className="bg-gradient-to-br from-green-50 to-teal-50 p-8 rounded-xl border border-green-200 text-center">
+                <div className="bg-gradient-to-r from-green-500 to-teal-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Free Consultation</h3>
+                <p className="text-xl font-bold text-green-600">Online Booking</p>
+                <p className="text-sm text-gray-600 mt-2">Schedule Now</p>
+              </Card>
+            </div>
+            <div className="text-center">
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all shadow-lg text-lg px-12 py-4"
+                onClick={() => setIsConsultationOpen(true)}
+              >
+                <Phone className="h-5 w-5 mr-2" />
+                Schedule Free Consultation
+              </Button>
+              <p className="text-sm text-gray-500 mt-4">No obligation • Confidential • Expert legal advice</p>
             </div>
           </div>
         </section>
