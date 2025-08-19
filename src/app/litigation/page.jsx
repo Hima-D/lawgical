@@ -534,7 +534,7 @@ export default function LitigationHomepage() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Email Consultation</h3>
               <a href="mailto:help@lawgical.io" className="text-2xl font-bold text-purple-600 hover:text-purple-700 transition-colors">
-                help@lawgical.io
+                support@lawgical.tech
               </a>
               <p className="text-sm text-gray-600 mt-2">(Free Case Review)</p>
             </Card>
@@ -544,8 +544,8 @@ export default function LitigationHomepage() {
                 <MapPin className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Office Location</h3>
-              <p className="text-xl font-bold text-green-600">Lawgical Avenue</p>
-              <p className="text-sm text-gray-600 mt-2">Sector 12, Gurugram, Haryana</p>
+              <p className="text-xl font-bold text-green-600">Avenue</p>
+              <p className="text-sm text-gray-600 mt-2">Gurugram, Haryana</p>
             </Card>
           </div>
 
