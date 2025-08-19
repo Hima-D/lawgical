@@ -36,6 +36,7 @@ import {
   FileText,
 } from "lucide-react";
 import { Slot } from "@radix-ui/react-slot"; // For asChild support
+import TestimonialsSlider from "@/components/testimonials";
 
 // shadcn/ui component implementations
 const Button = ({ children, variant = "default", size = "default", className = "", asChild = false, ...props }) => {
@@ -234,31 +235,9 @@ const POSH = () => {
       icon: Briefcase,
     },
   ];
+  
 
-  const testimonials = [
-    {
-      name: "Priya Sharma",
-      role: "HR Director, Tech Corp",
-      content:
-        "The POSH training was comprehensive and engaging. Our team gained valuable insights into creating a safer workplace.",
-      rating: 5,
-    },
-    {
-      name: "Rajesh Kumar",
-      role: "Legal Head, Finance Ltd",
-      content:
-        "Excellent program with practical scenarios. The trainers were knowledgeable and professional.",
-      rating: 5,
-    },
-    {
-      name: "Anjali Patel",
-      role: "Compliance Manager, Healthcare Inc",
-      content:
-        "Highly recommend this certification program. It's well-structured and addresses all key aspects of POSH law.",
-      rating: 5,
-    },
-  ];
-
+  // Key principles of POSH
   const keyPrinciples = [
     {
       title: "Prevention",
@@ -592,48 +571,7 @@ const POSH = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section
-        id="testimonials"
-        className="py-16 bg-white"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              What Our Participants Say
-            </h2>
-            <p className="text-xl text-gray-600">
-              Hear from professionals who have transformed their organizations through our training
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div
-                key={index}
-                className="bg-gradient-to-br from-slate-50 to-blue-50 p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
-              >
-                <div className="flex items-center space-x-1 mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="h-5 w-5 fill-yellow-400 text-yellow-400"
-                    />
-                  ))}
-                </div>
-                <p className="text-gray-600 italic mb-6 leading-relaxed">
-                  "{testimonial.content}"
-                </p>
-                <div className="border-t pt-4">
-                  <div className="font-semibold text-gray-900">
-                    {testimonial.name}
-                  </div>
-                  <div className="text-sm text-gray-500">{testimonial.role}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <TestimonialsSlider />
 
       {/* CTA Section */}
       <section className="py-16 bg-gradient-to-r from-blue-600 to-purple-700">
