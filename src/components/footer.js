@@ -22,7 +22,6 @@ const Footer = () => {
           <Link href="/aboutus" className="hover:text-blue-600 transition duration-200">About</Link>
           <Link href="/contact" className="hover:text-blue-600 transition duration-200">Contact</Link>
           <Link href="/careers" className="hover:text-blue-600 transition duration-200">Career</Link>
-          <Link href="/privacy-policy" className="hover:text-blue-600 transition duration-200">Privacy</Link>
           <Link href="/terms-of-service" className="hover:text-blue-600 transition duration-200">Terms</Link>
         </div>
 
