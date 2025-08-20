@@ -2,8 +2,15 @@
 User-agent: *
 Allow: /
 
+# *
+User-agent: *
+Disallow: /api
+Disallow: /404
+Disallow: /500
+
 # Host
 Host: https://www.lawgical.tech
 
 # Sitemaps
 Sitemap: https://www.lawgical.tech/sitemap.xml
+Sitemap: https://www.lawgical.tech/server-sitemap.xml
