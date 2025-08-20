@@ -11,10 +11,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Updated User model in your Prisma schema
 model User {
   id            Int            @id @default(autoincrement())
   email         String         @unique
-  passwordHash  String
+  passwordHash  String?        // Made optional for Google users
   userType      String         // "lawyer" | "client"
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
@@ -23,6 +24,7 @@ model User {
   phoneNumber   String?
   isActive      Boolean        @default(true)
   emailVerified Boolean        @default(false)
+  googleId      String?        @unique // Add this field for Google users
   
   // Relations
   appointments  Appointment[]  @relation("ClientAppointments")
