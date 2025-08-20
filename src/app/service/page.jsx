@@ -118,8 +118,8 @@ export default function ServicesPage() {
   const currentCategory = SERVICE_CATEGORIES.find(cat => cat.id === activeCategory);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100">
-      <Header />
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100" >
+    <Header />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-50 via-white to-purple-50 py-16">
