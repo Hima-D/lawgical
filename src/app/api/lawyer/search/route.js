@@ -1,137 +1,354 @@
 // app/api/lawyers/search/route.js
+import { NextResponse } from 'next/server';
 import { PrismaClient } from '@/generated/prisma';
 
+// Create a single Prisma instance
 const prisma = new PrismaClient();
+
+// Helper function to build where clause
+function buildWhereClause(params) {
+  const {
+    search,
+    specialization,
+    location,
+    minRate,
+    maxRate,
+    minExperience,
+    language,
+    isVerified
+  } = params;
+
+  let whereClause = {};
+
+  // Handle general search across multiple fields
+  if (search) {
+    whereClause.OR = [
+      {
+        user: {
+          displayName: {
+            contains: search,
+            mode: 'insensitive'
+          }
+        }
+      },
+      {
+        specialization: {
+          contains: search,
+          mode: 'insensitive'
+        }
+      },
+      {
+        firmName: {
+          contains: search,
+          mode: 'insensitive'
+        }
+      },
+      {
+        bio: {
+          contains: search,
+          mode: 'insensitive'
+        }
+      }
+    ];
+  }
+
+  // Handle specific specialization filter
+  if (specialization && specialization !== search) {
+    const specializationFilter = {
+      specialization: {
+        contains: specialization,
+        mode: 'insensitive'
+      }
+    };
+
+    if (whereClause.OR) {
+      whereClause = {
+        AND: [
+          { OR: whereClause.OR },
+          specializationFilter
+        ]
+      };
+      delete whereClause.OR;
+    } else {
+      whereClause = specializationFilter;
+    }
+  }
+
+  // Location filter
+  if (location) {
+    const locationFilter = {
+      address: {
+        contains: location,
+        mode: 'insensitive'
+      }
+    };
+
+    if (whereClause.AND) {
+      whereClause.AND.push(locationFilter);
+    } else if (whereClause.OR) {
+      whereClause = {
+        AND: [
+          { OR: whereClause.OR },
+          locationFilter
+        ]
+      };
+      delete whereClause.OR;
+    } else {
+      whereClause = { ...whereClause, ...locationFilter };
+    }
+  }
+
+  // Rate filter
+  if (minRate || maxRate) {
+    const rateFilter = { hourlyRate: {} };
+    if (minRate) rateFilter.hourlyRate.gte = parseFloat(minRate);
+    if (maxRate) rateFilter.hourlyRate.lte = parseFloat(maxRate);
+
+    if (whereClause.AND) {
+      whereClause.AND.push(rateFilter);
+    } else if (whereClause.OR) {
+      whereClause = {
+        AND: [
+          { OR: whereClause.OR },
+          rateFilter
+        ]
+      };
+      delete whereClause.OR;
+    } else {
+      whereClause = { ...whereClause, ...rateFilter };
+    }
+  }
+
+  // Experience filter
+  if (minExperience) {
+    const experienceFilter = {
+      yearsExperience: {
+        gte: parseInt(minExperience)
+      }
+    };
+
+    if (whereClause.AND) {
+      whereClause.AND.push(experienceFilter);
+    } else if (whereClause.OR) {
+      whereClause = {
+        AND: [
+          { OR: whereClause.OR },
+          experienceFilter
+        ]
+      };
+      delete whereClause.OR;
+    } else {
+      whereClause = { ...whereClause, ...experienceFilter };
+    }
+  }
+
+  // Language filter
+  if (language) {
+    const languageFilter = {
+      languages: {
+        has: language
+      }
+    };
+
+    if (whereClause.AND) {
+      whereClause.AND.push(languageFilter);
+    } else if (whereClause.OR) {
+      whereClause = {
+        AND: [
+          { OR: whereClause.OR },
+          languageFilter
+        ]
+      };
+      delete whereClause.OR;
+    } else {
+      whereClause = { ...whereClause, ...languageFilter };
+    }
+  }
+
+  // Verified filter
+  if (isVerified === 'true') {
+    const verifiedFilter = { isVerified: true };
+
+    if (whereClause.AND) {
+      whereClause.AND.push(verifiedFilter);
+    } else if (whereClause.OR) {
+      whereClause = {
+        AND: [
+          { OR: whereClause.OR },
+          verifiedFilter
+        ]
+      };
+      delete whereClause.OR;
+    } else {
+      whereClause = { ...whereClause, ...verifiedFilter };
+    }
+  }
+
+  return whereClause;
+}
+
+// Helper function to build order by clause
+function buildOrderBy(sortBy, sortOrder) {
+  switch (sortBy) {
+    case 'experience':
+      return { yearsExperience: sortOrder };
+    case 'rate':
+      return { hourlyRate: sortOrder };
+    case 'rating':
+      return { createdAt: 'desc' }; // We'll sort by calculated rating in memory
+    case 'name':
+      return { user: { displayName: sortOrder } };
+    case 'createdAt':
+    default:
+      return { createdAt: sortOrder };
+  }
+}
+
+// Helper function to validate and sanitize parameters
+function validateSearchParams(searchParams) {
+  const search = searchParams.get('search')?.trim() || '';
+  const specialization = searchParams.get('specialization')?.trim() || '';
+  const location = searchParams.get('location')?.trim() || null;
+  const language = searchParams.get('language')?.trim() || null;
+  const isVerified = searchParams.get('isVerified');
+
+  // Validate and parse numeric parameters
+  let minRate = searchParams.get('minRate');
+  let maxRate = searchParams.get('maxRate');
+  let minExperience = searchParams.get('minExperience');
+
+  if (minRate) {
+    const parsed = parseFloat(minRate);
+    minRate = !isNaN(parsed) && parsed >= 0 ? parsed : null;
+  }
+
+  if (maxRate) {
+    const parsed = parseFloat(maxRate);
+    maxRate = !isNaN(parsed) && parsed >= 0 ? parsed : null;
+  }
+
+  if (minExperience) {
+    const parsed = parseInt(minExperience);
+    minExperience = !isNaN(parsed) && parsed >= 0 ? parsed : null;
+  }
+
+  // Validate sort parameters
+  const sortBy = ['experience', 'rate', 'rating', 'name', 'createdAt'].includes(searchParams.get('sortBy')) 
+    ? searchParams.get('sortBy') 
+    : 'createdAt';
+  
+  const sortOrder = ['asc', 'desc'].includes(searchParams.get('sortOrder')) 
+    ? searchParams.get('sortOrder') 
+    : 'desc';
+
+  // Validate pagination parameters
+  let page = parseInt(searchParams.get('page'));
+  let limit = parseInt(searchParams.get('limit'));
+  
+  page = !isNaN(page) && page > 0 ? page : 1;
+  limit = !isNaN(limit) && limit > 0 && limit <= 50 ? limit : 6; // Max limit of 50
+
+  return {
+    search,
+    specialization,
+    location,
+    minRate,
+    maxRate,
+    minExperience,
+    language,
+    isVerified,
+    sortBy,
+    sortOrder,
+    page,
+    limit,
+    skip: (page - 1) * limit
+  };
+}
 
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     
-    // Search parameters
-    const specialization = searchParams.get('specialization');
-    const location = searchParams.get('location');
-    const minRate = searchParams.get('minRate');
-    const maxRate = searchParams.get('maxRate');
-    const minExperience = searchParams.get('minExperience');
-    const language = searchParams.get('language');
-    const isVerified = searchParams.get('isVerified');
-    const sortBy = searchParams.get('sortBy') || 'createdAt'; // 'rating', 'experience', 'rate', 'createdAt'
-    const sortOrder = searchParams.get('sortOrder') || 'desc';
-    const page = parseInt(searchParams.get('page')) || 1;
-    const limit = parseInt(searchParams.get('limit')) || 10;
-    const skip = (page - 1) * limit;
+    // Validate and sanitize parameters
+    const params = validateSearchParams(searchParams);
+    
+    console.log('Search params:', {
+      search: params.search,
+      specialization: params.specialization,
+      page: params.page,
+      limit: params.limit
+    });
 
     // Build where clause
-    let whereClause = {};
-
-    if (specialization) {
-      whereClause.specialization = {
-        contains: specialization,
-        mode: 'insensitive'
-      };
-    }
-
-    if (location) {
-      whereClause.address = {
-        contains: location,
-        mode: 'insensitive'
-      };
-    }
-
-    if (minRate || maxRate) {
-      whereClause.hourlyRate = {};
-      if (minRate) whereClause.hourlyRate.gte = parseFloat(minRate);
-      if (maxRate) whereClause.hourlyRate.lte = parseFloat(maxRate);
-    }
-
-    if (minExperience) {
-      whereClause.yearsExperience = {
-        gte: parseInt(minExperience)
-      };
-    }
-
-    if (language) {
-      whereClause.languages = {
-        has: language
-      };
-    }
-
-    if (isVerified === 'true') {
-      whereClause.isVerified = true;
-    }
+    const whereClause = buildWhereClause(params);
+    console.log('Where clause:', JSON.stringify(whereClause, null, 2));
 
     // Build orderBy clause
-    let orderBy = {};
-    switch (sortBy) {
-      case 'experience':
-        orderBy = { yearsExperience: sortOrder };
-        break;
-      case 'rate':
-        orderBy = { hourlyRate: sortOrder };
-        break;
-      case 'rating':
-        // For rating, we'll handle this separately as it requires aggregation
-        orderBy = { createdAt: 'desc' };
-        break;
-      default:
-        orderBy = { [sortBy]: sortOrder };
-    }
+    const orderBy = buildOrderBy(params.sortBy, params.sortOrder);
 
-    // Get lawyers with their profiles and stats
-    const lawyers = await prisma.lawyerProfile.findMany({
-      where: whereClause,
-      include: {
-        user: {
-          select: {
-            id: true,
-            email: true,
-            displayName: true,
-            photoUrl: true,
-            createdAt: true
-          }
-        },
-        services: {
-          where: { isActive: true },
-          select: {
-            id: true,
-            name: true,
-            description: true,
-            price: true,
-            durationMinutes: true,
-            category: true
-          }
-        },
-        reviews: {
-          where: { isVisible: true },
-          select: {
-            rating: true,
-            comment: true,
-            createdAt: true,
-            client: {
-              select: {
-                displayName: true,
-                photoUrl: true
-              }
+    // Execute queries in parallel for better performance
+    const [lawyers, totalCount] = await Promise.all([
+      prisma.lawyerProfile.findMany({
+        where: whereClause,
+        include: {
+          user: {
+            select: {
+              id: true,
+              email: true,
+              displayName: true,
+              photoUrl: true,
+              createdAt: true
             }
           },
-          orderBy: { createdAt: 'desc' },
-          take: 5 // Show latest 5 reviews
-        },
-        _count: {
-          select: {
-            appointments: {
-              where: { status: 'completed' }
+          services: {
+            where: { isActive: true },
+            select: {
+              id: true,
+              name: true,
+              description: true,
+              price: true,
+              durationMinutes: true,
+              category: true
+            }
+          },
+          reviews: {
+            where: { isVisible: true },
+            select: {
+              rating: true,
+              comment: true,
+              createdAt: true,
+              client: {
+                select: {
+                  displayName: true,
+                  photoUrl: true
+                }
+              }
             },
-            reviews: {
-              where: { isVisible: true }
+            orderBy: { createdAt: 'desc' },
+            take: 5
+          },
+          _count: {
+            select: {
+              appointments: {
+                where: { status: 'completed' }
+              },
+              reviews: {
+                where: { isVisible: true }
+              }
             }
           }
-        }
-      },
-      orderBy,
-      skip,
-      take: limit
-    });
+        },
+        orderBy,
+        skip: params.skip,
+        take: params.limit
+      }),
+      
+      prisma.lawyerProfile.count({
+        where: whereClause
+      })
+    ]);
+
+    console.log(`Found ${lawyers.length} lawyers out of ${totalCount} total`);
 
     // Calculate average rating and enrich data
     const enrichedLawyers = lawyers.map(lawyer => {
@@ -140,68 +357,103 @@ export async function GET(request) {
         : 0;
 
       return {
-        ...lawyer,
+        id: lawyer.id,
+        userId: lawyer.userId,
+        bio: lawyer.bio,
+        specialization: lawyer.specialization,
+        yearsExperience: lawyer.yearsExperience,
+        hourlyRate: lawyer.hourlyRate,
+        address: lawyer.address,
+        phoneNumber: lawyer.phoneNumber,
+        firmName: lawyer.firmName,
+        languages: lawyer.languages,
+        isVerified: lawyer.isVerified,
+        isAvailable: lawyer.isAvailable,
+        createdAt: lawyer.createdAt,
+        updatedAt: lawyer.updatedAt,
+        user: lawyer.user,
+        services: lawyer.services,
+        reviews: lawyer.reviews,
         averageRating: Math.round(avgRating * 10) / 10,
         completedAppointments: lawyer._count.appointments,
-        totalReviews: lawyer._count.reviews,
-        // Remove _count from response
-        _count: undefined
+        totalReviews: lawyer._count.reviews
       };
     });
 
-    // Sort by rating if requested (since we can't do this in SQL easily)
-    if (sortBy === 'rating') {
+    // Sort by rating if requested (since we calculate it in memory)
+    if (params.sortBy === 'rating') {
       enrichedLawyers.sort((a, b) => {
-        if (sortOrder === 'desc') {
+        if (params.sortOrder === 'desc') {
           return b.averageRating - a.averageRating;
         }
         return a.averageRating - b.averageRating;
       });
     }
 
-    // Get total count for pagination
-    const totalCount = await prisma.lawyerProfile.count({
-      where: whereClause
-    });
+    // Calculate pagination info
+    const totalPages = Math.ceil(totalCount / params.limit);
+    const hasMore = params.skip + params.limit < totalCount;
 
-    // Get available specializations for filtering
-    const specializations = await prisma.lawyerProfile.groupBy({
-      by: ['specialization'],
-      _count: {
-        specialization: true
-      },
-      orderBy: {
-        _count: {
-          specialization: 'desc'
+    console.log(`Returning ${enrichedLawyers.length} lawyers, hasMore: ${hasMore}`);
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        lawyers: enrichedLawyers,
+        pagination: {
+          page: params.page,
+          limit: params.limit,
+          total: totalCount,
+          totalPages,
+          hasNext: params.page < totalPages,
+          hasPrev: params.page > 1
+        },
+        hasMore,
+        appliedFilters: {
+          search: params.search || null,
+          specialization: params.specialization || null,
+          location: params.location,
+          minRate: params.minRate,
+          maxRate: params.maxRate,
+          minExperience: params.minExperience,
+          language: params.language,
+          isVerified: params.isVerified === 'true' ? true : null,
+          sortBy: params.sortBy,
+          sortOrder: params.sortOrder
         }
-      }
-    });
-
-    return Response.json({
-      lawyers: enrichedLawyers,
-      pagination: {
-        page,
-        limit,
-        totalCount,
-        totalPages: Math.ceil(totalCount / limit),
-        hasNext: page * limit < totalCount,
-        hasPrev: page > 1
-      },
-      filters: {
-        availableSpecializations: specializations.map(s => ({
-          name: s.specialization,
-          count: s._count.specialization
-        }))
       }
     });
 
   } catch (error) {
     console.error('Search lawyers error:', error);
-    return Response.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+    
+    // Return more specific error messages
+    let errorMessage = 'Internal server error';
+    let statusCode = 500;
+
+    if (error.code === 'P2002') {
+      errorMessage = 'Database constraint error';
+    } else if (error.code === 'P2025') {
+      errorMessage = 'Record not found';
+      statusCode = 404;
+    } else if (error.message.includes('Invalid')) {
+      errorMessage = 'Invalid query parameters';
+      statusCode = 400;
+    }
+
+    return NextResponse.json(
+      { 
+        success: false,
+        error: errorMessage,
+        message: process.env.NODE_ENV === 'development' ? error.message : undefined,
+        code: error.code || undefined
+      },
+      { status: statusCode }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }
+
+// Cleanup function for graceful shutdown
+process.on('beforeExit', async () => {
+  await prisma.$disconnect();
+});

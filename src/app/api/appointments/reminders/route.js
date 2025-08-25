@@ -1,6 +1,8 @@
 // ==================== APPOINTMENT REMINDERS ====================
 
 // app/api/appointments/reminders/route.js - Send appointment reminders
+import { PrismaClient } from '@/generated/prisma'; // or '@prisma/client' if you're using the standard path
+const prisma = new PrismaClient();
 export async function POST(request) {
   try {
     const { type } = await request.json(); // '24h', '1h', etc.
