@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+
   // Allow external images
   images: {
     remotePatterns: [
@@ -11,10 +12,13 @@ const nextConfig = {
       // Add more hosts here if needed
     ],
   },
-  // Future-proofing for Next.js 15 app router
+
+  // You can still keep other experimental flags here if needed, 
+  // but appDir should be removed
   experimental: {
-    appDir: true,
+    // future experimental options
   },
+
   // Optional: custom headers, rewrites, etc.
 };
 
