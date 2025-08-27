@@ -11,7 +11,7 @@ const About = () => {
       bio: "Chahat is a highly skilled lawyer with a sharp intellect and exceptional courtroom presence. With years of experience, she's earned a reputation for handling even the most challenging cases with poise and precision."
     },
     {
-      name: "Millit",
+      name: "Himanshu Dixit",
       role: "Engineer",
       image: "https://picsum.photos/150/150?random=3",
       bio: "Millit is a brilliant CS engineer with exceptional technical skills. Known for his problem-solving abilities and passion for technology, he is an invaluable part of the team."
