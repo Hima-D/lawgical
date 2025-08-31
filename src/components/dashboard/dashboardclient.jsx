@@ -6,8 +6,8 @@ import React, { useState } from 'react';
 import DashboardLayout from "@/components/dashboard/layout";
 import WelcomeSection from "@/components/dashboard/welcome";
 import StatsGrid from "@/components/dashboard/statgrid";
-import LawyerQuickActions from "@/components/dashboard/lawyeraction";
 import RecentReviews from "@/components/dashboard/recentreview";
+import AppointmentSystemApp from "@/components/dashboard/lawyeraction";
 import RecommendedLawyers from "@/components/dashboard/recommendedlawyers";
 // import LegalResources from "@/components/dashboard/LegalResources";
 import AppointmentsList from "@/components/dashboard/appointmentlist";
@@ -41,9 +41,9 @@ export default function DashboardClient({ user, isLawyer, stats }) {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {isLawyer ? (
               <>
-                <LawyerQuickActions 
-                  onAddService={() => setShowForm(true)} 
-                />
+                <LawyerQuickActions
+                   onAddService={() => setShowForm(true)}
+                 />
                 <RecentReviews user={user} />
               </>
             ) : (
@@ -56,16 +56,16 @@ export default function DashboardClient({ user, isLawyer, stats }) {
         </TabsContent>
 
         <TabsContent value="appointments" className="space-y-4">
-          <AppointmentsList user={user} isLawyer={isLawyer} />
+          <AppointmentSystemApp userType={isLawyer ? 'lawyer' : 'client'} />
         </TabsContent>
 
         <TabsContent value={isLawyer ? "services" : "lawyers"} className="space-y-4">
           {isLawyer ? (
-            <LawyerServices 
-              user={user} 
-              showForm={showForm} 
-              setShowForm={setShowForm} 
-            />
+            <LawyerServices
+               user={user}
+               showForm={showForm}
+               setShowForm={setShowForm}
+             />
           ) : (
             <ClientLawyerBrowser />
           )}

@@ -14,7 +14,7 @@ const About = () => {
       name: "Himanshu Dixit",
       role: "Engineer",
       image: "https://picsum.photos/150/150?random=3",
-      bio: "Millit is a brilliant CS engineer with exceptional technical skills. Known for his problem-solving abilities and passion for technology, he is an invaluable part of the team."
+      bio: "Himanshu is a CS engineer with exceptional technical skills. Known for his problem-solving abilities and passion for technology, he is an invaluable part of the team."
     }
   ];
 
