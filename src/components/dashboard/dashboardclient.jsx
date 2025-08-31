@@ -7,7 +7,7 @@ import DashboardLayout from "@/components/dashboard/layout";
 import WelcomeSection from "@/components/dashboard/welcome";
 import StatsGrid from "@/components/dashboard/statgrid";
 import RecentReviews from "@/components/dashboard/recentreview";
-import AppointmentSystemApp from "@/components/dashboard/lawyeraction";
+import AppointmentManagementSystem from "@/components/dashboard/lawyeraction";
 import RecommendedLawyers from "@/components/dashboard/recommendedlawyers";
 // import LegalResources from "@/components/dashboard/LegalResources";
 import AppointmentsList from "@/components/dashboard/appointmentlist";
@@ -56,7 +56,7 @@ export default function DashboardClient({ user, isLawyer, stats }) {
         </TabsContent>
 
         <TabsContent value="appointments" className="space-y-4">
-          <AppointmentSystemApp userType={isLawyer ? 'lawyer' : 'client'} />
+          <AppointmentManagementSystem userType={isLawyer ? 'lawyer' : 'client'} />
         </TabsContent>
 
         <TabsContent value={isLawyer ? "services" : "lawyers"} className="space-y-4">

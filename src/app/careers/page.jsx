@@ -17,7 +17,7 @@ import {
   ChevronRight
 } from "lucide-react";
 
-// Enhanced Button Component (from NotFoundPage)
+// Enhanced Button Component
 const Button = ({ children, variant = "default", size = "default", className = "", asChild = false, ...props }) => {
   const baseClasses =
     "inline-flex items-center justify-center rounded-xl text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background active:scale-95 touch-manipulation";
@@ -145,12 +145,12 @@ export default function Careers() {
       .animate-float {
         animation: float 6s ease-in-out infinite;
       }
-      @keyframes pulse-glow {
-        0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
-        50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
+      @keyframes text-glow {
+        0%, 100% { text-shadow: 0 0 5px rgba(59, 130, 246, 0.5), 0 0 10px rgba(147, 51, 234, 0.4); }
+        50% { text-shadow: 0 0 10px rgba(59, 130, 246, 0.8), 0 0 20px rgba(147, 51, 234, 0.6); }
       }
-      .animate-pulse-glow {
-        animation: pulse-glow 2s ease-in-out infinite;
+      .animate-text-glow {
+        animation: text-glow 2s ease-in-out infinite;
       }
     `;
     document.head.appendChild(style);
@@ -233,7 +233,7 @@ export default function Careers() {
               <div className="text-center mb-8">
                 <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
                   Join Our{" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 animate-pulse-glow">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 animate-text-glow">
                     Lawgical Team
                   </span>
                 </h2>

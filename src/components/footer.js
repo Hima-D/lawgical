@@ -27,7 +27,7 @@ const Footer = () => {
 
         {/* Social Media Icons */}
         <div className="flex justify-center md:justify-end gap-5 text-gray-700">
-          <a href="https://www.linkedin.com/company/lawkaro/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600">
+          <a href="https://www.linkedin.com/company/lawgicaltech/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600">
             <FaLinkedin size={22} />
           </a>
           <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600">

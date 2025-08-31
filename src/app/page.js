@@ -806,7 +806,7 @@ export default function LawgicalHomepage() {
                     className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
                     asChild
                   >
-                    <Link href="/services">
+                    <Link href="/service">
                       View Services
                       <ArrowRight className="h-5 w-5 ml-2" />
                     </Link>
