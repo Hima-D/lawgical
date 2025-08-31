@@ -1,146 +1,59 @@
-@import 'animate.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --primary: #4f46e5; /* Adjust primary color */
-  --secondary: #6b7280; /* Secondary text color */
-  --accent: #3b82f6; /* Accent color for buttons and links */
-  --card-shadow: rgba(0, 0, 0, 0.1); /* Card shadow for smoother card hover effects */
-  --light-black: #1f1f1f; /* Light black color for the background */
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a; /* Dark black background for dark mode */
-    --foreground: #ededed;
-    --primary: #3b82f6; /* Accent color in dark mode */
-    --secondary: #d1d5db; /* Lighter secondary color in dark mode */
-    --card-shadow: rgba(255, 255, 255, 0.1); /* Darker card shadow for dark mode */
-    --light-black: #1f1f1f; /* Light black color in dark mode remains the same */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
   }
 }
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  color: var(--foreground);
-  background-color: var(--light-black); /* Light black background */
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Card Styling */
-.testimonial-container {
-  display: flex;
-  position: relative;
-  overflow: hidden;
-  max-width: 100%;
-  border-radius: 12px;
-  background: var(--background);
-  padding: 30px;
-  box-shadow: 0 8px 20px var(--card-shadow);
-  gap: 10px;
-  align-items: center;
-}
-
-.testimonial-wrapper {
-  display: flex;
-  transition: transform 0.6s ease-in-out;
-}
-
-.testimonial {
-  flex: 0 0 100%;
-  background: var(--background);
-  padding: 25px;
-  border-radius: 20px;
-  box-shadow: 0 12px 30px var(--card-shadow);
-  margin-right: 20px;
-  transition: transform 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.testimonial img {
-  border-radius: 50%;
-  width: 75px;
-  height: 75px;
-  object-fit: cover;
-}
-
-.testimonial p {
-  font-style: italic;
-  color: var(--secondary);
-  margin-bottom: 15px;
-}
-
-.testimonial .author {
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
-  gap: 10px;
-}
-
-.testimonial .author .name {
-  font-weight: bold;
-  color: var(--foreground);
-}
-
-.testimonial .author .position {
-  font-size: 0.9rem;
-  color: var(--secondary);
-}
-
-/* Floating Effect for Testimonial Cards */
-.testimonial:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-}
-
-/* Arrow Buttons */
-.arrow-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.3);
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  z-index: 10;
-}
-
-.arrow-button:hover {
-  background-color: rgba(0, 0, 0, 0.6);
-  transform: scale(1.1);
-}
-
-.arrow-left {
-  left: 10px;
-}
-
-.arrow-right {
-  right: 10px;
-}
-
-/* For the slider container to show transition effects */
-.testimonial-slider {
-  overflow: hidden;
-  width: 100%;
-}
-
-.testimonial-slider .testimonial-wrapper {
-  display: flex;
-  gap: 10px;
-}
-
-/* For smoother background transitions */
-body {
-  transition: background-color 0.3s ease, color 0.3s ease;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

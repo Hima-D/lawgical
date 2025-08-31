@@ -1,0 +1,199 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Updated User model in your Prisma schema
+model User {
+  id            Int            @id @default(autoincrement())
+  email         String         @unique
+  passwordHash  String?        // Made optional for Google users
+  userType      String         // "lawyer" | "client"
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  displayName   String?
+  photoUrl      String?
+  phoneNumber   String?
+  isActive      Boolean        @default(true)
+  emailVerified Boolean        @default(false)
+  googleId      String?        @unique // Add this field for Google users
+  
+  // Relations
+  appointments  Appointment[]  @relation("ClientAppointments")
+  lawyerProfile LawyerProfile?
+  messages      Message[]
+  notifications Notification[]
+  reviews       Review[]       @relation("ClientReviews")
+  documents     Document[]
+  
+  @@map("users")
+}
+
+model LawyerProfile {
+  id               Int                @id @default(autoincrement())
+  userId           Int                @unique
+  bio              String?
+  specialization   String
+  licenseNumber    String             @unique
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  firmName         String?
+  address          String?
+  websiteUrl       String?
+  hourlyRate       Float?
+  isVerified       Boolean            @default(false)
+  yearsExperience  Int?
+  education        String[]           @default([])
+  certifications   String[]           @default([])
+  languages        String[]           @default([])
+  
+  // Relations
+  user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  appointments     Appointment[]      @relation("LawyerAppointments")
+  availability     AvailabilitySlot[]
+  services         Service[]
+  reviews          Review[]           @relation("LawyerReviews")
+  
+  @@map("lawyer_profiles")
+}
+
+model Service {
+  id              Int           @id @default(autoincrement())
+  lawyerProfileId Int
+  name            String
+  description     String
+  price           Float
+  durationMinutes Int
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  category        String?       // "consultation", "document_review", "representation", etc.
+  isActive        Boolean       @default(true)
+  
+  // Relations
+  lawyerProfile   LawyerProfile @relation(fields: [lawyerProfileId], references: [id], onDelete: Cascade)
+  appointments    Appointment[]
+  
+  @@map("services")
+}
+
+model AvailabilitySlot {
+  id              Int           @id @default(autoincrement())
+  lawyerProfileId Int
+  dayOfWeek       Int           // 0=Sunday, 1=Monday, etc.
+  startTime       String        // "09:00"
+  endTime         String        // "17:00"
+  date            DateTime?     // For specific date slots
+  isRecurring     Boolean       @default(true)
+  isBooked        Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  notes           String?
+  
+  // Relations
+  lawyerProfile   LawyerProfile @relation(fields: [lawyerProfileId], references: [id], onDelete: Cascade)
+  appointments    Appointment[]
+  
+  @@map("availability_slots")
+}
+
+model Appointment {
+  id                 Int              @id @default(autoincrement())
+  clientId           Int
+  lawyerProfileId    Int
+  serviceId          Int
+  availabilitySlotId Int?
+  appointmentDate    DateTime
+  appointmentTime    String
+  status             String           @default("pending") // "pending", "confirmed", "completed", "cancelled"
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  clientNotes        String?
+  lawyerNotes        String?
+  meetingLink        String?          // For virtual meetings
+  meetingType        String?          // "in-person", "virtual", "phone"
+  
+  // Relations
+  client             User             @relation("ClientAppointments", fields: [clientId], references: [id])
+  lawyerProfile      LawyerProfile    @relation("LawyerAppointments", fields: [lawyerProfileId], references: [id])
+  service            Service          @relation(fields: [serviceId], references: [id])
+  availabilitySlot   AvailabilitySlot? @relation(fields: [availabilitySlotId], references: [id])
+  messages           Message[]
+  documents          Document[]
+  
+  @@map("appointments")
+}
+
+model Message {
+  id            Int         @id @default(autoincrement())
+  senderId      Int
+  appointmentId Int?
+  content       String
+  messageType   String      @default("text") // "text", "file", "image"
+  createdAt     DateTime    @default(now())
+  isRead        Boolean     @default(false)
+  
+  // Relations
+  sender        User        @relation(fields: [senderId], references: [id])
+  appointment   Appointment? @relation(fields: [appointmentId], references: [id])
+  
+  @@map("messages")
+}
+
+model Review {
+  id              Int           @id @default(autoincrement())
+  clientId        Int
+  lawyerProfileId Int
+  rating          Int           // 1-5 stars
+  comment         String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  isVisible       Boolean       @default(true)
+  
+  // Relations
+  client          User          @relation("ClientReviews", fields: [clientId], references: [id])
+  lawyerProfile   LawyerProfile @relation("LawyerReviews", fields: [lawyerProfileId], references: [id])
+  
+  @@unique([clientId, lawyerProfileId])
+  @@map("reviews")
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  title     String
+  message   String
+  type      String   // "appointment", "payment", "message", "system"
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("notifications")
+}
+
+model Document {
+  id            Int         @id @default(autoincrement())
+  uploaderId    Int
+  appointmentId Int?
+  fileName      String
+  fileUrl       String
+  fileSize      Int
+  fileType      String
+  description   String?
+  createdAt     DateTime    @default(now())
+  
+  // Relations
+  uploader      User        @relation(fields: [uploaderId], references: [id])
+  appointment   Appointment? @relation(fields: [appointmentId], references: [id])
+  
+  @@map("documents")
+}

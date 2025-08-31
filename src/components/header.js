@@ -1,339 +1,171 @@
 "use client";
-import Link from 'next/link';
-import Image from 'next/image';
-import { useState, useRef, useEffect } from 'react';
+
+import Link from "next/link";
+import { useState, useEffect } from "react";
+import {
+  Moon,
+  Sun,
+  Menu,
+  ChevronDown,
+  ShieldCheck,
+  Users,
+  Briefcase,
+  Gavel,
+  FileText,
+  Monitor
+} from "lucide-react";
+import { useTheme } from "next-themes";
+
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+} from "@/components/ui/sheet";
+
+const servicesList = [
+  { name: "POCSO", href: "/pocso", description: "Legal protection for minors", icon: ShieldCheck },
+  { name: "POSH", href: "/posh", description: "Workplace harassment law", icon: Users },
+  { name: "Corporate Law", href: "/corporate-law", description: "Business legal services", icon: Briefcase },
+  { name: "Litigation", href: "/litigation", description: "Court representation", icon: Gavel },
+  { name: "Contract Law", href: "/contract-law", description: "Agreement drafting & review", icon: FileText },
+];
+
+const navigationItems = [
+  { name: "Home", href: "/" },
+  { name: "Service", href: "/service" },
+  { name: "Consultation", href: "/consultation" },
+  { name: "Signup", href: "/signup" },
+
+];
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const mobileMenuRef = useRef(null);
-  const searchResultsRef = useRef(null);
+  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
 
-  // Close menus when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event) {
-      // Check if the click was outside the menu and menu is open
-      if (mobileMenuRef.current && 
-          !mobileMenuRef.current.contains(event.target) && 
-          !event.target.closest('button[aria-label]')) {
-        setIsMenuOpen(false);
-        setIsMobileServicesOpen(false);
-      }
-      
-      // Check if click was outside search results
-      if (searchResultsRef.current && 
-          !searchResultsRef.current.contains(event.target) && 
-          !event.target.closest('form')) {
-        setSearchResults([]);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  // Handle menu functions
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-    setIsMobileServicesOpen(false); // Also close the services submenu
-  };
-  const toggleMobileServices = () => setIsMobileServicesOpen(!isMobileServicesOpen);
-
-  // Handle search input change
-  const handleSearchChange = (e) => setSearchQuery(e.target.value);
-
-  // Simulating a search function
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    
-    if (searchQuery.trim() === '') {
-      setSearchResults([]);
-      return;
-    }
-
-    // Simulating search results
-    const simulatedResults = [
-      'Corporate Law Guide',
-      'POCSO Legal Procedures',
-      'POSH Workplace Guidelines',
-      'Contract Law Best Practices',
-      'Litigation Services Overview',
-    ].filter((result) =>
-      result.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-    setSearchResults(simulatedResults);
-  };
-
-  // Services list - centralized for reuse
-  const servicesList = [
-    { name: 'POCSO (Prevention of Sexual Offenses)', href: '/pocso' },
-    { name: 'POSH (Prevention of Sexual Harassment)', href: '/posh' },
-    { name: 'Corporate Law', href: '/corporate-law' },
-    { name: 'Litigation Services', href: '/litigation' },
-    { name: 'Contract Law', href: '/contract-law' },
-  ];
-
-  // Close menu when route changes
-  const handleLinkClick = () => {
-    closeMenu();
-  };
+  useEffect(() => setMounted(true), []);
 
   return (
-    <header className="bg-black text-white py-4 shadow-md relative z-40">
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-6 sm:px-12">
-        {/* Logo */}
-        <div className="flex items-center gap-4">
-          <Link href="/" onClick={handleLinkClick}>
-            <div className="h-10 w-32 relative">
-              <Image
-                src="/logo.png"  // Update with your actual logo path
-                alt="Lawgical"
-                fill
-                style={{ objectFit: 'contain' }}
-                priority
-                className="transition-transform transform hover:scale-105 duration-300"
-              />
-            </div>
-          </Link>
-        </div>
+    <header className="w-full border-b border-gray-200 bg-white text-black z-50">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+        <Link href="/" className="text-2xl font-bold text-black">
+          <span className="text-blue-600">Law</span>gical
+        </Link>
 
-        {/* Navigation Links, Search, and Get Started Button */}
-        <nav className="hidden sm:flex items-center gap-8 text-lg font-semibold">
-          <ul className="flex gap-8">
-            {/* Home */}
-            <li>
-              <Link href="/" className="hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">
-                Home
-              </Link>
-            </li>
+        {/* Desktop Navigation */}
+        <nav className="hidden lg:flex items-center gap-6">
+          {navigationItems.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              className="text-black hover:text-blue-600 transition-colors"
+            >
+              {item.name}
+            </Link>
+          ))}
 
-            {/* Services with Hover Dropdown */}
-            <li className="relative group">
-              <button className="flex items-center gap-1 hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">
-                Services
-                <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-              </button>
-              <div className="absolute left-0 mt-2 hidden group-hover:block bg-gradient-to-t from-black via-gray-800 to-black text-white py-3 px-6 w-60 shadow-xl rounded-lg z-50 transition-all duration-300 ease-in-out transform origin-top scale-95 group-hover:scale-100">
-                <ul className="space-y-1">
-                  {servicesList.map((service, index) => (
-                    <li key={index}>
-                      <Link 
-                        href={service.href} 
-                        className="block py-2 px-3 rounded hover:bg-gray-700 transition-all duration-300 ease-in-out"
-                      >
-                        {service.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </li>
-
-            {/* Book Service */}
-            <li>
-              <Link href="/bookservice" className="hover:text-gray-300 transition-all duration-300 ease-in-out transform hover:scale-105">
-                Book Service
-              </Link>
-            </li>
-
-            {/* Get Started Button */}
-            <li>
-              <Link
-                href="/signup"
-                className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-300 ease-in-out transform hover:scale-105"
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className="text-black hover:text-blue-600 hover:bg-transparent p-0 h-auto font-normal"
               >
-                Get Started
-              </Link>
-            </li>
-          </ul>
+                Explore <ChevronDown className="w-4 h-4 ml-1" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="start"
+              className="w-80 bg-white border border-gray-200"
+            >
+              {servicesList.map(({ name, href, description, icon: Icon }) => (
+                <DropdownMenuItem key={name} className="p-0">
+                  <Link
+                    href={href}
+                    className="flex items-start gap-3 w-full px-3 py-3 hover:bg-gray-100 rounded-sm"
+                  >
+                    <Icon className="w-5 h-5 text-blue-500 mt-1" />
+                    <div className="flex-1">
+                      <div className="font-medium text-gray-900">{name}</div>
+                      <p className="text-sm text-gray-600 mt-1 leading-snug">
+                        {description}
+                      </p>
+                    </div>
+                  </Link>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-          {/* Search Bar */}
-          <div className="relative ml-6">
-            <form onSubmit={handleSearchSubmit} className="flex items-center">
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-                className="bg-white text-black py-2 px-4 rounded-lg shadow-md w-48 sm:w-72 transition-all duration-300 ease-in-out"
-              />
-              <button
-                type="submit"
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black"
-              >
-                <svg className="w-6 h-6 transition-all duration-300 ease-in-out" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
-              </button>
-            </form>
-
-            {/* Search Results Dropdown */}
-            {searchResults.length > 0 && (
-              <div 
-                ref={searchResultsRef}
-                className="absolute top-full mt-2 bg-white text-black rounded-lg shadow-lg w-full z-10"
-              >
-                <ul className="max-h-60 overflow-y-auto">
-                  {searchResults.map((result, index) => (
-                    <li key={index} className="py-2 px-4 hover:bg-gray-200 cursor-pointer transition-all duration-300 ease-in-out">
-                      <Link href={`/search-results?query=${encodeURIComponent(result)}`} className="block">
-                        {result}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
         </nav>
 
-        {/* Mobile Menu Button (Hamburger/Close) */}
-        <div className="sm:hidden">
-          <button
-            aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
-            onClick={toggleMenu}
-            className="text-white p-2 transition-transform transform hover:scale-105 duration-300"
-          >
-            {isMenuOpen ? (
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-            ) : (
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
-              </svg>
-            )}
-          </button>
+        {/* Mobile Navigation */}
+        <div className="lg:hidden flex items-center gap-2">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="text-black hover:bg-gray-100">
+                <Menu className="w-5 h-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[300px] bg-white">
+              <nav className="mt-6 space-y-4">
+                {navigationItems.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className="block rounded-md px-3 py-2 text-gray-900 hover:bg-gray-100 transition-colors"
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+
+                <div className="mt-6 pt-4 border-t border-gray-200">
+                  <p className="mb-3 px-3 text-sm font-semibold text-gray-500 uppercase tracking-wider">
+                    Services
+                  </p>
+                  <div className="space-y-1">
+                    {servicesList.map(({ name, href, icon: Icon }) => (
+                      <Link
+                        key={name}
+                        href={href}
+                        className="flex items-center gap-3 rounded-md px-3 py-2 text-gray-900 hover:bg-gray-100 transition-colors"
+                      >
+                        <Icon className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                        <span className="font-medium">{name}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
-
-      {/* Mobile Menu - Slide in from top */}
-      {isMenuOpen && (
-        <div 
-          ref={mobileMenuRef}
-          className="sm:hidden fixed inset-0 bg-black bg-opacity-95 z-50 overflow-y-auto"
-          style={{ top: '76px' }} // Adjust based on your header height
-        >
-          <div className="px-6 py-6 flex flex-col gap-6">
-            {/* Mobile Search */}
-            <form onSubmit={handleSearchSubmit} className="flex items-center relative">
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-                className="w-full bg-white text-black py-3 px-4 rounded-lg shadow-md"
-              />
-              <button
-                type="submit"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
-              </button>
-            </form>
-
-            {/* Search Results */}
-            {searchResults.length > 0 && (
-              <div className="bg-white text-black rounded-lg shadow-lg w-full">
-                <ul className="max-h-60 overflow-y-auto">
-                  {searchResults.map((result, index) => (
-                    <li key={index} className="py-3 px-4 hover:bg-gray-200 cursor-pointer border-b border-gray-200 last:border-b-0">
-                      <Link 
-                        href={`/search-results?query=${encodeURIComponent(result)}`} 
-                        className="block"
-                        onClick={handleLinkClick}
-                      >
-                        {result}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* Navigation Links */}
-            <nav className="text-white font-medium">
-              <ul className="space-y-4">
-                <li>
-                  <Link 
-                    href="/" 
-                    className="block py-3 px-4 hover:bg-gray-800 rounded-lg transition-all duration-300"
-                    onClick={handleLinkClick}
-                  >
-                    Home
-                  </Link>
-                </li>
-                
-                {/* Services Dropdown */}
-                <li>
-                  <button 
-                    onClick={toggleMobileServices}
-                    className="flex items-center justify-between w-full py-3 px-4 hover:bg-gray-800 rounded-lg transition-all duration-300"
-                  >
-                    <span>Services</span>
-                    <svg 
-                      className={`w-5 h-5 transition-transform duration-300 ${isMobileServicesOpen ? 'rotate-180' : ''}`} 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24" 
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                  </button>
-                  
-                  {/* Expanded Services Menu */}
-                  {isMobileServicesOpen && (
-                    <ul className="mt-2 ml-4 space-y-2 border-l-2 border-gray-700 pl-4">
-                      {servicesList.map((service, index) => (
-                        <li key={index}>
-                          <Link 
-                            href={service.href} 
-                            className="block py-2 px-3 hover:bg-gray-800 rounded-lg transition-all duration-300"
-                            onClick={handleLinkClick}
-                          >
-                            {service.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
-                
-                <li>
-                  <Link 
-                    href="/bookservice" 
-                    className="block py-3 px-4 hover:bg-gray-800 rounded-lg transition-all duration-300"
-                    onClick={handleLinkClick}
-                  >
-                    Book Service
-                  </Link>
-                </li>
-                
-                <li className="pt-4">
-                  <Link 
-                    href="/signup"
-                    className="block py-3 text-center bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300"
-                    onClick={handleLinkClick}
-                  >
-                    Get Started
-                  </Link>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      )}
     </header>
   );
 };
 
 export default Header;
+
+const ThemeToggle = () => {
+  const { setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted) return <div className="w-9 h-9" />;
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+       
+      </DropdownMenuTrigger>
+      
+    </DropdownMenu>
+  );
+};

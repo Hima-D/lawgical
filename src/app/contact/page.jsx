@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from 'react';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
@@ -21,7 +22,6 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setStatus('Sending...');
 
     try {
@@ -48,122 +48,100 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-black">
-      {/* Header Component */}
+    <div className="min-h-screen flex flex-col bg-white text-black">
       <Header />
 
-      {/* Contact Form Section */}
-      <div className="flex-grow flex items-center justify-center py-8">
-        <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-xl">
-          <h2 className="text-2xl font-semibold text-center mb-6 text-black">Get In Touch</h2>
+      <main className="flex-grow container mx-auto px-4 py-16">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold mb-3">Get In Touch</h1>
+            <p className="text-lg text-gray-600 max-w-xl mx-auto">
+              We'd love to hear from you. Fill out the form and we'll get back to you soon.
+            </p>
+          </div>
 
-          <p className="text-center text-lg text-gray-600 mb-6">
-            We’d love to hear from you. Fill out the form below and we’ll respond shortly.
-          </p>
+          <div className="grid md:grid-cols-2 gap-10">
+            <div className="bg-gray-100 p-8 rounded-lg shadow-md">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-semibold text-gray-700">Full Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    placeholder="Your name"
+                    className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:outline-none"
+                  />
+                </div>
 
-          <form onSubmit={handleSubmit}>
-            {/* Name Input */}
-            <div className="mb-4 relative">
-              <label
-                htmlFor="name"
-                className="absolute text-sm font-medium text-gray-700 left-4 -top-3 bg-white px-1"
-              >
-                Full Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className={`mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-black ${status === 'Sending...' ? 'opacity-50 cursor-not-allowed' : ''}`}
-                placeholder="Enter your full name"
-              />
-            </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-semibold text-gray-700">Email Address</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    placeholder="you@example.com"
+                    className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:outline-none"
+                  />
+                </div>
 
-            {/* Email Input */}
-            <div className="mb-4 relative">
-              <label
-                htmlFor="email"
-                className="absolute text-sm font-medium text-gray-700 left-4 -top-3 bg-white px-1"
-              >
-                Email Address
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className={`mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-black ${status === 'Sending...' ? 'opacity-50 cursor-not-allowed' : ''}`}
-                placeholder="Enter your email"
-              />
-            </div>
+                <div>
+                  <label htmlFor="message" className="block text-sm font-semibold text-gray-700">Message</label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows="5"
+                    required
+                    placeholder="Your message..."
+                    className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:outline-none"
+                  ></textarea>
+                </div>
 
-            {/* Message Textarea */}
-            <div className="mb-6 relative">
-              <label
-                htmlFor="message"
-                className="absolute text-sm font-medium text-gray-700 left-4 -top-3 bg-white px-1"
-              >
-                Your Message
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                rows="4"
-                required
-                className={`mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black text-black ${status === 'Sending...' ? 'opacity-50 cursor-not-allowed' : ''}`}
-                placeholder="Enter your message"
-              ></textarea>
-            </div>
+                <button
+                  type="submit"
+                  disabled={status === 'Sending...'}
+                  className={`w-full py-3 px-4 rounded-md text-white font-semibold transition duration-300 
+                    ${status === 'Sending...' ? 'bg-gray-400 cursor-not-allowed' : 'bg-black hover:bg-gray-800'}`}
+                >
+                  {status === 'Sending...' ? 'Sending...' : 'Send Message'}
+                </button>
 
-            {/* Submit Button */}
-            <div className="mb-4">
-              <button
-                type="submit"
-                className={`w-full py-2 px-4 bg-black text-white rounded-md focus:outline-none focus:ring-2 focus:ring-black ${status === 'Sending...' ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-800'}`}
-                disabled={status === 'Sending...'}
-              >
-                {status === 'Sending...' ? (
-                  <div className="flex justify-center items-center">
-                    <svg className="w-5 h-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 0116 0"></path>
-                    </svg>
-                  </div>
-                ) : (
-                  'Send Message'
+                {status && status !== 'Sending...' && (
+                  <p className={`text-center text-sm ${status.includes('successfully') ? 'text-green-600' : 'text-red-600'}`}>{status}</p>
                 )}
-              </button>
+              </form>
             </div>
-          </form>
 
-          {/* Status Message */}
-          {status && status !== 'Sending...' && (
-            <div className="mt-4 text-center text-lg">
-              <p className={`${status === 'Message sent successfully!' ? 'text-green-600' : 'text-red-600'}`}>{status}</p>
+            <div className="flex flex-col gap-6 justify-center text-gray-700">
+              <div>
+                <h2 className="text-xl font-semibold mb-2">Email</h2>
+                <p><a href="mailto:advocatechahat@gmail.com" className="text-blue-600 hover:underline">support@lawgical.tech</a></p>
+              </div>
+
+              <div>
+                <h2 className="text-xl font-semibold mb-2">Phone</h2>
+                <p><a href="tel:+918383801899" className="text-blue-600 hover:underline">+91 838 380 1899</a></p>
+              </div>
+
+              <div>
+                <h2 className="text-xl font-semibold mb-2">Office Hours</h2>
+                <p>Mon – Fri: 9 AM – 6 PM</p>
+              </div>
+
+              
             </div>
-          )}
+          </div>
         </div>
-      </div>
+      </main>
 
-      {/* Optional Info Section */}
-      <div className="mt-12 text-center">
-        <h2 className="text-xl font-semibold text-white mb-4">Need Help Immediately?</h2>
-        <p className="text-lg text-gray-300">
-          Reach out to us at <a href="mailto:advocatechahat@gmail.com" className="text-white">advocatechahat@gmail.com</a>
-        </p>
-        <p className="text-lg text-gray-300 mt-2">
-          Or give us a call at <span className="text-white">+918383801899</span>
-        </p>
-      </div>
-
-      {/* Footer Component */}
       <Footer />
     </div>
   );
