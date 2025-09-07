@@ -4,8 +4,8 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import Script from "next/script";
+import Image from "next/image";
 import { ThemeProvider } from "next-themes";
-
 
 const geistSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
@@ -205,7 +205,7 @@ export const metadata = {
     "msapplication-config": "/browserconfig.xml",
     
     // Social Media
-    "fb:app_id": "your_facebook_app_id", // Add your Facebook App ID
+    "fb:app_id": "1121918703374207", // Updated with your Facebook App ID
     "og:email": "support@lawgical.tech",
     "og:phone_number": "+918383801899", // Add your phone number
     
@@ -236,7 +236,6 @@ export const metadata = {
   verification: {
     google: "QYcBwyVDXGDlSSxuYbzHmLRiUrofznU8LHBS9ZTUUqI",
     bing: "1CCF3565C81789FD267302CF040AA5F0",
-   
   },
   
   // Archives and sitemap
@@ -275,6 +274,15 @@ export default function RootLayout({ children }) {
           }}
         />
 
+        {/* Facebook Pixel Code */}
+        <Script
+          id="facebook-pixel"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js'); fbq('init', '1121918703374207'); fbq('track', 'PageView');`,
+          }}
+        />
+
         {/* Enhanced Meta Tags */}
         <meta name="google-site-verification" content="QYcBwyVDXGDlSSxuYbzHmLRiUrofznU8LHBS9ZTUUqI" />
         <meta name="msvalidate.01" content="1CCF3565C81789FD267302CF040AA5F0" />
@@ -291,11 +299,13 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://connect.facebook.net" />
         
         {/* DNS prefetch for external scripts */}
         <link rel="dns-prefetch" href="//js.hs-scripts.com" />
         <link rel="dns-prefetch" href="//cdn.segment.com" />
         <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
+        <link rel="dns-prefetch" href="//connect.facebook.net" />
         
         {/* Resource hints for better performance */}
         <link rel="prefetch" href="/sitemap.xml" />
@@ -510,14 +520,14 @@ export default function RootLayout({ children }) {
           }}
         />
 
-        {/* Additional Schema for Local Business (if applicable) */}
+        {/* Additional Schema for Local Business */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              "name": "Lawgical Legal Tech ",
+              "name": "Lawgical Legal Tech",
               "url": "https://www.lawgical.tech",
               "logo": "https://www.lawgical.tech/logo.png",
               "contactPoint": {
@@ -535,7 +545,7 @@ export default function RootLayout({ children }) {
           }}
         />
 
-        {/* FAQ Schema (add your common FAQs) */}
+        {/* FAQ Schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -588,7 +598,20 @@ export default function RootLayout({ children }) {
             src="https://www.googletagmanager.com/ns.html?id=GTM-TSVBZ4FD"
             height="0" 
             width="0" 
-            style={{display: 'none', visibility: 'hidden'}}
+            style={{ display: 'none', visibility: 'hidden' }}
+          />
+        </noscript>
+
+        {/* Facebook Pixel (noscript) */}
+        <noscript>
+          <Image
+            height={1}
+            width={1}
+            alt="Facebook Pixel"
+            src="https://www.facebook.com/tr?id=1121918703374207&ev=PageView&noscript=1"
+            style={{ display: 'none' }}
+            unoptimized
+            priority
           />
         </noscript>
 
@@ -671,7 +694,7 @@ export default function RootLayout({ children }) {
           async
         />
 
-        {/* Error Tracking (optional - add your preferred service) */}
+        {/* Error Tracking */}
         <Script
           id="error-tracking"
           strategy="afterInteractive"
