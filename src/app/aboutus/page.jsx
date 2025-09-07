@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
+import { Linkedin } from 'lucide-react';
 
 const About = () => {
   const teamMembers = [
@@ -41,94 +42,130 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
-      <Header />
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 text-gray-900">
+    <Header />
 
-      {/* Hero Section */}
-      <section className="relative h-80 sm:h-96 overflow-hidden">
-        <Image
-          src="https://picsum.photos/1920/1080?random=1"
-          alt="About Us Hero"
-          width={1920}
-          height={1080}
-          className="object-cover w-full h-full brightness-75"
-          priority
-        />
-        <div className="absolute inset-0 flex items-center justify-center z-10">
-          <h1 className="text-5xl sm:text-6xl font-bold text-white drop-shadow-lg">About Us</h1>
-        </div>
-      </section>
+    {/* Hero Section */}
+    <section className="relative h-80 sm:h-96 overflow-hidden">
+      <Image
+        src="https://picsum.photos/1920/1080?random=1"
+        alt="About Us Hero"
+        width={1920}
+        height={1080}
+        className="object-cover w-full h-full brightness-75"
+        priority
+      />
+      <div className="absolute inset-0 flex items-center justify-center z-10 bg-black/40">
+        <h1 className="text-5xl sm:text-6xl font-bold text-white drop-shadow-lg">About Lawgical</h1>
+      </div>
+    </section>
 
-      {/* Mission and Values */}
-      <div className="max-w-6xl mx-auto px-6 sm:px-12 py-20">
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-24 items-start">
-          <div>
-            <h2 className="text-4xl font-bold text-gray-800 mb-6">Our Mission</h2>
-            <p className="text-lg mb-8 leading-relaxed text-gray-700">
-            "At Lawgical, our mission is to democratize justice by connecting everyone with the legal expertise they need."
-            </p>
-            <h2 className="text-4xl font-bold text-gray-800 mb-6">Our Core Values</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {coreValues.map((item, index) => (
-                <div key={index} className="p-6 rounded-xl border border-gray-200 bg-white shadow-md hover:shadow-lg transition">
-                  <h3 className="text-xl font-semibold text-blue-700 mb-2">{item.value}</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div>
-            <Image
-              src="https://picsum.photos/600/800?random=1"
-              alt="Team image"
-              width={600}
-              height={800}
-              className="rounded-xl shadow-lg w-full object-cover aspect-[3/4]"
-            />
-          </div>
-        </section>
-
-        {/* Team Section */}
-        <section className="py-16">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">Meet Our Team</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Our team consists of passionate individuals dedicated to making Lawgical the best platform for legal professionals.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            {teamMembers.map((member, index) => (
-              <div key={index} className="flex flex-col sm:flex-row items-center gap-6 bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
-                <Image
-                  src={member.image}
-                  alt={member.name}
-                  width={150}
-                  height={150}
-                  className="rounded-full border border-gray-300"
-                />
-                <div className="text-center sm:text-left">
-                  <h3 className="text-2xl font-bold text-gray-800">{member.name}</h3>
-                  <p className="text-blue-500 font-medium mb-2">{member.role}</p>
-                  <p className="text-gray-600 text-sm leading-relaxed">{member.bio}</p>
-                </div>
+    {/* Mission and Values */}
+    <div className="max-w-7xl mx-auto px-6 sm:px-12 py-20">
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-24 items-center">
+        <div>
+          <h2 className="text-4xl font-bold text-gray-800 mb-6">Our Mission</h2>
+          <p className="text-lg mb-8 leading-relaxed text-gray-700">
+            At Lawgical, our mission is to democratize justice by connecting everyone with the legal expertise they need, delivering compassionate, expert-driven solutions for a fairer world.
+          </p>
+          <h2 className="text-4xl font-bold text-gray-800 mb-6">Our Core Values</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {coreValues.map((item, index) => (
+              <div key={index} className="p-6 rounded-xl border border-gray-200 bg-white shadow-md hover:shadow-lg transition-all duration-300">
+                <h3 className="text-xl font-semibold text-blue-600 mb-2">{item.value}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
               </div>
             ))}
           </div>
-        </section>
+        </div>
+        <div>
+          <Image
+            src="https://picsum.photos/600/800?random=2"
+            alt="Team collaboration"
+            width={600}
+            height={800}
+            className="rounded-xl shadow-lg w-full object-cover aspect-[3/4] hover:scale-105 transition-transform duration-300"
+          />
+        </div>
+      </section>
 
-        {/* CTA Section */}
-        <section className="mt-24 bg-white border border-blue-100 rounded-2xl p-12 text-center shadow-sm">
-          <h2 className="text-3xl font-bold mb-4 text-gray-800">Join Our Legal Community</h2>
-          <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
-            Connect with fellow legal professionals, access resources, and grow your practice with Lawgical.
+      {/* Team Section */}
+      <section className="py-16">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gray-800 mb-4">Meet Our Leadership Team</h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            Our diverse team of legal, business, marketing, and technical experts drives Lawgical’s vision to transform the legal landscape with innovation and integrity.
           </p>
-          <button className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition">Join Now</button>
-        </section>
-      </div>
+        </div>
 
-      <Footer />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {teamMembers.map((member, index) => (
+            <div key={index} className="flex flex-col items-center bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100">
+              <Image
+                src={member.image}
+                alt={member.name}
+                width={150}
+                height={150}
+                className="rounded-full border-2 border-blue-200 mb-4"
+              />
+              <h3 className="text-xl font-bold text-gray-800">{member.name}</h3>
+              <p className="text-blue-600 font-medium mb-3">{member.role}</p>
+              <p className="text-gray-600 text-sm text-center leading-relaxed mb-4">{member.bio}</p>
+              <a
+                href={member.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+              >
+                <Linkedin className="h-5 w-5 mr-2" />
+                LinkedIn Profile
+              </a>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Our Story Section */}
+      <section className="py-16">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gray-800 mb-4">Our Story</h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            Founded with a vision to bridge the gap between legal expertise and accessibility, Lawgical combines cutting-edge technology with unparalleled legal acumen to serve clients across India and beyond.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <p className="text-gray-700 text-lg leading-relaxed mb-6">
+              Lawgical was born from a shared passion for justice and innovation. Recognizing the challenges individuals and businesses face in navigating complex legal systems, our founders set out to create a platform that simplifies access to top-tier legal services.
+            </p>
+            <p className="text-gray-700 text-lg leading-relaxed">
+              From contract disputes to child protection cases, our team has grown to offer comprehensive legal solutions, driven by a commitment to integrity, collaboration, and client empowerment. Today, Lawgical stands as a trusted partner for those seeking justice and clarity in the legal world.
+            </p>
+          </div>
+          <Image
+            src="https://picsum.photos/600/400?random=3"
+            alt="Lawgical story"
+            width={600}
+            height={400}
+            className="rounded-xl shadow-lg w-full object-cover"
+          />
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="mt-24 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-100 rounded-2xl p-12 text-center shadow-lg">
+        <h2 className="text-3xl font-bold mb-4 text-gray-800">Join the Lawgical Community</h2>
+        <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          Partner with us to access expert legal resources, connect with professionals, and grow your practice or resolve your legal challenges with confidence.
+        </p>
+        <button className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-transform hover:scale-105">
+          Get Started
+        </button>
+      </section>
     </div>
+
+    <Footer />
+  </div>
   );
 };
 
