@@ -1,173 +1,167 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import Head from "next/head";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
-import {
-  Phone,
-  Mail,
-  MapPin,
-  CheckCircle,
-  Star,
-  ArrowRight,
-  Shield,
-  FileText,
-  Gavel,
-  Users,
+import React, { useState, useEffect } from 'react';
+import { 
+  Shield, 
+  FileText, 
+  Gavel, 
+  Phone, 
+  Mail, 
+  MapPin, 
+  CheckCircle, 
+  Users, 
+  Clock, 
+  Award,
+  BookOpen,
   AlertCircle,
-} from "lucide-react";
-import { Slot } from "@radix-ui/react-slot";
+  ArrowRight,
+  Star,
+  Scale
+} from 'lucide-react';
+import Header from '@/components/header';
+import Footer from '@/components/footer';
 
-// shadcn/ui Components
-const Button = ({ children, variant = "default", size = "default", className = "", asChild = false, ...props }) => {
-  const baseClasses =
-    "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background";
-
+// shadcn/ui Components (simplified)
+const Button = ({ children, variant = "default", size = "default", className = "", ...props }) => {
+  const baseClasses = "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background";
+  
   const variants = {
-    default: "bg-primary text-primary-foreground hover:bg-primary/90",
-    destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+    default: "bg-blue-600 text-white hover:bg-blue-700",
     outline: "border border-input hover:bg-accent hover:text-accent-foreground",
-    secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
     ghost: "hover:bg-accent hover:text-accent-foreground",
-    link: "underline-offset-4 hover:underline text-primary",
+    secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200",
   };
-
+  
   const sizes = {
-    default: "h-10 py-2 px-4",
+    default: "h-10 px-4 py-2",
     sm: "h-9 px-3 rounded-md",
-    lg: "h-11 px-8 rounded-md",
-    icon: "h-10 w-10",
+    lg: "h-12 px-8 text-lg",
   };
-
-  const Comp = asChild ? Slot : "button";
-
+  
   return (
-    <Comp
+    <button
       className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`}
       {...props}
     >
       {children}
-    </Comp>
+    </button>
   );
 };
 
 const Card = ({ children, className = "", ...props }) => (
-  <div
-    className={`rounded-lg border bg-card text-card-foreground shadow-sm ${className}`}
-    {...props}
-  >
+  <div className={`rounded-lg border bg-card text-card-foreground shadow-sm ${className}`} {...props}>
     {children}
   </div>
 );
 
-const CardHeader = ({ children, className = "", ...props }) => (
-  <div className={`flex flex-col space-y-1.5 p-6 ${className}`} {...props}>
-    {children}
-  </div>
-);
-
-const CardTitle = ({ children, className = "", ...props }) => (
-  <h3
-    className={`text-2xl font-semibold leading-none tracking-tight ${className}`}
-    {...props}
-  >
-    {children}
-  </h3>
-);
-
-const CardDescription = ({ children, className = "", ...props }) => (
-  <p className={`text-sm text-muted-foreground ${className}`} {...props}>
-    {children}
-  </p>
-);
-
-const CardContent = ({ children, className = "", ...props }) => (
-  <div className={`p-6 pt-0 ${className}`} {...props}>
-    {children}
-  </div>
-);
-
-const Input = ({ className = "", type = "text", label, id, ...props }) => (
-  <div className="space-y-1">
-    <label htmlFor={id} className="text-sm font-medium text-gray-700">
-      {label}
-    </label>
-    <input
-      type={type}
-      id={id}
-      className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
-      {...props}
-    />
-  </div>
-);
-
-const Textarea = ({ className = "", label, id, ...props }) => (
-  <div className="space-y-1">
-    <label htmlFor={id} className="text-sm font-medium text-gray-700">
-      {label}
-    </label>
-    <textarea
-      id={id}
-      className={`flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
-      {...props}
-    />
-  </div>
-);
-
-// Error Boundary
-const ErrorBoundary = ({ children }) => {
-  const [hasError, setHasError] = useState(false);
-
-  useEffect(() => {
-    const errorHandler = (error) => {
-      console.error("ErrorBoundary caught:", error);
-      setHasError(true);
-    };
-    window.addEventListener("error", errorHandler);
-    return () => window.removeEventListener("error", errorHandler);
-  }, []);
-
-  if (hasError) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="text-center p-8 bg-white rounded-lg shadow-lg">
-          <h2 className="text-2xl font-bold text-red-600 mb-4">Something went wrong</h2>
-          <p className="text-gray-600 mb-4">Please refresh the page or try again later.</p>
-          <button
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-            onClick={() => window.location.reload()}
-          >
-            Refresh
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  return children;
+const Badge = ({ children, variant = "default", className = "" }) => {
+  const variants = {
+    default: "bg-primary text-primary-foreground",
+    secondary: "bg-secondary text-secondary-foreground",
+    outline: "border border-input",
+  };
+  
+  return (
+    <div className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors ${variants[variant]} ${className}`}>
+      {children}
+    </div>
+  );
 };
 
-const ContractLawPage = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitMessage, setSubmitMessage] = useState("");
-  const [counters, setCounters] = useState({
-    contractsDrafted: 0,
-    disputesResolved: 0,
-    clientsServed: 0,
-    yearsExperience: 0,
-  });
+const STATS = [
+  { number: "1200+", label: "Contracts Drafted", icon: FileText },
+  { number: "850+", label: "Disputes Resolved", icon: Gavel },
+  { number: "500+", label: "Clients Served", icon: Users },
+  { number: "15+", label: "Years Experience", icon: Award },
+];
 
-  // Animate counters
+const SERVICES = [
+  {
+    icon: FileText,
+    title: "Contract Drafting & Review",
+    description: "Expert drafting of airtight contracts tailored to your business needs, including comprehensive review to identify risks and ensure enforceability from the outset.",
+    color: "from-blue-500 to-indigo-500"
+  },
+  {
+    icon: Gavel,
+    title: "Breach Investigation & Litigation",
+    description: "Thorough investigation of contract breaches, followed by strategic litigation to enforce terms, recover damages, and hold counterparties accountable in court.",
+    color: "from-purple-500 to-violet-500"
+  },
+  {
+    icon: Scale,
+    title: "Dispute Resolution & Negotiation",
+    description: "Mediation, arbitration, and negotiation services to resolve contract disputes efficiently, minimizing costs and time while achieving optimal outcomes for our clients.",
+    color: "from-green-500 to-emerald-500"
+  },
+  {
+    icon: Shield,
+    title: "Enforcement & Compliance",
+    description: "Ongoing support for contract enforcement, regulatory compliance audits, and defensive strategies to protect your interests against potential claims or violations.",
+    color: "from-orange-500 to-amber-500"
+  },
+  {
+    icon: BookOpen,
+    title: "Risk Assessment & Advisory",
+    description: "Proactive legal advisory on contract risks, including scenario planning, clause optimization, and training for your team to prevent future disputes.",
+    color: "from-teal-500 to-cyan-500"
+  },
+  {
+    icon: Users,
+    title: "Corporate Contract Management",
+    description: "End-to-end management of corporate agreements, from vendor contracts to partnerships, ensuring seamless integration with your business operations and legal strategy.",
+    color: "from-pink-500 to-rose-500"
+  }
+];
+
+const FEATURES = [
+  {
+    title: "Comprehensive Contract Analysis",
+    description: "Our litigation team conducts in-depth analysis of contract terms, identifying ambiguities, enforceability issues, and strategic advantages for court proceedings.",
+    icon: FileText
+  },
+  {
+    title: "Strategic Litigation Planning",
+    description: "From filing suits to trial preparation, we develop tailored litigation strategies that maximize recovery and minimize exposure in contract disputes.",
+    icon: Gavel
+  },
+  {
+    title: "Evidence Preservation & Discovery",
+    description: "Expert handling of evidence collection, e-discovery, and documentation to build ironclad cases for contract enforcement or defense in litigation.",
+    icon: Scale
+  },
+  {
+    title: "Alternative Dispute Resolution",
+    description: "When litigation is not ideal, we leverage mediation and arbitration to resolve disputes swiftly while preserving business relationships.",
+    icon: Shield
+  }
+];
+
+const TESTIMONIALS = [
+  {
+    name: "Anita Desai",
+    role: "Business Owner, Retail",
+    content: "The team at Lawgical drafted our supplier contracts with precision and resolved a major dispute through expert litigation, saving our business significantly.",
+    rating: 5,
+  },
+  {
+    name: "Vikram Singh",
+    role: "Corporate Counsel, Tech",
+    content: "Their strategic approach to contract review and negotiation turned potential litigation into a favorable settlement, protecting our company's interests.",
+    rating: 5,
+  },
+  {
+    name: "Meera Patel",
+    role: "Freelancer",
+    content: "Lawgical handled my contract breach case with professionalism and care, ensuring I received the compensation I deserved through efficient litigation.",
+    rating: 5,
+  },
+];
+
+const ContractLawPage = () => {
+  const [counters, setCounters] = useState({ contracts: 0, disputes: 0, clients: 0, experience: 0 });
+
   useEffect(() => {
-    console.log("ContractLawPage rendered, starting counter animation");
     const animateCounter = (target, key, suffix = "") => {
       let current = 0;
       const increment = target / 100;
@@ -177,473 +171,360 @@ const ContractLawPage = () => {
           current = target;
           clearInterval(timer);
         }
-        setCounters((prev) => ({
+        setCounters(prev => ({
           ...prev,
           [key]: Math.floor(current) + suffix,
         }));
       }, 20);
     };
 
-    animateCounter(1200, "contractsDrafted", "+");
-    animateCounter(850, "disputesResolved", "+");
-    animateCounter(500, "clientsServed", "+");
-    animateCounter(15, "yearsExperience", "+");
+    animateCounter(1200, "contracts", "+");
+    animateCounter(850, "disputes", "+");
+    animateCounter(500, "clients", "+");
+    animateCounter(15, "experience", "+");
   }, []);
 
-  const stats = [
-    { label: "Contracts Drafted", value: counters.contractsDrafted, icon: FileText },
-    { label: "Disputes Resolved", value: counters.disputesResolved, icon: Gavel },
-    { label: "Clients Served", value: counters.clientsServed, icon: Users },
-    { label: "Years of Experience", value: counters.yearsExperience, icon: Shield },
-  ];
-
-  const testimonials = [
+  const litigationProcess = [
     {
-      name: "Anita Desai",
-      role: "Business Owner, Retail",
-      content: "The team at Lawgical drafted our supplier contracts with precision, saving us from potential disputes.",
-      rating: 5,
+      step: 1,
+      title: "Initial Assessment",
+      description: "We begin with a thorough review of your contract and circumstances to evaluate breach claims, potential liabilities, and viable legal pathways."
     },
     {
-      name: "Vikram Singh",
-      role: "Corporate Counsel, Tech",
-      content: "Their expertise in contract review helped us negotiate better terms with our partners.",
-      rating: 5,
+      step: 2,
+      title: "Strategy Development",
+      description: "Our experts craft a customized litigation strategy, including negotiation attempts, evidence gathering, and preparation for court if necessary."
     },
     {
-      name: "Meera Patel",
-      role: "Freelancer",
-      content: "Lawgical's consultation was clear and actionable, ensuring my freelance agreements were watertight.",
-      rating: 5,
-    },
-  ];
-
-  const faqs = [
-    {
-      question: "What makes a contract legally binding?",
-      answer: "A contract is legally binding if it includes an offer, acceptance, consideration, and mutual intent. Our team ensures all elements are met for enforceability.",
+      step: 3,
+      title: "Execution & Representation",
+      description: "We handle all aspects of the process, from filing claims to court representation, ensuring aggressive advocacy and compliance with legal timelines."
     },
     {
-      question: "Can you help with contract disputes?",
-      answer: "Yes, we provide expert dispute resolution services, including mediation and litigation, to enforce your rights and recover losses.",
-    },
-    {
-      question: "Do you offer contract drafting for startups?",
-      answer: "Absolutely, we tailor contracts for startups, ensuring compliance and protection as you scale your business.",
-    },
-  ];
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log("Contact form submitted:", formData);
-    setIsSubmitting(true);
-    setSubmitMessage("");
-
-    try {
-      const response = await fetch("/api/contract/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      const responseData = await response.json();
-      if (!response.ok) throw new Error(responseData.message || "Failed to send message");
-      setSubmitMessage("Message sent successfully! We'll get back to you soon.");
-      setFormData({ name: "", email: "", phone: "", message: "" });
-    } catch (error) {
-      console.error("Contact form error:", error);
-      setSubmitMessage(error.message || "An error occurred. Please try again.");
-    } finally {
-      setIsSubmitting(false);
+      step: 4,
+      title: "Resolution & Enforcement",
+      description: "Whether through settlement or judgment, we secure enforceable outcomes and assist with post-resolution enforcement to achieve full recovery."
     }
-  };
+  ];
 
   return (
-    <ErrorBoundary>
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100">
-        <Head>
-          <title>Contract Law Services | Lawgical</title>
-          <meta
-            name="description"
-            content="Expert contract law services for drafting, reviewing, and resolving disputes. Ensure your agreements are clear, fair, and legally binding."
-          />
-          <meta
-            name="keywords"
-            content="contract law, legal agreements, contract drafting, dispute resolution, legal consultation"
-          />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100">
+      {/* Header */}
+      <Header />
 
-        <Header />
-
-        {/* Hero Section */}
-        <section
-          id="home"
-          className="bg-gradient-to-br from-blue-50 via-white to-purple-50 py-16 lg:py-24"
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
-                Contract Law: Protect Your{" "}
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-blue-50 via-white to-purple-50 py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="text-center lg:text-left">
+              <Badge className="mb-6 bg-blue-100 text-blue-800">
+                Expert Contract Litigation
+              </Badge>
+              <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                Contract Law: Securing Agreements,
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-                  Legal Agreements
+                  {" "}Delivering Justice
                 </span>
               </h1>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-                From drafting to dispute resolution, our expert legal team ensures your contracts are clear, fair, and enforceable.
+              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+                Specialized litigation services for contract disputes, breaches, and enforcement. Our experienced team protects your business interests through strategic legal advocacy, negotiation, and courtroom representation when every agreement counts.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button
-                  size="lg"
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg transform hover:scale-105 shadow-lg"
-                  asChild
-                >
-                  <Link href="/contact">Get Legal Help Now</Link>
+              <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all shadow-lg">
+                  <Phone className="h-5 w-5 mr-2" />
+                  Urgent Consultation
                 </Button>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="border-2 border-blue-600 text-blue-600 px-8 py-4 text-lg hover:bg-blue-600 hover:text-white"
-                  asChild
-                >
-                  <Link href="#contact">Request Consultation</Link>
+                <Button variant="outline" size="lg" className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white">
+                  Explore Our Process
+                  <ArrowRight className="h-5 w-5 ml-2" />
                 </Button>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Stats Section */}
-        <section className="py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid md:grid-cols-4 gap-8">
-              {stats.map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="mb-4">
-                    <stat.icon className="h-12 w-12 text-blue-600 mx-auto" />
-                  </div>
-                  <div className="text-4xl font-bold text-blue-600 mb-2">
-                    {stat.value}
-                  </div>
-                  <div className="text-gray-600 font-medium">{stat.label}</div>
+              <div className="flex items-center justify-center lg:justify-start space-x-8 text-sm text-gray-500">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <span>24/7 Support</span>
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* What is Contract Law? */}
-        <section id="about" className="py-16 lg:py-24 bg-gradient-to-br from-slate-50 to-blue-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">What is Contract Law?</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Understand the foundation of legally binding agreements and how we can help you navigate them.
-              </p>
-            </div>
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <p className="text-lg text-gray-600 mb-6">
-                  Contract law governs agreements between parties, ensuring fairness and enforceability. It covers contract formation, execution, and breach resolution.
-                </p>
-                <p className="text-lg text-gray-600">
-                  Our team provides expert guidance to create, review, and enforce contracts, protecting your interests in personal and professional dealings.
-                </p>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                  <span>Confidential</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+                  <span>Proven Track Record</span>
+                </div>
               </div>
-              
+            </div>
+            
+            <div className="relative">
+              <Card className="bg-white/80 backdrop-blur rounded-2xl shadow-2xl p-8 border border-gray-100">
+                <div className="text-center mb-6">
+                  <div className="bg-gradient-to-r from-blue-500 to-purple-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Shield className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900">Litigation-Ready Support</h3>
+                  <p className="text-gray-600 mt-2">From breach to resolution, we&apos;re prepared to fight for your rights</p>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="flex items-center p-4 bg-blue-50 rounded-lg border border-blue-100">
+                    <FileText className="h-8 w-8 text-blue-600 mr-4" />
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Contract Analysis</h4>
+                      <p className="text-sm text-gray-600">Identify strengths and weaknesses</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center p-4 bg-purple-50 rounded-lg border border-purple-100">
+                    <Gavel className="h-8 w-8 text-purple-600 mr-4" />
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Court Representation</h4>
+                      <p className="text-sm text-gray-600">Aggressive advocacy in litigation</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center p-4 bg-green-50 rounded-lg border border-green-100">
+                    <Shield className="h-8 w-8 text-green-600 mr-4" />
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Risk Mitigation</h4>
+                      <p className="text-sm text-gray-600">Protect against future disputes</p>
+                    </div>
+                  </div>
+                </div>
+              </Card>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Types of Contracts */}
-        <section id="types" className="py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Types of Contracts</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Explore the various types of contracts we handle to meet your specific needs.
-              </p>
-            </div>
-            <div className="grid lg:grid-cols-2 gap-12 items-start">
-              <div>
-                <ul className="space-y-6">
-                  <li className="flex items-start space-x-3">
-                    <CheckCircle className="h-6 w-6 text-green-500 mt-1" />
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Written Contracts</h4>
-                      <p className="text-gray-600">Formal documents with clear, enforceable terms.</p>
-                    </div>
+      {/* Urgent Contact Banner */}
+      <section className="bg-gradient-to-r from-red-600 to-pink-600 py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center text-center text-white">
+            <AlertCircle className="h-6 w-6 mr-3 animate-pulse" />
+            <span className="text-lg font-semibold">Facing a Contract Dispute? Contact us immediately at </span>
+            <a href="tel:+918383801899" className="ml-2 text-xl font-bold hover:text-yellow-200 transition-colors">
+              +91 8383801899
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-4 gap-8">
+            {STATS.map((stat, index) => (
+              <div key={index} className="text-center">
+                <div className="mb-4">
+                  <div className="bg-gradient-to-r from-blue-500 to-purple-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto">
+                    <stat.icon className="h-8 w-8 text-white" />
+                  </div>
+                </div>
+                <div className="text-4xl font-bold text-blue-600 mb-2">
+                  {stat.number === "1200+" ? counters.contracts : 
+                   stat.number === "850+" ? counters.disputes : 
+                   stat.number === "500+" ? counters.clients : 
+                   counters.experience}
+                  {stat.number.includes("+") ? "+" : ""}
+                </div>
+                <div className="text-gray-600 font-medium">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* About Contract Law Section */}
+      <section id="about" className="py-20 bg-gradient-to-br from-slate-50 to-blue-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">Understanding Contract Law Litigation</h2>
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto">
+              Contract law forms the backbone of business transactions, governing agreements from simple deals to complex partnerships. When disputes arise—through breaches, misinterpretations, or non-performance—our litigation expertise ensures your rights are vigorously defended in court or through alternative resolutions.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+            <div>
+              <Card className="bg-white p-8 rounded-2xl shadow-xl">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">Core Elements of Effective Contract Litigation</h3>
+                <ul className="space-y-4">
+                  <li className="flex items-start">
+                    <CheckCircle className="h-6 w-6 text-green-500 mt-1 mr-3 flex-shrink-0" />
+                    <span className="text-gray-700">Clear identification of breach types, from material violations to anticipatory repudiation</span>
                   </li>
-                  <li className="flex items-start space-x-3">
-                    <CheckCircle className="h-6 w-6 text-green-500 mt-1" />
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Oral Contracts</h4>
-                      <p className="text-gray-600">Spoken agreements, often requiring legal expertise to enforce.</p>
-                    </div>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-6 w-6 text-green-500 mt-1 mr-3 flex-shrink-0" />
+                    <span className="text-gray-700">Strategic use of evidence, including emails, documents, and witness testimonies</span>
                   </li>
-                  <li className="flex items-start space-x-3">
-                    <CheckCircle className="h-6 w-6 text-green-500 mt-1" />
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Implied Contracts</h4>
-                      <p className="text-gray-600">Formed through actions or circumstances, not explicit terms.</p>
-                    </div>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-6 w-6 text-green-500 mt-1 mr-3 flex-shrink-0" />
+                    <span className="text-gray-700">Pursuit of remedies like damages, specific performance, or injunctions tailored to your case</span>
                   </li>
-                  <li className="flex items-start space-x-3">
-                    <CheckCircle className="h-6 w-6 text-green-500 mt-1" />
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Unilateral Contracts</h4>
-                      <p className="text-gray-600">One-sided promises contingent on specific actions.</p>
-                    </div>
+                  <li className="flex items-start">
+                    <CheckCircle className="h-6 w-6 text-green-500 mt-1 mr-3 flex-shrink-0" />
+                    <span className="text-gray-700">Compliance with jurisdictional rules and timelines to avoid procedural pitfalls</span>
                   </li>
                 </ul>
-              </div>
-              
+              </Card>
             </div>
-          </div>
-        </section>
-
-        {/* Our Services */}
-        <section id="services" className="py-16 lg:py-24 bg-gradient-to-br from-slate-50 to-purple-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Our Contract Law Services</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Comprehensive support to ensure your contracts are robust and enforceable.
-              </p>
-            </div>
-            <div className="grid md:grid-cols-2 gap-8">
-              {[
-                { title: "Contract Drafting", description: "Custom contracts tailored to your needs and compliant with legal standards.", icon: FileText },
-                { title: "Review & Negotiation", description: "Detailed analysis and negotiation to protect your interests.", icon: Gavel },
-                { title: "Dispute Resolution", description: "Swift legal action to enforce contracts and resolve disputes.", icon: Shield },
-                { title: "Consultation", description: "Expert advice to avoid pitfalls and ensure clarity.", icon: Users },
-              ].map((service, index) => (
+            
+            <div className="grid grid-cols-2 gap-6">
+              {FEATURES.map((feature, index) => (
                 <Card key={index} className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all">
-                  <div className="flex items-center space-x-4 mb-4">
-                    <div className="p-3 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg">
-                      <service.icon className="h-8 w-8 text-blue-600" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-gray-900">{service.title}</h3>
+                  <div className="bg-gradient-to-r from-blue-500 to-purple-500 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                    <feature.icon className="h-6 w-6 text-white" />
                   </div>
-                  <p className="text-gray-600">{service.description}</p>
+                  <h4 className="font-semibold text-gray-900 mb-2">{feature.title}</h4>
+                  <p className="text-sm text-gray-600">{feature.description}</p>
                 </Card>
               ))}
             </div>
           </div>
-        </section>
 
-        {/* Testimonials Section */}
-        <section id="testimonials" className="py-16 bg-gradient-to-br from-slate-50 to-blue-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">What Our Clients Say</h2>
-              <p className="text-xl text-gray-600">Hear from those who trust us with their contract law needs.</p>
-            </div>
-            <div className="grid md:grid-cols-3 gap-8">
-              {testimonials.map((testimonial, index) => (
-                <Card key={index} className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all">
-                  <div className="flex items-center space-x-1 mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                    ))}
-                  </div>
-                  <p className="text-gray-600 italic mb-6">"{testimonial.content}"</p>
-                  <div className="border-t pt-4">
-                    <div className="font-semibold text-gray-900">{testimonial.name}</div>
-                    <div className="text-sm text-gray-500">{testimonial.role}</div>
-                  </div>
-                </Card>
-              ))}
-            </div>
+          {/* Litigation Process */}
+          <div className="text-center mb-16">
+            <h3 className="text-3xl font-bold text-gray-900 mb-6">Our Complete Litigation Process</h3>
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto mb-12">
+              We guide you through every stage of contract litigation with transparency and expertise, ensuring a structured approach from assessment to resolution.
+            </p>
           </div>
-        </section>
+          <div className="grid md:grid-cols-4 gap-6">
+            {litigationProcess.map((stepItem, index) => (
+              <Card key={index} className="bg-white p-6 rounded-xl shadow-lg text-center border border-gray-100">
+                <div className="bg-blue-500 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold">
+                  {stepItem.step}
+                </div>
+                <h4 className="font-semibold text-gray-900 mb-2">{stepItem.title}</h4>
+                <p className="text-sm text-gray-600">{stepItem.description}</p>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
 
-        {/* FAQ Section */}
-        <section id="faq" className="py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Get answers to common questions about our contract law services.
+      {/* Services Section */}
+      <section id="services" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">Our Comprehensive Contract Law Services</h2>
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto">
+              From preventive drafting to aggressive litigation, our services cover the full spectrum of contract law needs, delivered by seasoned litigators who understand the nuances of commercial disputes.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {SERVICES.map((service, index) => (
+              <Card key={index} className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 group">
+                <div className={`bg-gradient-to-r ${service.color} w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
+                  <service.icon className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">{service.title}</h3>
+                <p className="text-gray-600 leading-relaxed">{service.description}</p>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Commitment Section */}
+      <section className="py-20 bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center text-white">
+            <h2 className="text-4xl font-bold mb-8">Our Commitment to Litigation Excellence</h2>
+            <div className="max-w-4xl mx-auto space-y-6 text-lg leading-relaxed">
+              <p>
+                At Lawgical, we treat every contract dispute as a critical battle for your business&lsquo;s future. Our litigators bring decades of courtroom experience, combining aggressive advocacy with meticulous preparation to secure favorable verdicts and settlements.
+              </p>
+              <p>
+                We understand that litigation can disrupt operations, which is why we prioritize efficient strategies that resolve matters swiftly while maximizing your recovery. Whether defending against unfounded claims or pursuing justice for breaches, our focus remains on protecting your assets, reputation, and long-term success.
+              </p>
+              <p>
+                With a client-centric approach, we provide transparent updates, strategic counsel, and unwavering support throughout the process, ensuring you feel confident and informed at every turn.
               </p>
             </div>
-            <div className="space-y-6 max-w-3xl mx-auto">
-              {faqs.map((faq, index) => (
-                <Card key={index} className="bg-white p-6 rounded-xl shadow-lg">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                  <p className="text-gray-600">{faq.answer}</p>
-                </Card>
-              ))}
-            </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Contact Section */}
-        <section id="contact" className="py-20 bg-muted/50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto">
-              <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6">Contact Us for Expert Legal Help</h2>
-                <p className="text-lg text-gray-600">Need assistance with contracts? Reach out to our team today.</p>
-              </div>
-              <div className="grid md:grid-cols-2 gap-12">
-                <div>
-                  <h3 className="text-2xl font-semibold mb-6">Contact Information</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center space-x-3">
-                      <Phone className="h-5 w-5 text-blue-600" />
-                      <span>+91 8383801899</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <Mail className="h-5 w-5 text-blue-600" />
-                      <span>help@lawgical.io</span>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                      <MapPin className="h-5 w-5 text-blue-600 mt-0.5" />
-                      <span>Lawgical Avenue, Sec 12, Gurugram</span>
-                    </div>
-                  </div>
+      {/* Testimonials */}
+      <section className="py-20 bg-gradient-to-br from-slate-50 to-blue-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">What Our Clients Say</h2>
+            <p className="text-xl text-gray-600">Real stories from businesses that trusted us with their contract litigation.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {TESTIMONIALS.map((testimonial, index) => (
+              <Card key={index} className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all">
+                <div className="flex items-center space-x-1 mb-4">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                  ))}
                 </div>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Send us a Message</CardTitle>
-                    <CardDescription>Fill out the form below, and we'll get back to you shortly.</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                      <Input
-                        name="name"
-                        id="name"
-                        label="Your Name"
-                        placeholder="Enter your name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        required
-                      />
-                      <Input
-                        name="email"
-                        id="email"
-                        label="Your Email"
-                        type="email"
-                        placeholder="Enter your email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                      />
-                      <Input
-                        name="phone"
-                        id="phone"
-                        label="Your Phone"
-                        placeholder="Enter your phone number"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        required
-                      />
-                      <Textarea
-                        name="message"
-                        id="message"
-                        label="Your Message"
-                        placeholder="Tell us about your needs"
-                        value={formData.message}
-                        onChange={handleInputChange}
-                        rows={4}
-                      />
-                      <Button
-                        type="submit"
-                        className="w-full border-2 border-blue-600 text-blue-600 px-8 py-4 text-lg hover:bg-blue-600 hover:text-white shadow-lg"
-                        disabled={isSubmitting}
-                      >
-                        {isSubmitting ? (
-                          <span className="flex items-center">
-                            <svg
-                              className="animate-spin h-5 w-5 mr-2 text-blue-600"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                            >
-                              <circle
-                                className="opacity-25"
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="currentColor"
-                                strokeWidth="4"
-                              ></circle>
-                              <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                              ></path>
-                            </svg>
-                            Submitting...
-                          </span>
-                        ) : (
-                          <>
-                            Send Message
-                            <ArrowRight className="h-4 w-4 ml-2" />
-                          </>
-                        )}
-                      </Button>
-                    </form>
-                    {submitMessage && (
-                      <p
-                        className={`mt-4 text-center text-sm ${
-                          submitMessage.includes("success") ? "text-green-600" : "text-red-500"
-                        } flex items-center justify-center`}
-                      >
-                        <AlertCircle className="h-4 w-4 mr-1" /> {submitMessage}
-                      </p>
-                    )}
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
+                <p className="text-gray-600 italic mb-6">{testimonial.content}</p>
+                <div className="border-t pt-4">
+                  <div className="font-semibold text-gray-900">{testimonial.name}</div>
+                  <div className="text-sm text-gray-500">{testimonial.role}</div>
+                </div>
+              </Card>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* CTA Section */}
-        <section className="py-16 bg-gradient-to-r from-blue-600 to-purple-700">
-          <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-            <h2 className="text-4xl font-bold text-white mb-6">Ready to Secure Your Contracts?</h2>
-            <p className="text-xl text-blue-100 mb-8 leading-relaxed">
-              Partner with Lawgical to ensure your agreements are robust and legally sound.
+      {/* Contact Section */}
+      <section id="contact" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">Ready for Litigation Support?</h2>
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto">
+              Whether you&apos;re facing a potential breach or need proactive contract advice, our litigation specialists are here to provide confidential, expert guidance tailored to your situation.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                size="lg"
-                className="bg-white text-blue-600 px-8 py-4 text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg"
-                asChild
-              >
-                <Link href="/contact">Get Started Now</Link>
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="border-2 border-white text-white px-8 py-4 text-lg font-semibold hover:bg-white hover:text-blue-600 transition-all"
-                asChild
-              >
-                <Link href="/posh">Explore POSH Training</Link>
-              </Button>
-            </div>
-            <div className="mt-8 text-blue-100 text-sm">
-              <span>✓ Expert Guidance</span>
-              <span className="mx-4">✓ Trusted by 500+ Clients</span>
-              <span>✓ Secure Process</span>
-            </div>
           </div>
-        </section>
 
-        <Footer />
-      </div>
-    </ErrorBoundary>
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 p-8 rounded-xl border border-blue-200 text-center">
+              <div className="bg-gradient-to-r from-blue-500 to-indigo-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Phone className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Urgent Helpline</h3>
+              <a href="tel:+918383801899" className="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors">
+                +91 8383801899
+              </a>
+              <p className="text-sm text-gray-600 mt-2">(Available 24/7)</p>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-purple-50 to-pink-50 p-8 rounded-xl border border-purple-200 text-center">
+              <div className="bg-gradient-to-r from-purple-500 to-pink-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Mail className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Email Contact</h3>
+              <a href="mailto:help@lawgical.io" className="text-2xl font-bold text-purple-600 hover:text-purple-700 transition-colors">
+                help@lawgical.io
+              </a>
+              <p className="text-sm text-gray-600 mt-2">(Response within 24 hours)</p>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-green-50 to-teal-50 p-8 rounded-xl border border-green-200 text-center">
+              <div className="bg-gradient-to-r from-green-500 to-teal-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                <MapPin className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Office Location</h3>
+              <p className="text-xl font-bold text-green-600">Lawgical Office</p>
+              <p className="text-sm text-gray-600 mt-2">Lawgical Avenue, Sec 12, Gurugram</p>
+            </Card>
+          </div>
+
+          <div className="text-center">
+            <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all shadow-lg text-lg px-12 py-4">
+              Schedule a Consultation
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <Footer />
+    </div>
   );
 };
 

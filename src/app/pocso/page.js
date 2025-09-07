@@ -385,7 +385,7 @@ export default function POCSOHomepage() {
             <h2 className="text-4xl font-bold mb-8">Our Commitment to Child Protection</h2>
             <div className="max-w-4xl mx-auto space-y-6 text-lg leading-relaxed">
               <p>
-                At Lawgical, we are unwavering in our commitment to protect children's rights and dignity. We understand that cases involving child sexual abuse require not just legal expertise, but also exceptional sensitivity, patience, and dedication.
+                At Lawgical, we are unwavering in our commitment to protect children&apos;s rights and dignity. We understand that cases involving child sexual abuse require not just legal expertise, but also exceptional sensitivity, patience, and dedication.
               </p>
               <p>
                 Our team approaches each POCSO case with the understanding that behind every legal file is a child whose life has been profoundly affected. We strive to create a supportive environment where children and their families feel safe, respected, and empowered throughout the legal process.
@@ -413,7 +413,7 @@ export default function POCSOHomepage() {
                     <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
-                <p className="text-gray-600 italic mb-6">"{testimonial.content}"</p>
+                <p className="text-gray-600 italic mb-6">{testimonial.content}</p>
                 <div className="border-t pt-4">
                   <div className="font-semibold text-gray-900">{testimonial.name}</div>
                   <div className="text-sm text-gray-500">{testimonial.role}</div>
@@ -430,7 +430,7 @@ export default function POCSOHomepage() {
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-6">Confidential Consultation</h2>
             <p className="text-xl text-gray-600 max-w-4xl mx-auto">
-              If you need to report a POCSO case or seek legal guidance regarding child protection matters, our specialized legal team is available for strictly confidential consultations. We prioritize your child's safety and wellbeing above all else.
+              If you need to report a POCSO case or seek legal guidance regarding child protection matters, our specialized legal team is available for strictly confidential consultations. We prioritize your child&apos;s safety and wellbeing above all else.
             </p>
           </div>
 
@@ -451,8 +451,8 @@ export default function POCSOHomepage() {
                 <Mail className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Email Contact</h3>
-              <a href="mailto:help@lawgical.io" className="text-2xl font-bold text-purple-600 hover:text-purple-700 transition-colors">
-                help@lawgical.io
+              <a href="mailto:support@lawgical.tech" className="text-2xl font-bold text-purple-600 hover:text-purple-700 transition-colors">
+                support@lawgical.tech
               </a>
               <p className="text-sm text-gray-600 mt-2">(Response within 24 hours)</p>
             </Card>
