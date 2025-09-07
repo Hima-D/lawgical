@@ -2,8 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import Head from "next/head";
-import Image from "next/image";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { 
@@ -21,26 +19,23 @@ import {
   ChevronRight
 } from "lucide-react";
 
-// Enhanced Button Component with better mobile touch targets
+
+
+// Button Component
 const Button = ({ children, variant = "default", size = "default", className = "", asChild = false, ...props }) => {
   const baseClasses =
-    "inline-flex items-center justify-center rounded-xl text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background active:scale-95 touch-manipulation";
+    "inline-flex items-center justify-center rounded-xl text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background active:scale-95 touch-manipulation";
 
   const variants = {
     default: "bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-xl",
-    destructive: "bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800",
     outline: "border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white backdrop-blur-sm",
-    secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200",
     ghost: "hover:bg-gray-100 hover:text-gray-900",
-    link: "underline-offset-4 hover:underline text-blue-600",
-    gradient: "bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl",
   };
 
   const sizes = {
     default: "h-12 py-3 px-6 text-base min-w-[120px]",
     sm: "h-10 px-4 text-sm min-w-[100px]",
     lg: "h-14 px-8 text-lg min-w-[140px]",
-    icon: "h-12 w-12",
   };
 
   if (asChild) {
@@ -63,12 +58,11 @@ const Button = ({ children, variant = "default", size = "default", className = "
   );
 };
 
-// Enhanced Card Component with better mobile design
+// Card Component
 const Card = ({ children, className = "", variant = "default", ...props }) => {
   const variants = {
     default: "bg-white border border-gray-200 shadow-sm hover:shadow-md",
     glass: "bg-white/80 backdrop-blur-sm border border-white/20 shadow-xl",
-    gradient: "bg-gradient-to-br from-white to-gray-50 border border-gray-200 shadow-lg",
   };
 
   return (
@@ -86,16 +80,14 @@ const FloatingElement = ({ children, delay = 0, className = "" }) => {
   return (
     <div 
       className={`animate-float ${className}`}
-      style={{
-        animationDelay: `${delay}s`,
-      }}
+      style={{ animationDelay: `${delay}s` }}
     >
       {children}
     </div>
   );
 };
 
-// Error Boundary with better mobile UX
+// Error Boundary Component
 const ErrorBoundary = ({ children }) => {
   const [hasError, setHasError] = useState(false);
 
@@ -136,27 +128,6 @@ export default function NotFoundPage() {
 
   useEffect(() => {
     setMounted(true);
-    // Add custom animations
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes float {
-        0%, 100% { transform: translateY(0px) rotate(0deg); }
-        33% { transform: translateY(-10px) rotate(1deg); }
-        66% { transform: translateY(-5px) rotate(-1deg); }
-      }
-      .animate-float {
-        animation: float 6s ease-in-out infinite;
-      }
-      @keyframes pulse-glow {
-        0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
-        50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
-      }
-      .animate-pulse-glow {
-        animation: pulse-glow 2s ease-in-out infinite;
-      }
-    `;
-    document.head.appendChild(style);
-    return () => document.head.removeChild(style);
   }, []);
 
   if (!mounted) return null;
@@ -208,19 +179,8 @@ export default function NotFoundPage() {
           </FloatingElement>
         </div>
 
-        <Head>
-          <title>404 - Page Not Found | Lawgical</title>
-          <meta
-            name="description"
-            content="The legal document or page you are looking for cannot be found. Our legal experts at Lawgical are ready to assist you."
-          />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-
         <Header />
 
-        {/* Main 404 Section - Mobile First Design */}
         <section className="relative py-12 sm:py-16 lg:py-24 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
@@ -235,17 +195,16 @@ export default function NotFoundPage() {
                 
                 <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
                   Page{" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 animate-pulse-glow">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800">
                     Not Found
                   </span>
                 </h1>
                 
                 <p className="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                  The legal document or page you&apos;re looking for doesn&apos;t exist, but don&apos;t worry! 
+                  The page you&apos;re looking for doesn&apos;t exist, but don&apos;t worry! 
                   Our expert legal team is here to guide you to the right solution.
                 </p>
 
-                {/* Action Buttons - Responsive Stack */}
                 <div className="flex flex-col sm:flex-row gap-4 mb-8 justify-center lg:justify-start">
                   <Button
                     size="lg"
@@ -263,14 +222,13 @@ export default function NotFoundPage() {
                     asChild
                     className="w-full sm:w-auto"
                   >
-                    <Link href="/consultation" className="flex items-center justify-center">
-                      <MessageCircle className="w-5 h-5 mr-2" />
-                      Free Consultation
+                    <Link href="/search" className="flex items-center justify-center">
+                      <Search className="w-5 h-5 mr-2" />
+                      Find a Lawyer
                     </Link>
                   </Button>
                 </div>
 
-                {/* Stats Grid - Mobile Optimized */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                   {stats.map((stat, index) => (
                     <div key={index} className="text-center p-3 bg-white/50 backdrop-blur-sm rounded-xl border border-white/20">
@@ -285,7 +243,6 @@ export default function NotFoundPage() {
               {/* Visual Section */}
               <div className="relative order-1 lg:order-2">
                 <Card variant="glass" className="p-6 sm:p-8">
-                  {/* 404 Illustration */}
                   <div className="text-center mb-6">
                     <div className="relative w-48 h-48 sm:w-64 sm:h-64 mx-auto mb-6">
                       <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full opacity-20 animate-pulse"></div>
@@ -302,7 +259,6 @@ export default function NotFoundPage() {
                     Let&apos;s Get You Back on Track
                   </h3>
 
-                  {/* Quick Actions */}
                   <div className="space-y-4">
                     {quickActions.map((action, index) => (
                       <Link 
@@ -318,7 +274,7 @@ export default function NotFoundPage() {
                             <h4 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
                               {action.title}
                             </h4>
-                            <p className="text-sm text-gray-600 mt-1 line-clamp-1">
+                            <p className="text-sm text-gray-600 mt-1 truncate">
                               {action.description}
                             </p>
                           </div>
@@ -328,13 +284,12 @@ export default function NotFoundPage() {
                     ))}
                   </div>
 
-                  {/* Help Section */}
                   <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-100">
                     <div className="text-center">
                       <Shield className="w-8 h-8 text-blue-600 mx-auto mb-2" />
                       <h4 className="font-semibold text-gray-900 mb-1">Need Immediate Help?</h4>
                       <p className="text-sm text-gray-600 mb-3">Our support team is available 24/7</p>
-                      <Button size="sm" variant="gradient" className="w-full">
+                      <Button size="sm" variant="default" className="w-full">
                         Contact Support
                       </Button>
                     </div>
@@ -348,15 +303,26 @@ export default function NotFoundPage() {
         <Footer />
       </div>
 
-      <style jsx>{`
-        .line-clamp-1 {
-          display: -webkit-box;
-          -webkit-line-clamp: 1;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
+      <style jsx global>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          33% { transform: translateY(-10px) rotate(1deg); }
+          66% { transform: translateY(-5px) rotate(-1deg); }
         }
-        .active\\:scale-98:active {
-          transform: scale(0.98);
+        .animate-float {
+          animation: float 6s ease-in-out infinite;
+        }
+        @keyframes pulse {
+          0%, 100% { opacity: 0.2; }
+          50% { opacity: 0.4; }
+        }
+        .animate-pulse {
+          animation: pulse 2s ease-in-out infinite;
+        }
+        .truncate {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
       `}</style>
     </ErrorBoundary>

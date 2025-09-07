@@ -1,18 +1,18 @@
-// app/api/logout/route.js
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+// app/api/logout/route.ts
+import { cookies } from 'next/headers';
 
 export async function POST() {
-  const cookieStore = await cookies();
+  const cookieStore = cookies();
 
   cookieStore.set({
-    name: "token",
-    value: "",
-    path: "/",
-    expires: new Date(0), // Expire immediately
+    name: 'token',
+    value: '',
+    path: '/',
+    expires: new Date(0),
     httpOnly: true,
   });
 
-  // Redirect to homepage after logout
-  redirect("/");
+  return new Response(null, {
+    status: 200,
+  });
 }

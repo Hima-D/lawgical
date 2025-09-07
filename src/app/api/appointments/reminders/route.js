@@ -1,109 +1,139 @@
-// ==================== APPOINTMENT REMINDERS ====================
+import { NextResponse } from 'next/server';
+import { verify } from 'jsonwebtoken';
+import { PrismaClient } from '@/generated/prisma';
+import { addHours, isWithinInterval, startOfHour, endOfHour } from 'date-fns';
 
-// app/api/appointments/reminders/route.js - Send appointment reminders
-import { PrismaClient } from '@/generated/prisma'; // or '@prisma/client' if you're using the standard path
 const prisma = new PrismaClient();
-export async function POST(request) {
+
+// Helper function to authenticate the JWT token
+const authenticateToken = (request) => {
+  const authHeader = request.headers.get('authorization');
+  let token;
+
+  if (authHeader?.startsWith('Bearer ')) {
+    token = authHeader.split(' ')[1];
+    console.log('Token found in Authorization header');
+  } else {
+    const cookieHeader = request.headers.get('cookie');
+    token = cookieHeader?.match(/token=([^;]+)/)?.[1];
+    console.log('Token found in cookie:', token ? 'present' : 'not found');
+  }
+
+  if (!token) {
+    console.log('Authentication failed: No token provided');
+    return null;
+  }
+
   try {
-    const { type } = await request.json(); // '24h', '1h', etc.
-    
-    let timeThreshold;
-    let reminderMessage;
-    
-    switch (type) {
-      case '24h':
-        timeThreshold = new Date(Date.now() + 24 * 60 * 60 * 1000);
-        reminderMessage = 'You have an appointment tomorrow';
-        break;
-      case '1h':
-        timeThreshold = new Date(Date.now() + 60 * 60 * 1000);
-        reminderMessage = 'You have an appointment in 1 hour';
-        break;
-      default:
-        return Response.json(
-          { error: 'Invalid reminder type' },
-          { status: 400 }
-        );
+    const decoded = verify(token, process.env.JWT_SECRET);
+    if (!decoded.userId || !decoded.userType) {
+      console.log('Invalid token payload:', decoded);
+      throw new Error('Invalid token payload: Missing userId or userType');
+    }
+    console.log('Token verified successfully:', decoded);
+    return decoded;
+  } catch (error) {
+    console.error('JWT verification failed:', error.message);
+    return null;
+  }
+};
+
+// POST: Create reminder notifications for appointments within a time window
+export async function POST(request) {
+  console.log('Received POST request for /api/appointments/reminders');
+
+  const user = authenticateToken(request);
+  if (!user) {
+    return NextResponse.json(
+      { success: false, error: 'Unauthorized' },
+      { status: 401 }
+    );
+  }
+  console.log(`Authenticated user: ID ${user.userId}, type: ${user.userType}`);
+
+  try {
+    const { reminderType } = await request.json();
+    console.log(`Reminder request for type: ${reminderType}`);
+
+    // Validate reminderType
+    if (!['24h', '1h'].includes(reminderType)) {
+      console.log('Invalid reminderType:', reminderType);
+      return NextResponse.json(
+        { success: false, error: 'Invalid reminder type. Use "24h" or "1h"' },
+        { status: 400 }
+      );
     }
 
-    // Find appointments that need reminders
-    const appointmentsNeedingReminders = await prisma.appointment.findMany({
+    // Calculate time window
+    const now = new Date();
+    const timeWindowHours = reminderType === '24h' ? 24 : 1;
+    const startTime = startOfHour(now);
+    const endTime = endOfHour(addHours(now, timeWindowHours));
+
+    console.log(`Fetching appointments in window: ${startTime.toISOString()} to ${endTime.toISOString()}`);
+
+    // Fetch appointments for the lawyer
+    const appointments = await prisma.appointment.findMany({
       where: {
-        status: 'confirmed',
+        lawyerProfile: { userId: user.userId },
+        status: { in: ['confirmed', 'pending'] },
         appointmentDate: {
-          lte: timeThreshold,
-          gte: new Date()
+          gte: startTime,
+          lte: endTime
         }
-        // Add additional logic to check if reminder already sent
       },
       include: {
-        client: {
-          select: {
-            id: true,
-            displayName: true,
-            email: true
-          }
-        },
-        lawyerProfile: {
-          include: {
-            user: {
-              select: {
-                id: true,
-                displayName: true,
-                email: true
-              }
-            }
-          }
-        },
-        service: {
-          select: {
-            name: true
-          }
-        }
+        lawyerProfile: { select: { userId: true } },
+        client: { select: { id: true, displayName: true } },
+        service: { select: { name: true } }
       }
     });
 
-    const remindersSent = [];
-
-    // Send reminders using transaction
-    for (const appointment of appointmentsNeedingReminders) {
-      await prisma.$transaction(async (tx) => {
-        // Create notifications for both client and lawyer
-        await tx.notification.createMany({
-          data: [
-            {
-              userId: appointment.clientId,
-              title: 'Appointment Reminder',
-              message: `${reminderMessage}: ${appointment.service.name} with ${appointment.lawyerProfile.user.displayName} on ${appointment.appointmentDate.toDateString()} at ${appointment.appointmentTime}`,
-              type: 'appointment'
-            },
-            {
-              userId: appointment.lawyerProfile.userId,
-              title: 'Appointment Reminder',
-              message: `${reminderMessage}: ${appointment.service.name} with ${appointment.client.displayName} on ${appointment.appointmentDate.toDateString()} at ${appointment.appointmentTime}`,
-              type: 'appointment'
-            }
-          ]
-        });
-
-        remindersSent.push(appointment.id);
-      });
+    if (appointments.length === 0) {
+      console.log('No eligible appointments found for reminders');
+      return NextResponse.json(
+        { success: true, message: 'No eligible appointments found for reminders' },
+        { status: 200 }
+      );
     }
 
-    return Response.json({
-      message: `${remindersSent.length} reminders sent successfully`,
-      appointmentIds: remindersSent,
-      reminderType: type
-    });
+    console.log(`Found ${appointments.length} eligible appointments`);
+
+    // Create notifications for each appointment
+    const notifications = await prisma.$transaction(
+      appointments.map(appointment => {
+        const reminderTime = addHours(new Date(`${appointment.appointmentDate}T${appointment.appointmentTime}`), -timeWindowHours);
+        return prisma.notification.create({
+          data: {
+            userId: appointment.clientId, // Notify client
+            title: 'Appointment Reminder',
+            message: `Reminder: Your appointment for ${appointment.service.name} with ${appointment.lawyerProfile.userId === user.userId ? 'your lawyer' : appointment.client.displayName} on ${new Date(appointment.appointmentDate).toDateString()} at ${appointment.appointmentTime} is scheduled. Reminder set for ${reminderTime.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}.`,
+            type: 'reminder',
+            isRead: false
+          }
+        });
+      })
+    );
+
+    console.log(`Created ${notifications.length} reminder notifications`);
+
+    return NextResponse.json({
+      success: true,
+      message: `Successfully sent ${reminderType} reminders for ${notifications.length} appointments`,
+      notifications
+    }, { status: 201 });
 
   } catch (error) {
-    console.error('Send reminders error:', error);
-    return Response.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+    console.error(`Error creating reminders for user ID ${user?.userId}:`, error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: error.message || 'Internal server error',
+        message: process.env.NODE_ENV === 'development' ? error.message : undefined
+      },
+      { status: error.message.includes('Unauthorized') ? 401 : error.message.includes('Invalid') ? 400 : 500 }
     );
   } finally {
     await prisma.$disconnect();
   }
 }
-

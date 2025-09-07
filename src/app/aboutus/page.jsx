@@ -7,15 +7,30 @@ const About = () => {
     {
       name: "Chahat Siwach",
       role: "Founder & CEO",
-      image: "https://picsum.photos/150/150?random=2",
+      image: "https://picsum.photos/150/150?random=1",
       bio: "Chahat is a highly skilled lawyer with a sharp intellect and exceptional courtroom presence. With years of experience, she's earned a reputation for handling even the most challenging cases with poise and precision."
+    },
+   
+    {
+      name: "Khushbu Dixit",
+      role: "Business Head",
+      image: "https://picsum.photos/150/150?random=2",
+      bio: "Khushbu brings strategic vision and operational excellence to the team. With a strong background in business development and leadership, she excels at driving growth, building partnerships, and translating ideas into actionable results."
+    }
+    ,
+    {
+      name: "Sharath Potturu",
+      role: "Marketing Head",
+      image: "https://picsum.photos/150/150?random=3",
+      bio: "Sharath is a creative marketing strategist with a flair for brand storytelling and digital campaigns. With deep industry insight and data-driven thinking, he crafts impactful marketing initiatives that boost visibility and engagement."
     },
     {
       name: "Himanshu Dixit",
       role: "Engineer",
-      image: "https://picsum.photos/150/150?random=3",
+      image: "https://picsum.photos/150/150?random=4",
       bio: "Himanshu is a CS engineer with exceptional technical skills. Known for his problem-solving abilities and passion for technology, he is an invaluable part of the team."
     }
+    
   ];
 
   const coreValues = [

@@ -6,6 +6,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import Script from "next/script";
 import { ThemeProvider } from "next-themes";
 
+
 const geistSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
 

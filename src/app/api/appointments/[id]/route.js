@@ -1,11 +1,40 @@
-// ==================== SINGLE APPOINTMENT OPERATIONS ====================
-
-// app/api/appointments/[id]/route.js - Single appointment operations
 import { PrismaClient } from '@/generated/prisma';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 
 const prisma = new PrismaClient();
+
+// Helper function to authenticate the JWT token
+const verifyAuth = async () => {
+  const cookieStore = await cookies();
+  let token = cookieStore.get('token')?.value;
+
+  if (!token) {
+    const authHeader = await (await headers()).get('authorization');
+    if (authHeader?.startsWith('Bearer ')) {
+      token = authHeader.split(' ')[1];
+      console.log('Token found in Authorization header');
+    }
+  }
+
+  if (!token) {
+    console.log('Authentication failed: No token provided');
+    throw new Error('No token provided');
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (!decoded.userId || !decoded.userType) {
+      console.log('Invalid token payload:', decoded);
+      throw new Error('Invalid token payload: Missing userId or userType');
+    }
+    console.log('Token verified successfully:', decoded);
+    return decoded;
+  } catch (error) {
+    console.error('JWT verification failed:', error.message);
+    throw new Error('Invalid token');
+  }
+};
 
 // Get single appointment
 export async function GET(request, { params }) {
@@ -77,8 +106,8 @@ export async function GET(request, { params }) {
   } catch (error) {
     console.error('Get appointment error:', error);
     return Response.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: error.message || 'Internal server error' },
+      { status: error.message === 'No token provided' || error.message === 'Invalid token' ? 401 : 500 }
     );
   } finally {
     await prisma.$disconnect();
@@ -121,7 +150,6 @@ export async function PUT(request, { params }) {
     let allowedUpdates = {};
 
     if (isClient) {
-      // Client can only update certain fields
       if (updateData.clientNotes !== undefined) {
         allowedUpdates.clientNotes = updateData.clientNotes;
       }
@@ -129,7 +157,6 @@ export async function PUT(request, { params }) {
         allowedUpdates.meetingType = updateData.meetingType;
       }
     } else if (isLawyer) {
-      // Lawyer can update more fields
       if (updateData.lawyerNotes !== undefined) {
         allowedUpdates.lawyerNotes = updateData.lawyerNotes;
       }
@@ -180,11 +207,10 @@ export async function PUT(request, { params }) {
   } catch (error) {
     console.error('Update appointment error:', error);
     return Response.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: error.message || 'Internal server error' },
+      { status: error.message === 'No token provided' || error.message === 'Invalid token' ? 401 : 500 }
     );
   } finally {
     await prisma.$disconnect();
   }
 }
-

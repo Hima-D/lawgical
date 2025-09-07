@@ -1,6 +1,10 @@
-// ==================== AVAILABILITY CHECKING ====================
+// app/api/appointments/availability/route.js
+import { NextResponse } from 'next/server';
+import { PrismaClient } from '@/generated/prisma';
 
-// app/api/appointments/availability/route.js - Check lawyer availability
+// Create a single Prisma instance
+const prisma = new PrismaClient();
+
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -8,7 +12,7 @@ export async function GET(request) {
     const date = searchParams.get('date');
 
     if (!lawyerProfileId || !date) {
-      return Response.json(
+      return NextResponse.json(
         { error: 'Lawyer profile ID and date are required' },
         { status: 400 }
       );
@@ -16,7 +20,7 @@ export async function GET(request) {
 
     const targetDate = new Date(date);
     if (isNaN(targetDate.getTime())) {
-      return Response.json(
+      return NextResponse.json(
         { error: 'Invalid date format' },
         { status: 400 }
       );
@@ -102,7 +106,7 @@ export async function GET(request) {
       }
     }
 
-    return Response.json({
+    return NextResponse.json({
       date: date,
       lawyerProfileId: parseInt(lawyerProfileId),
       availableSlots: availableSlots,
@@ -111,7 +115,7 @@ export async function GET(request) {
 
   } catch (error) {
     console.error('Check availability error:', error);
-    return Response.json(
+    return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     );
@@ -131,4 +135,3 @@ function minutesToTime(minutes) {
   const mins = minutes % 60;
   return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
 }
-

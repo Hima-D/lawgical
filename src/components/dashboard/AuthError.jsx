@@ -18,7 +18,7 @@ export default function AuthError({ message }) {
           </CardDescription>
         </CardHeader>
         <CardContent className="text-center">
-          <Link href="/sign-in">
+          <Link href="/signin">
             <Button className="w-full">Sign In</Button>
           </Link>
         </CardContent>
