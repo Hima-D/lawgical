@@ -7,7 +7,7 @@ const About = () => {
   const teamMembers = [
     {
       name: "Chahat Siwach",
-      role: "Advocate & Co-Founder",
+      role: "Advocate & Founder",
       image: "https://picsum.photos/150/150?random=1",
       bio: "Chahat is a skilled advocate with sharp legal acumen and a strong courtroom presence. Known for handling complex cases with confidence and precision, she brings depth and leadership to the team."
     },
@@ -19,15 +19,15 @@ const About = () => {
     },
     {
       name: "Sharath Potturu",
-      role: "Public Researcher & Marketing Head",
+      role: "Public Researcher & Marketing",
       image: "https://picsum.photos/150/150?random=3",
       bio: "Sharath is a creative strategist with a flair for brand storytelling and digital outreach. Combining industry insight with data-driven thinking, he designs impactful campaigns that boost engagement and visibility."
     },
     {
       name: "Himanshu Dixit",
-      role: "Co-Founder",
+      role: "Strategy",
       image: "https://picsum.photos/150/150?random=4",
-      bio: "Himanshu is a Co-founder and Computer Science engineer with strong technical expertise. Driven by innovation and problem-solving, he builds scalable solutions and leads with vision, making him a core pillar of the team."
+      bio: "Himanshu is a Computer Science engineer with strong technical expertise. Driven by innovation and problem-solving, he builds scalable solutions and leads with vision, making him a core pillar of the team."
     }     
   ];
 
