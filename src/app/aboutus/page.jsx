@@ -7,31 +7,28 @@ const About = () => {
   const teamMembers = [
     {
       name: "Chahat Siwach",
-      role: "Founder & CEO",
+      role: "Advocate & Co-Founder",
       image: "https://picsum.photos/150/150?random=1",
-      bio: "Chahat is a highly skilled lawyer with a sharp intellect and exceptional courtroom presence. With years of experience, she's earned a reputation for handling even the most challenging cases with poise and precision."
+      bio: "Chahat is a skilled advocate with sharp legal acumen and a strong courtroom presence. Known for handling complex cases with confidence and precision, she brings depth and leadership to the team."
     },
-   
     {
       name: "Khushbu Dixit",
       role: "Business Head",
       image: "https://picsum.photos/150/150?random=2",
-      bio: "Khushbu brings strategic vision and operational excellence to the team. With a strong background in business development and leadership, she excels at driving growth, building partnerships, and translating ideas into actionable results."
-    }
-    ,
+      bio: "Khushbu drives strategic growth and operational excellence. With expertise in business development and leadership, she excels at building partnerships and turning ideas into measurable success."
+    },
     {
       name: "Sharath Potturu",
-      role: "Marketing Head",
+      role: "Public Researcher & Marketing Head",
       image: "https://picsum.photos/150/150?random=3",
-      bio: "Sharath is a creative marketing strategist with a flair for brand storytelling and digital campaigns. With deep industry insight and data-driven thinking, he crafts impactful marketing initiatives that boost visibility and engagement."
+      bio: "Sharath is a creative strategist with a flair for brand storytelling and digital outreach. Combining industry insight with data-driven thinking, he designs impactful campaigns that boost engagement and visibility."
     },
     {
       name: "Himanshu Dixit",
-      role: "Engineer",
+      role: "Co-Founder",
       image: "https://picsum.photos/150/150?random=4",
-      bio: "Himanshu is a CS engineer with exceptional technical skills. Known for his problem-solving abilities and passion for technology, he is an invaluable part of the team."
-    }
-    
+      bio: "Himanshu is a Co-founder and Computer Science engineer with strong technical expertise. Driven by innovation and problem-solving, he builds scalable solutions and leads with vision, making him a core pillar of the team."
+    }     
   ];
 
   const coreValues = [
