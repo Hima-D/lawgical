@@ -11,67 +11,31 @@ const geistSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
 
 export const metadata = {
-  title: "Lawgical - Best Legal Services & Online Lawyer Consultation India | Expert Legal Advice",
+  title: "Lawgical - Top Legal Services, Company Incorporation & GST Registration in Delhi NCR",
   description:
-    "India's leading legal platform connecting you with verified lawyers across Mumbai, Delhi, Bangalore, Pune, Chennai, Hyderabad. Get instant online consultation, company registration, GST services, trademark filing & comprehensive legal solutions. 24/7 expert legal advice starting at ₹499.",
+    "Delhi NCR's trusted legal-tech platform for lawyer consultation, company incorporation, GST registration. Verified lawyers in Delhi, Noida, Gurgaon. Starts at ₹499.",
   keywords: [
-    // Primary Brand Keywords
-    "lawgical", "lawgical india", "lawgical legal services", "lawgical lawyer consultation",
-    
-    // Core Legal Services
-    "online lawyer consultation india", "best lawyers in india", "legal consultation online", "lawyer booking app",
-    "legal services near me", "virtual lawyer meeting", "instant legal advice", "affordable legal consultation",
-    
-    // City-Specific Keywords (Major Indian Cities)
-    "lawyers in mumbai", "legal services delhi ncr", "best law firm bangalore", "lawyers in pune",
-    "legal consultation chennai", "corporate lawyers hyderabad", "legal services kolkata", 
-    "lawyers in ahmedabad", "legal services noida", "lawyers in gurgaon", "legal services faridabad",
-    "lawyers in thane", "legal services navi mumbai", "lawyers in ghaziabad", "legal services lucknow",
-    
-    // Business Legal Services
-    "company registration online india", "private limited company registration", "llp registration online",
-    "one person company registration", "startup registration india", "business incorporation services",
-    "GST registration online", "GST return filing services", "GST compliance consultant",
-    
-    // IP & Trademark Services
-    "trademark registration india", "copyright registration online", "patent filing services",
-    "brand registration india", "logo trademark registration", "intellectual property lawyer",
-    
-    // Compliance Services  
-    "FSSAI license registration", "ISO certification consultant", "MSME udyam registration",
-    "shop act license online", "labour license registration", "ESI PF registration",
-    "import export code registration", "digital signature certificate", "POSH compliance training",
-    
-    // Legal Specializations
-    "corporate lawyer consultation", "employment law advice", "contract drafting services",
-    "legal notice drafting", "divorce lawyer consultation", "property lawyer advice",
-    "criminal lawyer consultation", "family law services", "immigration lawyer india",
-    "tax lawyer consultation", "banking law services", "insurance law advice",
-    
-    // Long-tail Service Keywords
-    "how to register company in india online", "GST registration process and documents",
-    "trademark application filing procedure", "legal requirements for startup india",
-    "cost of lawyer consultation in india", "best online legal platform india",
-    "legal documents preparation online", "business legal compliance checklist",
-    
-    // Technology & Innovation
-    "AI powered legal services", "digital legal consultation platform", "legal tech india",
-    "automated legal document generation", "smart legal solutions", "legal consultation app",
-    "online case management system", "virtual legal services",
-    
-    // Trust & Quality Indicators
-    "verified lawyers india", "licensed legal professionals", "experienced legal consultants",
-    "trusted legal service provider", "certified lawyers online", "reliable legal advice platform",
-    "top rated law firm india", "expert legal consultation services",
-    
-    // Regional Language Support
-    "hindi legal consultation", "regional language legal services", "local lawyer consultation",
-    "multilingual legal support", "vernacular legal advice",
-    
-    // Industry Specific
-    "startup legal services india", "small business legal help", "ecommerce legal services",
-    "fintech legal compliance", "healthcare legal services", "real estate legal advice",
-    "manufacturing legal services", "retail legal compliance"
+    "legal services delhi ncr", "lawyers delhi ncr", "best lawyers in delhi", "legal consultation delhi",
+    "company incorporation delhi ncr", "private limited company registration delhi", "business registration delhi",
+    "gst registration delhi ncr", "online gst registration delhi", "gst compliance delhi",
+    "lawyer consultation delhi", "corporate lawyers delhi", "trademark registration delhi",
+    "online lawyer consultation delhi ncr", "best law firm delhi", "legal services near me delhi",
+    "virtual lawyer meeting delhi", "instant legal advice delhi", "affordable legal consultation delhi ncr",
+    "company registration online delhi", "llp registration delhi", "one person company delhi",
+    "startup registration delhi ncr", "business incorporation services delhi", "how to register company in delhi",
+    "gst registration process delhi", "gst return filing delhi", "gst consultant delhi ncr",
+    "fssai license delhi", "msme registration delhi", "import export code delhi",
+    "corporate lawyer delhi", "employment law delhi", "contract drafting delhi",
+    "divorce lawyer delhi", "property lawyer delhi ncr", "criminal lawyer delhi",
+    "family law services delhi", "tax lawyer delhi", "immigration lawyer delhi",
+    "best company incorporation services in delhi ncr", "gst registration fees and documents delhi",
+    "online lawyer for company registration delhi", "verified lawyers for gst compliance delhi",
+    "cost of lawyer consultation in delhi ncr", "legal documents preparation delhi",
+    "business legal compliance checklist delhi", "trademark filing procedure delhi",
+    "verified lawyers delhi ncr", "licensed legal professionals delhi", "experienced legal consultants delhi",
+    "trusted legal service provider delhi", "top rated law firm delhi ncr", "expert legal consultation delhi",
+    "lawyers in noida", "legal services gurgaon", "law firm ghaziabad", "lawyers in faridabad",
+    "legal consultation greater noida", "corporate lawyers in gurgaon"
   ].join(", "),
   
   authors: [{ name: "Chahat Siwach", url: "https://www.lawgical.tech/about" }],
@@ -83,9 +47,9 @@ export const metadata = {
   publisher: "Lawgical",
   
   openGraph: {
-    title: "Lawgical - India's Leading Online Legal Services & Lawyer Consultation Platform",
+    title: "Lawgical - Expert Legal Services & Lawyer Consultation in Delhi NCR",
     description:
-      "Connect with 10,000+ verified lawyers across 50+ Indian cities. Get instant legal consultation, company registration, GST services, trademark filing. Trusted by 1 lakh+ clients. Book consultation starting ₹499.",
+      "Connect with verified lawyers in Delhi NCR for company incorporation, GST registration, and legal consultation. Trusted by 50K+ clients. Book now starting at ₹499.",
     type: "website",
     siteName: "Lawgical",
     locale: "en_IN",
@@ -93,34 +57,29 @@ export const metadata = {
     countryName: "India",
     images: [
       {
-        url: "https://www.lawgical.tech/og-image-main.jpg",
+        url: "https://www.lawgical.tech/og-image-delhi-ncr.jpg",
         width: 1200,
         height: 630,
-        alt: "Lawgical - Online Legal Services & Lawyer Consultation Platform India"
-      },
-      {
-        url: "https://www.lawgical.tech/og-image-services.jpg", 
-        width: 1200,
-        height: 630,
-        alt: "Legal Services - Company Registration, GST, Trademark Filing"
+        alt: "Lawgical - Legal Services, Company Incorporation & GST Registration in Delhi NCR",
+        type: "image/jpeg"
       }
-    ],
+    ]
   },
   
   twitter: {
     card: "summary_large_image",
-    title: "Lawgical - Online Legal Services & Expert Lawyer Consultation India",
-    description: "India's most trusted legal platform. 10K+ verified lawyers, 50+ cities, instant consultation. Company registration, GST, trademarks & more. Book now ₹499+",
+    title: "Lawgical - Legal Services & Lawyer Consultation in Delhi NCR",
+    description: "Top legal platform in Delhi NCR for company incorporation, GST registration, and expert lawyer consultation. Starts at ₹499. Trusted by 50K+ clients.",
     creator: "@chahat_siwach",
     site: "@lawgical_legal",
     images: [
       {
-        url: "https://www.lawgical.tech/twitter-card-main.jpg",
-        alt: "Lawgical Legal Services Platform India",
+        url: "https://www.lawgical.tech/twitter-card-delhi-ncr.jpg",
+        alt: "Lawgical Legal Services in Delhi NCR",
         width: 1200,
-        height: 630,
+        height: 630
       }
-    ],
+    ]
   },
   
   robots: {
@@ -133,8 +92,8 @@ export const metadata = {
       noimageindex: false,
       'max-video-preview': -1,
       'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
+      'max-snippet': -1
+    }
   },
   
   icons: { 
@@ -154,48 +113,42 @@ export const metadata = {
   
   manifest: "/site.webmanifest",
   
-  // Enhanced SEO metadata
   category: "Legal Services",
   classification: "Professional Services",
-  coverage: "India",
+  coverage: "Delhi NCR",
   distribution: "India",
   rating: "General",
   
   formatDetection: {
     email: false,
     address: false,
-    telephone: false,
+    telephone: false
   },
   
-  // Geographic and Business metadata
   other: {
-    "geo.region": "IN",
-    "geo.country": "India", 
-    "geo.placename": "India",
-    "ICBM": "20.5937,78.9629", // Geographic center of India
-    "DC.title": "Lawgical - Online Legal Services India",
+    "geo.region": "IN-DL",
+    "geo.country": "India",
+    "geo.placename": "Delhi NCR",
+    "ICBM": "28.6139,77.2090",
+    "DC.title": "Lawgical - Legal Services in Delhi NCR",
     "DC.creator": "Lawgical Legal Tech",
-    "DC.subject": "Legal Services, Lawyer Consultation, Company Registration",
-    "DC.description": "Professional legal services platform connecting clients with verified lawyers across India",
+    "DC.subject": "Legal Services Delhi NCR, Company Incorporation, GST Registration",
+    "DC.description": "Expert legal services in Delhi NCR including lawyer consultation, company incorporation, and GST registration",
     "DC.publisher": "Lawgical",
-    "DC.contributor": "Legal Professionals Network",
+    "DC.contributor": "Legal Professionals Network Delhi NCR",
     "DC.date": new Date().toISOString(),
     "DC.type": "Service",
     "DC.format": "text/html",
     "DC.identifier": "https://www.lawgical.tech",
     "DC.source": "https://www.lawgical.tech",
     "DC.language": "en-IN",
-    "DC.coverage": "India",
+    "DC.coverage": "Delhi NCR",
     "DC.rights": "Copyright Lawgical Legal Tech Pvt Ltd",
-    
-    // Business Information
-    "business:contact_data:street_address": "India",
-    "business:contact_data:locality": "Multiple Cities", 
-    "business:contact_data:region": "PAN India",
-    "business:contact_data:postal_code": "Various",
+    "business:contact_data:street_address": "Delhi NCR",
+    "business:contact_data:locality": "Delhi, Noida, Gurgaon",
+    "business:contact_data:region": "Delhi NCR",
+    "business:contact_data:postal_code": "110001",
     "business:contact_data:country_name": "India",
-    
-    // App Information
     "application-name": "Lawgical",
     "mobile-web-app-capable": "yes",
     "mobile-web-app-status-bar-style": "default",
@@ -203,58 +156,51 @@ export const metadata = {
     "theme-color": "#2563eb",
     "msapplication-TileColor": "#2563eb",
     "msapplication-config": "/browserconfig.xml",
-    
-    // Social Media
-    "fb:app_id": "1121918703374207", // Updated with your Facebook App ID
+    "fb:app_id": "1121918703374207",
     "og:email": "support@lawgical.tech",
-    "og:phone_number": "+918383801899", // Add your phone number
-    
-    // Additional SEO
+    "og:phone_number": "+918383801899",
     "revisit-after": "1 days",
     "distribution": "global",
     "rating": "general",
     "doc-class": "Living Document",
     "doc-rights": "Copywritten Work",
-    "doc-type": "Public",
+    "doc-type": "Public"
   },
   
-  // Canonical and alternate URLs
   alternates: {
     canonical: "https://www.lawgical.tech",
     languages: {
       'en-IN': 'https://www.lawgical.tech',
-      'hi-IN': 'https://www.lawgical.tech/hi', // If you have Hindi version
+      'hi-IN': 'https://www.lawgical.tech/hi'
     },
     types: {
       'application/rss+xml': [
-        { url: 'https://www.lawgical.tech/rss.xml', title: 'Lawgical Legal Updates' }
-      ],
-    },
+        { url: 'https://www.lawgical.tech/rss.xml', title: 'Lawgical Legal Updates Delhi NCR' }
+      ]
+    }
   },
   
-  // Search Engine Verification
   verification: {
     google: "QYcBwyVDXGDlSSxuYbzHmLRiUrofznU8LHBS9ZTUUqI",
-    bing: "1CCF3565C81789FD267302CF040AA5F0",
+    bing: "1CCF3565C81789FD267302CF040AA5F0"
   },
   
-  // Archives and sitemap
   archives: ['https://www.lawgical.tech/archive'],
   assets: ['https://www.lawgical.tech/assets'],
-  bookmarks: ['https://www.lawgical.tech/bookmarks'],
+  bookmarks: ['https://www.lawgical.tech/bookmarks']
 };
 
 export const viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 5, // Allow zoom for accessibility
+  maximumScale: 5,
   minimumScale: 1,
-  userScalable: true, // Enable for accessibility
+  userScalable: true,
   viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#2563eb" },
     { media: "(prefers-color-scheme: dark)", color: "#1e40af" }
-  ],
+  ]
 };
 
 export default function RootLayout({ children }) {
@@ -270,7 +216,7 @@ export default function RootLayout({ children }) {
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-TSVBZ4FD');`,
+            })(window,document,'script','dataLayer','GTM-TSVBZ4FD');`
           }}
         />
 
@@ -279,7 +225,7 @@ export default function RootLayout({ children }) {
           id="facebook-pixel"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
-            __html: `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js'); fbq('init', '1121918703374207'); fbq('track', 'PageView');`,
+            __html: `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js'); fbq('init', '1121918703374207'); fbq('track', 'PageView');`
           }}
         />
 
@@ -287,11 +233,11 @@ export default function RootLayout({ children }) {
         <meta name="google-site-verification" content="QYcBwyVDXGDlSSxuYbzHmLRiUrofznU8LHBS9ZTUUqI" />
         <meta name="msvalidate.01" content="1CCF3565C81789FD267302CF040AA5F0" />
         
-        {/* Geographic Targeting */}
-        <meta name="geo.region" content="IN" />
+        {/* Geographic Targeting (Delhi NCR) */}
+        <meta name="geo.region" content="IN-DL" />
         <meta name="geo.country" content="India" />
-        <meta name="geo.placename" content="India" />
-        <meta name="ICBM" content="20.5937,78.9629" />
+        <meta name="geo.placename" content="Delhi NCR" />
+        <meta name="ICBM" content="28.6139,77.2090" />
         
         {/* Enhanced Performance */}
         <link rel="preconnect" href="https://personalize.relevic.com" />
@@ -307,11 +253,11 @@ export default function RootLayout({ children }) {
         <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
         <link rel="dns-prefetch" href="//connect.facebook.net" />
         
-        {/* Resource hints for better performance */}
+        {/* Resource hints */}
         <link rel="prefetch" href="/sitemap.xml" />
         <link rel="prefetch" href="/robots.txt" />
         
-        {/* Animate.css with proper integrity */}
+        {/* Animate.css */}
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
@@ -320,16 +266,17 @@ export default function RootLayout({ children }) {
           referrerPolicy="no-referrer"
         />
         
-        {/* Enhanced Schema.org structured data */}
+        {/* LegalService Schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "LegalService",
+              "@id": "https://www.lawgical.tech/#legal-service",
               "name": "Lawgical",
-              "alternateName": "Lawgical Legal Services",
-              "description": "India's leading online legal services platform providing expert lawyer consultation, company registration, GST services, and comprehensive legal solutions",
+              "alternateName": "Lawgical Legal Services Delhi NCR",
+              "description": "Delhi NCR's premier legal-tech platform offering lawyer consultation, company incorporation, GST registration, and comprehensive legal solutions.",
               "url": "https://www.lawgical.tech",
               "logo": {
                 "@type": "ImageObject",
@@ -338,101 +285,81 @@ export default function RootLayout({ children }) {
                 "height": 512
               },
               "image": [
-                "https://www.lawgical.tech/og-image-main.jpg",
-                "https://www.lawgical.tech/logo.png"
+                "https://www.lawgical.tech/og-image-delhi-ncr.jpg"
               ],
               "telephone": "+91-8383801899",
               "email": "support@lawgical.tech",
               "priceRange": "₹₹-₹₹₹",
               "currenciesAccepted": "INR",
               "paymentAccepted": ["Cash", "Credit Card", "UPI", "Net Banking", "Wallet"],
-              
               "address": {
                 "@type": "PostalAddress",
                 "addressCountry": "IN",
-                "addressRegion": "Multiple States",
-                "addressLocality": "Pan India Service"
+                "addressRegion": "Delhi NCR",
+                "addressLocality": "Delhi, Noida, Gurgaon",
+                "postalCode": "110001"
               },
-              
               "geo": {
                 "@type": "GeoCoordinates",
-                "latitude": 20.5937,
-                "longitude": 78.9629
+                "latitude": 28.6139,
+                "longitude": 77.2090
               },
-              
               "areaServed": [
                 {
-                  "@type": "Country",
-                  "name": "India"
-                },
-                {
-                  "@type": "State",
-                  "name": "Maharashtra"
-                },
-                {
-                  "@type": "State", 
-                  "name": "Delhi"
-                },
-                {
-                  "@type": "State",
-                  "name": "Karnataka"
-                },
-                {
-                  "@type": "State",
+                  "@type": "AdministrativeArea",
                   "name": "Delhi NCR"
                 },
                 {
-                  "@type": "State",
-                  "name": "Haryana"
+                  "@type": "City",
+                  "name": "Delhi"
                 },
                 {
-                  "@type": "State",
-                  "name": "West Bengal"
+                  "@type": "City",
+                  "name": "Noida"
                 },
                 {
-                  "@type": "State",
-                  "name": "Gujarat"
+                  "@type": "City",
+                  "name": "Gurgaon"
                 },
                 {
-                  "@type": "State",
-                  "name": "Uttar Pradesh"
+                  "@type": "City",
+                  "name": "Ghaziabad"
+                },
+                {
+                  "@type": "City",
+                  "name": "Faridabad"
                 }
               ],
-              
               "serviceType": [
-                "Online Lawyer Consultation",
-                "Company Registration",
-                "GST Registration & Compliance", 
-                "Trademark Registration",
-                "Legal Document Preparation",
-                "Corporate Law Advisory",
-                "Intellectual Property Services",
-                "Compliance & Regulatory Services",
-                "Contract Drafting & Review",
-                "Legal Notice Services"
+                "Online Lawyer Consultation Delhi NCR",
+                "Company Incorporation Delhi",
+                "GST Registration Delhi NCR",
+                "Trademark Registration Delhi",
+                "Legal Document Preparation Delhi",
+                "Corporate Law Advisory Delhi NCR",
+                "Compliance & Regulatory Services Delhi"
               ],
-              
               "hasOfferCatalog": {
                 "@type": "OfferCatalog",
-                "name": "Legal Services Catalog",
+                "name": "Legal Services Catalog Delhi NCR",
                 "itemListElement": [
                   {
                     "@type": "Offer",
                     "itemOffered": {
                       "@type": "Service",
-                      "name": "Online Lawyer Consultation",
-                      "description": "Expert legal consultation with verified lawyers"
+                      "name": "Online Lawyer Consultation Delhi NCR",
+                      "description": "Expert legal consultation with verified lawyers in Delhi NCR"
                     },
                     "price": "499",
                     "priceCurrency": "INR",
                     "availability": "https://schema.org/InStock"
                   },
                   {
-                    "@type": "Offer", 
+                    "@type": "Offer",
                     "itemOffered": {
                       "@type": "Service",
-                      "name": "Private Limited Company Registration",
-                      "description": "Complete company incorporation services"
+                      "name": "Private Limited Company Incorporation Delhi",
+                      "description": "Complete company incorporation services in Delhi NCR"
                     },
                     "price": "6999",
                     "priceCurrency": "INR",
@@ -441,9 +368,9 @@ export default function RootLayout({ children }) {
                   {
                     "@type": "Offer",
                     "itemOffered": {
-                      "@type": "Service", 
-                      "name": "GST Registration",
-                      "description": "GST registration and compliance services"
+                      "@type": "Service",
+                      "name": "GST Registration Delhi NCR",
+                      "description": "GST registration and compliance services in Delhi"
                     },
                     "price": "2999",
                     "priceCurrency": "INR",
@@ -453,16 +380,15 @@ export default function RootLayout({ children }) {
                     "@type": "Offer",
                     "itemOffered": {
                       "@type": "Service",
-                      "name": "Trademark Registration",
-                      "description": "Complete trademark filing and registration"
+                      "name": "Trademark Registration Delhi",
+                      "description": "Complete trademark filing and registration in Delhi NCR"
                     },
                     "price": "4999",
-                    "priceCurrency": "INR", 
+                    "priceCurrency": "INR",
                     "availability": "https://schema.org/InStock"
                   }
                 ]
               },
-              
               "aggregateRating": {
                 "@type": "AggregateRating",
                 "ratingValue": "4.8",
@@ -470,12 +396,11 @@ export default function RootLayout({ children }) {
                 "bestRating": "5",
                 "worstRating": "1"
               },
-              
               "review": [
                 {
                   "@type": "Review",
                   "reviewRating": {
-                    "@type": "Rating", 
+                    "@type": "Rating",
                     "ratingValue": "5",
                     "bestRating": "5"
                   },
@@ -483,64 +408,84 @@ export default function RootLayout({ children }) {
                     "@type": "Person",
                     "name": "Priya Sharma"
                   },
-                  "reviewBody": "Excellent legal services. Quick company registration process with expert guidance."
+                  "reviewBody": "Excellent legal services in Delhi NCR. Quick company incorporation with expert guidance."
                 }
               ],
-              
               "sameAs": [
+                "https://www.linkedin.com/company/lawgicaltech/",
+                "https://www.twitter.com/lawgical_legal",
                 "https://www.facebook.com/lawgical",
-                "https://www.twitter.com/lawgical_legal", 
-                "https://www.linkedin.com/company/lawgical",
                 "https://www.instagram.com/lawgical_legal",
                 "https://www.youtube.com/@lawgical"
               ],
-              
               "foundingDate": "2020",
               "numberOfEmployees": {
                 "@type": "QuantitativeValue",
-                "value": "500+"
+                "value": "11-50"
               },
-              
               "knowsAbout": [
-                "Corporate Law",
-                "Business Registration",
-                "Tax Law", 
-                "Intellectual Property",
-                "Employment Law",
-                "Contract Law",
-                "Compliance",
-                "Regulatory Affairs"
+                "Corporate Law Delhi NCR",
+                "Business Registration Delhi",
+                "Tax Law Delhi",
+                "Intellectual Property Delhi",
+                "Employment Law Delhi NCR",
+                "Contract Law Delhi",
+                "Compliance Delhi",
+                "Regulatory Affairs Delhi NCR"
               ],
-              
               "memberOf": {
                 "@type": "Organization",
-                "name": "Bar Council of India"
+                "name": "Bar Council of Delhi"
               }
             })
           }}
         />
 
-        {/* Additional Schema for Local Business */}
+        {/* LocalBusiness Schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "Organization",
-              "name": "Lawgical Legal Tech",
+              "@type": "LocalBusiness",
+              "@id": "https://www.lawgical.tech/#local-business",
+              "name": "Lawgical Legal Tech Delhi NCR",
               "url": "https://www.lawgical.tech",
               "logo": "https://www.lawgical.tech/logo.png",
+              "description": "Leading legal services provider in Delhi NCR specializing in company incorporation, GST registration, and lawyer consultations",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Delhi NCR",
+                "addressLocality": "Delhi",
+                "addressRegion": "Delhi NCR",
+                "postalCode": "110001",
+                "addressCountry": "IN"
+              },
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 28.6139,
+                "longitude": 77.2090
+              },
+              "openingHoursSpecification": {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": [
+                  "Monday",
+                  "Tuesday",
+                  "Wednesday",
+                  "Thursday",
+                  "Friday"
+                ],
+                "opens": "09:00",
+                "closes": "21:00"
+              },
               "contactPoint": {
                 "@type": "ContactPoint",
                 "telephone": "+91-8383801899",
                 "contactType": "Customer Service",
-                "areaServed": "IN",
+                "areaServed": "Delhi NCR",
                 "availableLanguage": ["English", "Hindi"]
               },
-              "founder": {
-                "@type": "Person",
-                "name": "Chahat Siwach"
-              }
+              "priceRange": "₹₹-₹₹₹"
             })
           }}
         />
@@ -555,34 +500,42 @@ export default function RootLayout({ children }) {
               "mainEntity": [
                 {
                   "@type": "Question",
-                  "name": "How can I book a lawyer consultation online?",
+                  "name": "How to book a lawyer consultation in Delhi NCR?",
                   "acceptedAnswer": {
-                    "@type": "Answer", 
-                    "text": "You can book a lawyer consultation on Lawgical by selecting your legal issue, choosing from verified lawyers, and booking an instant consultation starting at ₹499."
+                    "@type": "Answer",
+                    "text": "Book instant lawyer consultation on Lawgical for Delhi NCR. Select your legal issue, choose verified lawyers in Delhi, Noida, Gurgaon, starting at ₹499."
                   }
                 },
                 {
                   "@type": "Question",
-                  "name": "What legal services does Lawgical provide?",
+                  "name": "What is the process for company incorporation in Delhi NCR?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Lawgical provides comprehensive legal services including online lawyer consultation, company registration, GST services, trademark filing, legal document preparation, and compliance services across India."
+                    "text": "Lawgical handles complete company incorporation in Delhi NCR, including Pvt Ltd registration. Documents, filing, and compliance starting from ₹6,999."
                   }
                 },
                 {
                   "@type": "Question",
-                  "name": "How much does company registration cost?", 
+                  "name": "How much does GST registration cost in Delhi?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Company registration through Lawgical starts from ₹6,999 for Private Limited Company registration, including all government fees and professional charges."
+                    "text": "GST registration in Delhi through Lawgical starts at ₹2,999, including application, verification, and certificate issuance within 7 days."
                   }
                 },
                 {
                   "@type": "Question",
-                  "name": "Is online legal consultation legally valid?",
+                  "name": "Are online legal services valid in Delhi NCR?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Yes, online legal consultations are legally valid. Our lawyers are licensed professionals registered with Bar Council of India and provide authentic legal advice."
+                    "text": "Yes, Lawgical's online legal consultations are fully valid in Delhi NCR. Our lawyers are Bar Council registered and provide authentic advice."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Best lawyers for GST compliance in Delhi NCR?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Connect with top GST experts on Lawgical for Delhi NCR. Get compliance, return filing, and advisory services from verified professionals."
                   }
                 }
               ]
@@ -592,7 +545,6 @@ export default function RootLayout({ children }) {
       </head>
       
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe 
             src="https://www.googletagmanager.com/ns.html?id=GTM-TSVBZ4FD"
@@ -602,7 +554,6 @@ export default function RootLayout({ children }) {
           />
         </noscript>
 
-        {/* Facebook Pixel (noscript) */}
         <noscript>
           <Image
             height={1}
@@ -624,21 +575,18 @@ export default function RootLayout({ children }) {
           {children}
         </ThemeProvider>
 
-        {/* Analytics & Tracking */}
         <Analytics />
         <SpeedInsights />
         <GoogleAnalytics gaId="G-4H1WL5DLNM" />
 
-        {/* Enhanced Segment Analytics */}
         <Script
           id="segment-analytics"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
-            __html: `!function(){var i="analytics",analytics=window[i]=window[i]||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","screen","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware","register"];analytics.factory=function(e){return function(){if(window[i].initialized)return window[i][e].apply(window[i],arguments);var n=Array.prototype.slice.call(arguments);if(["track","screen","alias","group","page","identify"].indexOf(e)>-1){var c=document.querySelector("link[rel='canonical']");n.push({__t:"bpc",c:c&&c.getAttribute("href")||void 0,p:location.pathname,u:location.href,s:location.search,t:document.title,r:document.referrer})}n.unshift(e);analytics.push(n);return analytics}};for(var n=0;n<analytics.methods.length;n++){var key=analytics.methods[n];analytics[key]=analytics.factory(key)}analytics.load=function(key,n){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.setAttribute("data-global-segment-analytics-key",i);t.src="https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(t,r);analytics._loadOptions=n};analytics._writeKey="PyMX8kMqFLV9aHo7i6k6oFgcDzmntCjT";analytics.SNIPPET_VERSION="5.2.0";analytics.load("PyMX8kMqFLV9aHo7i6k6oFgcDzmntCjT");analytics.page();}}();`,
+            __html: `!function(){var i="analytics",analytics=window[i]=window[i]||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","screen","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware","register"];analytics.factory=function(e){return function(){if(window[i].initialized)return window[i][e].apply(window[i],arguments);var n=Array.prototype.slice.call(arguments);if(["track","screen","alias","group","page","identify"].indexOf(e)>-1){var c=document.querySelector("link[rel='canonical']");n.push({__t:"bpc",c:c&&c.getAttribute("href")||void 0,p:location.pathname,u:location.href,s:location.search,t:document.title,r:document.referrer})}n.unshift(e);analytics.push(n);return analytics}};for(var n=0;n<analytics.methods.length;n++){var key=analytics.methods[n];analytics[key]=analytics.factory(key)}analytics.load=function(key,n){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.setAttribute("data-global-segment-analytics-key",i);t.src="https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(t,r);analytics._loadOptions=n};analytics._writeKey="PyMX8kMqFLV9aHo7i6k6oFgcDzmntCjT";analytics.SNIPPET_VERSION="5.2.0";analytics.load("PyMX8kMqFLV9aHo7i6k6oFgcDzmntCjT");analytics.page();}}();`
           }}
         />
 
-        {/* HubSpot Integration */}
         <Script
           id="hubspot-loader"
           strategy="afterInteractive"
@@ -650,7 +598,7 @@ export default function RootLayout({ children }) {
                 n.id = i; n.src = '//js.hs-scripts.com/242916761.js';
                 e.parentNode.insertBefore(n, e);
               })(document, "script", "hs-script-loader");
-            `,
+            `
           }}
         />
         
@@ -671,11 +619,10 @@ export default function RootLayout({ children }) {
                   });
                 }
               });
-            `,
+            `
           }}
         />
 
-        {/* Relevic Personalization */}
         <Script
           id="relevic-anti-flicker"
           strategy="beforeInteractive"
@@ -694,7 +641,6 @@ export default function RootLayout({ children }) {
           async
         />
 
-        {/* Error Tracking */}
         <Script
           id="error-tracking"
           strategy="afterInteractive"
@@ -708,7 +654,7 @@ export default function RootLayout({ children }) {
                   });
                 }
               });
-            `,
+            `
           }}
         />
       </body>
