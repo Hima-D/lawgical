@@ -38,7 +38,7 @@ export const metadata = {
     "legal consultation greater noida", "corporate lawyers in gurgaon"
   ].join(", "),
   
-  authors: [{ name: "Chahat Siwach", url: "https://www.lawgical.tech/about" }],
+  authors: [{ name: "Chahat Siwach", url: "https://www.lawgical.tech/aboutus" }],
   generator: "Next.js",
   applicationName: "Lawgical Legal Platform",
   referrer: "origin-when-cross-origin",
