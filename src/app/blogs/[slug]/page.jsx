@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import Head from 'next/head';
 import {
   Card,
   CardContent,
@@ -21,7 +22,6 @@ import {
   User,
   Tag,
   AlertCircle,
-  CheckCircle,
   Twitter,
   Linkedin,
   MessageCircle,
@@ -54,7 +54,7 @@ const BlogDetailPage = () => {
       }
     };
 
-    const fetchUser = async () => {
+    const fetchUserAndLikes = async () => {
       try {
         const response = await fetch('/api/auth/me', {
           headers: { 'Content-Type': 'application/json' },
@@ -67,17 +67,30 @@ const BlogDetailPage = () => {
           if (likesData.success) {
             setLikedBlogs(new Set(likesData.data.map((like) => like.blogId)));
           }
+        } else {
+          // Fetch anonymous likes
+          const likesResponse = await fetch('/api/blogs/likes?userId=anonymous');
+          const likesData = await likesResponse.json();
+          if (likesData.success) {
+            setLikedBlogs(new Set(likesData.data.map((like) => like.blogId)));
+          }
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('Error fetching user or likes:', error);
+        // Try fetching anonymous likes if user fetch fails
+        const likesResponse = await fetch('/api/blogs/likes?userId=anonymous');
+        const likesData = await likesResponse.json();
+        if (likesData.success) {
+          setLikedBlogs(new Set(likesData.data.map((like) => like.blogId)));
+        }
       }
     };
 
     fetchBlog();
-    fetchUser();
+    fetchUserAndLikes();
   }, [slug]);
 
-  // Handle like/unlike without requiring login
+  // Handle like/unlike
   const handleLike = async (blogId) => {
     try {
       const response = await fetch('/api/blogs/likes', {
@@ -108,27 +121,20 @@ const BlogDetailPage = () => {
     }
   };
 
-  // Handle social media sharing with card structure
+  // Handle social media sharing
   const handleShare = (blog, platform) => {
     const url = `${window.location.origin}/blogs/${blog.slug}`;
-    const title = encodeURIComponent(blog.title);
-    const excerpt = encodeURIComponent(blog.content.slice(0, 100) + '...');
-    const author = encodeURIComponent(blog.author.displayName || 'Anonymous');
-    const date = new Date(blog.createdAt).toLocaleDateString();
-    const tags = encodeURIComponent(blog.tags.join(', '));
-    
-    const shareCardText = `${title}\n\n${excerpt}\n\nBy ${author} | ${date}\nTags: ${tags}\nRead more: ${url}`;
     let shareUrl;
 
     switch (platform) {
       case 'twitter':
-        shareUrl = `https://twitter.com/intent/tweet?text=${shareCardText}`;
+        shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`;
         break;
       case 'linkedin':
-        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
         break;
       case 'whatsapp':
-        shareUrl = `https://api.whatsapp.com/send?text=${shareCardText}`;
+        shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(url)}`;
         break;
       default:
         return;
@@ -162,6 +168,21 @@ const BlogDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100">
+      <Head>
+        <title>{blog.title}</title>
+        <meta name="description" content={blog.content.slice(0, 160)} />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={blog.title} />
+        <meta property="og:description" content={blog.content.slice(0, 160)} />
+        <meta property="og:image" content={blog.coverImage || '/default-image.jpg'} />
+        <meta property="og:url" content={`${window.location.origin}/blogs/${blog.slug}`} />
+        <meta property="og:site_name" content="Legal Insights Blog" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={blog.title} />
+        <meta name="twitter:description" content={blog.content.slice(0, 160)} />
+        <meta name="twitter:image" content={blog.coverImage || '/default-image.jpg'} />
+        <meta name="twitter:site" content="@YourSiteHandle" />
+      </Head>
       <Header />
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Card className="bg-white shadow-lg border border-gray-100">

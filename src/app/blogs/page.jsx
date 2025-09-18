@@ -75,7 +75,7 @@ const BlogPage = () => {
       }
     };
 
-    const fetchUser = async () => {
+    const fetchUserAndLikes = async () => {
       try {
         const response = await fetch('/api/auth/me', {
           headers: { 'Content-Type': 'application/json' },
@@ -88,17 +88,30 @@ const BlogPage = () => {
           if (likesData.success) {
             setLikedBlogs(new Set(likesData.data.map((like) => like.blogId)));
           }
+        } else {
+          // Fetch anonymous likes
+          const likesResponse = await fetch('/api/blogs/likes?userId=anonymous');
+          const likesData = await likesResponse.json();
+          if (likesData.success) {
+            setLikedBlogs(new Set(likesData.data.map((like) => like.blogId)));
+          }
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('Error fetching user or likes:', error);
+        // Try fetching anonymous likes if user fetch fails
+        const likesResponse = await fetch('/api/blogs/likes?userId=anonymous');
+        const likesData = await likesResponse.json();
+        if (likesData.success) {
+          setLikedBlogs(new Set(likesData.data.map((like) => like.blogId)));
+        }
       }
     };
 
     fetchBlogs();
-    fetchUser();
+    fetchUserAndLikes();
   }, []);
 
-  // Handle like/unlike without requiring login
+  // Handle like/unlike
   const handleLike = async (blogId) => {
     try {
       const response = await fetch('/api/blogs/likes', {
@@ -132,27 +145,20 @@ const BlogPage = () => {
     }
   };
 
-  // Handle social media sharing with card structure
+  // Handle social media sharing
   const handleShare = (blog, platform) => {
     const url = `${window.location.origin}/blogs/${blog.slug}`;
-    const title = encodeURIComponent(blog.title);
-    const excerpt = encodeURIComponent(blog.content.slice(0, 100) + '...');
-    const author = encodeURIComponent(blog.author.displayName || 'Anonymous');
-    const date = new Date(blog.createdAt).toLocaleDateString();
-    const tags = encodeURIComponent(blog.tags.join(', '));
-    
-    const shareCardText = `${title}\n\n${excerpt}\n\nBy ${author} | ${date}\nTags: ${tags}\nRead more: ${url}`;
     let shareUrl;
 
     switch (platform) {
       case 'twitter':
-        shareUrl = `https://twitter.com/intent/tweet?text=${shareCardText}`;
+        shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`;
         break;
       case 'linkedin':
-        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
         break;
       case 'whatsapp':
-        shareUrl = `https://api.whatsapp.com/send?text=${shareCardText}`;
+        shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(url)}`;
         break;
       default:
         return;
@@ -202,8 +208,6 @@ const BlogPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100">
       <Header />
-
-      {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-50 via-white to-purple-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
@@ -219,9 +223,7 @@ const BlogPage = () => {
           </div>
         </div>
       </section>
-
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Add Blog Button (Lawyers Only) */}
         {user?.userType === 'lawyer' && (
           <div className="flex justify-end mb-8">
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
@@ -336,8 +338,6 @@ const BlogPage = () => {
             </Dialog>
           </div>
         )}
-
-        {/* Messages */}
         {successMessage && (
           <Alert className="mb-8 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-800">
             <CheckCircle className="w-6 h-6" />
@@ -350,8 +350,6 @@ const BlogPage = () => {
             <AlertDescription className="ml-3">{errorMessage}</AlertDescription>
           </Alert>
         )}
-
-        {/* Blog List */}
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {blogs.map((blog) => (
             <Card
@@ -449,7 +447,6 @@ const BlogPage = () => {
           ))}
         </div>
       </div>
-
       <Footer className="mt-16 bg-white shadow-lg border-t border-gray-200" />
     </div>
   );
