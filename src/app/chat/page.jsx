@@ -15,7 +15,8 @@ import {
   Sparkles,
   FileText,
   Users,
-  Zap
+  Zap,
+  Upload
 } from 'lucide-react';
 
 // Professional UI Components
@@ -94,9 +95,11 @@ const STARTER_PROMPTS = [
 
 export default function Chat() {
   const [input, setInput] = useState('');
-  const { messages, sendMessage, isLoading } = useChat();
+  const { messages, append, isLoading } = useChat({ api: '/api/chat' });
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const fileInputRef = useRef(null);
+  const [sessionId] = useState('test-session'); // Replace with auth/cookies in production
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -113,7 +116,7 @@ export default function Chat() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (input.trim() && !isLoading) {
-      sendMessage({ text: input.trim() });
+      append({ role: 'user', content: input.trim() });
       setInput('');
     }
   };
@@ -121,7 +124,30 @@ export default function Chat() {
   const handleStarterPrompt = (prompt) => {
     if (!isLoading) {
       setInput(prompt);
-      sendMessage({ text: prompt });
+      append({ role: 'user', content: prompt });
+    }
+  };
+
+  const handleUpload = async (e) => {
+    const file = e.target.files[0];
+    if (file && file.type === 'application/pdf') {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('sessionId', sessionId);
+
+      try {
+        const res = await fetch('/api/upload-pdf', {
+          method: 'POST',
+          body: formData,
+        });
+        if (res.ok) {
+          append({ role: 'user', content: `Uploaded PDF: ${file.name}. Content added to context.` });
+        } else {
+          console.error('Upload failed');
+        }
+      } catch (error) {
+        console.error('Error uploading PDF:', error);
+      }
     }
   };
 
@@ -258,18 +284,9 @@ export default function Chat() {
                       ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
                       : 'bg-gray-50 text-gray-900 border border-gray-200'
                   }`}>
-                    {message.parts.map((part, i) => {
-                      switch (part.type) {
-                        case 'text':
-                          return (
-                            <div key={`${message.id}-${i}`} className="whitespace-pre-wrap leading-relaxed">
-                              {part.text}
-                            </div>
-                          );
-                        default:
-                          return null;
-                      }
-                    })}
+                    <div className="whitespace-pre-wrap leading-relaxed">
+                      {message.content}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -312,7 +329,22 @@ export default function Chat() {
                            bg-white text-gray-900 placeholder-gray-500
                            focus:ring-2 focus:ring-blue-500 focus:border-transparent
                            disabled:opacity-50 disabled:cursor-not-allowed
-                           text-lg"
+                           text-lg pr-12"
+                />
+                <button 
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-600"
+                  disabled={isLoading}
+                >
+                  <Upload className="h-5 w-5" />
+                </button>
+                <input 
+                  ref={fileInputRef}
+                  type="file" 
+                  accept=".pdf" 
+                  className="hidden" 
+                  onChange={handleUpload} 
                 />
               </div>
               <Button
@@ -332,7 +364,6 @@ export default function Chat() {
               </Button>
             </form>
             
-            {/* Footer Note */}
             <div className="text-center mt-4">
               <p className="text-sm text-gray-500">
                 This AI provides general legal information and should not replace professional legal advice.
@@ -342,7 +373,6 @@ export default function Chat() {
           </div>
         </div>
         
-        {/* Quick Contact */}
         <div className="mt-6 grid md:grid-cols-2 gap-4">
           <Card className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200">
             <div className="flex items-center space-x-4">

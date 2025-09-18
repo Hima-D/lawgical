@@ -1,99 +1,102 @@
-import { createOpenAI } from '@ai-sdk/openai';
-import { streamText } from 'ai';
+const { streamText } = require('ai');
+const { openai } = require('@ai-sdk/openai');
+const { MongoClient } = require('mongodb');
+const { RecursiveCharacterTextSplitter } = require('langchain/text_splitter');
+const { OpenAIEmbeddings } = require('@langchain/openai');
+const { MongoDBAtlasVectorSearch } = require('@langchain/community/vectorstores/mongodb_atlas');
+const { ChatPromptTemplate, MessagesPlaceholder } = require('@langchain/core/prompts');
+const { HumanMessage, AIMessage } = require('@langchain/core/messages');
+const { MongoDBChatMessageHistory } = require('@langchain/community/chat_message_histories/mongodb');
+const { RunnableSequence } = require('@langchain/core/runnables');
 
-// Initialize OpenAI (you can replace this with other providers)
-const openai = createOpenAI({
-  // Add your OpenAI API key here or use environment variable
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+// Global MongoDB client
+let client;
+async function getMongoClient() {
+  if (!client) {
+    client = new MongoClient(process.env.MONGODB_URI);
+    await client.connect();
   }
-
-  try {
-    const { messages } = req.body;
-
-    // Validate the request
-    if (!messages || !Array.isArray(messages)) {
-      return res.status(400).json({ error: 'Invalid messages format' });
-    }
-
-    // Convert messages to the correct format
-    const formattedMessages = messages.map(msg => ({
-      role: msg.role,
-      content: msg.parts?.map(part => part.text).join('') || msg.content
-    }));
-
-    // Create the streaming response
-    const result = await streamText({
-      model: openai('gpt-4o-mini'), // or gpt-4, gpt-3.5-turbo, etc.
-      messages: formattedMessages,
-      temperature: 0.7,
-      maxTokens: 1000,
-    });
-
-    // Set headers for streaming
-    res.writeHead(200, {
-      'Content-Type': 'text/plain; charset=utf-8',
-      'Transfer-Encoding': 'chunked',
-    });
-
-    // Stream the response
-    for await (const chunk of result.textStream) {
-      res.write(chunk);
-    }
-
-    res.end();
-
-  } catch (error) {
-    console.error('Chat API Error:', error);
-    
-    if (error.message?.includes('API key')) {
-      return res.status(401).json({ 
-        error: 'OpenAI API key not configured. Please set OPENAI_API_KEY environment variable.' 
-      });
-    }
-
-    return res.status(500).json({ 
-      error: 'Internal server error',
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined
-    });
-  }
+  return client;
 }
 
-// Alternative implementation using different AI providers:
+exports.POST = async function (req) {
+  const { messages } = await req.json();
+  const sessionId = 'test-session'; // Replace with req.headers.get('session-id') or cookies
+  const lastMessage = messages[messages.length - 1].content;
 
-/*
-// For Anthropic Claude:
-import { createAnthropic } from '@ai-sdk/anthropic';
+  const mongoClient = await getMongoClient();
+  const db = mongoClient.db('ai_chat');
+  const historyCollection = db.collection('history');
+  const vectorCollection = db.collection('vectors');
 
-const anthropic = createAnthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+  // Message history
+  const history = new MongoDBChatMessageHistory({
+    collection: historyCollection,
+    sessionId,
+  });
 
-// Then use: anthropic('claude-3-sonnet-20240229')
-*/
+  // Add user message
+  await history.addMessages([new HumanMessage(lastMessage)]);
 
-/*
-// For Google Gemini:
-import { createGoogleGenerativeAI } from '@ai-sdk/google';
+  // Vector store for RAG
+  const embeddings = new OpenAIEmbeddings();
+  const vectorStore = new MongoDBAtlasVectorSearch(embeddings, {
+    collection: vectorCollection,
+    indexName: 'default',
+    textKey: 'text',
+    embeddingKey: 'embedding',
+  });
+  const retriever = vectorStore.asRetriever({
+    k: 4,
+    filter: { 'metadata.sessionId': sessionId },
+  });
 
-const google = createGoogleGenerativeAI({
-  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
-});
+  // Retrieve context
+  const relevantDocs = await retriever.invoke(lastMessage);
+  const context = relevantDocs.map((doc) => doc.pageContent).join('\n\n');
 
-// Then use: google('gemini-pro')
-*/
+  // Prompt template
+  const prompt = ChatPromptTemplate.fromMessages([
+    ['system', 'You are a helpful legal AI assistant. Use the following context if relevant: {context}'],
+    new MessagesPlaceholder('chat_history'),
+    ['human', '{question}'],
+  ]);
 
-/*
-// For local models using Ollama:
-import { createOllama } from 'ollama-ai-provider';
+  // Chain
+  const llm = openai('gpt-4o');
+  const chain = RunnableSequence.from([
+    prompt,
+    llm,
+  ]);
 
-const ollama = createOllama({
-  baseURL: 'http://localhost:11434/api',
-});
+  // Get past history
+  const pastMessages = await history.getMessages();
 
-// Then use: ollama('llama2') or any other local model
-*/
+  // Generate response with streaming
+  const result = await streamText({
+    model: llm,
+    prompt: await prompt.formatMessages({
+      context,
+      chat_history: pastMessages.slice(0, -1),
+      question: lastMessage,
+    }),
+  });
+
+  // Collect response for history
+  let fullResponse = '';
+  const stream = result.toReadableStream();
+  const [streamForResponse, streamForCollection] = stream.tee();
+
+  streamForCollection.pipeTo(
+    new WritableStream({
+      write(chunk) {
+        fullResponse += new TextDecoder().decode(chunk);
+      },
+      async close() {
+        await history.addMessages([new AIMessage(fullResponse)]);
+      },
+    })
+  );
+
+  return new Response(streamForResponse);
+};

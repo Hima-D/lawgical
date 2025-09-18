@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -11,12 +8,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Updated User model in your Prisma schema
 model User {
   id            Int            @id @default(autoincrement())
   email         String         @unique
-  passwordHash  String?        // Made optional for Google users
-  userType      String         // "lawyer" | "client"
+  passwordHash  String?
+  userType      String
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   displayName   String?
@@ -24,16 +20,17 @@ model User {
   phoneNumber   String?
   isActive      Boolean        @default(true)
   emailVerified Boolean        @default(false)
-  googleId      String?        @unique // Add this field for Google users
-  
-  // Relations
+  googleId      String?        @unique
+
   appointments  Appointment[]  @relation("ClientAppointments")
   lawyerProfile LawyerProfile?
   messages      Message[]
   notifications Notification[]
   reviews       Review[]       @relation("ClientReviews")
   documents     Document[]
-  
+  blogs         Blog[]         @relation("UserBlogs")
+  blogLikes     BlogLike[]     @relation("UserBlogLikes")
+
   @@map("users")
 }
 
@@ -54,14 +51,13 @@ model LawyerProfile {
   education        String[]           @default([])
   certifications   String[]           @default([])
   languages        String[]           @default([])
-  
-  // Relations
+
   user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   appointments     Appointment[]      @relation("LawyerAppointments")
   availability     AvailabilitySlot[]
   services         Service[]
   reviews          Review[]           @relation("LawyerReviews")
-  
+
   @@map("lawyer_profiles")
 }
 
@@ -74,33 +70,31 @@ model Service {
   durationMinutes Int
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
-  category        String?       // "consultation", "document_review", "representation", etc.
+  category        String?
   isActive        Boolean       @default(true)
-  
-  // Relations
+
   lawyerProfile   LawyerProfile @relation(fields: [lawyerProfileId], references: [id], onDelete: Cascade)
   appointments    Appointment[]
-  
+
   @@map("services")
 }
 
 model AvailabilitySlot {
   id              Int           @id @default(autoincrement())
   lawyerProfileId Int
-  dayOfWeek       Int           // 0=Sunday, 1=Monday, etc.
-  startTime       String        // "09:00"
-  endTime         String        // "17:00"
-  date            DateTime?     // For specific date slots
+  dayOfWeek       Int
+  startTime       String
+  endTime         String
+  date            DateTime?
   isRecurring     Boolean       @default(true)
   isBooked        Boolean       @default(false)
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
   notes           String?
-  
-  // Relations
+
   lawyerProfile   LawyerProfile @relation(fields: [lawyerProfileId], references: [id], onDelete: Cascade)
   appointments    Appointment[]
-  
+
   @@map("availability_slots")
 }
 
@@ -112,22 +106,21 @@ model Appointment {
   availabilitySlotId Int?
   appointmentDate    DateTime
   appointmentTime    String
-  status             String           @default("pending") // "pending", "confirmed", "completed", "cancelled"
+  status             String           @default("pending")
   createdAt          DateTime         @default(now())
   updatedAt          DateTime         @updatedAt
   clientNotes        String?
   lawyerNotes        String?
-  meetingLink        String?          // For virtual meetings
-  meetingType        String?          // "in-person", "virtual", "phone"
-  
-  // Relations
+  meetingLink        String?
+  meetingType        String?
+
   client             User             @relation("ClientAppointments", fields: [clientId], references: [id])
   lawyerProfile      LawyerProfile    @relation("LawyerAppointments", fields: [lawyerProfileId], references: [id])
   service            Service          @relation(fields: [serviceId], references: [id])
   availabilitySlot   AvailabilitySlot? @relation(fields: [availabilitySlotId], references: [id])
   messages           Message[]
   documents          Document[]
-  
+
   @@map("appointments")
 }
 
@@ -136,14 +129,13 @@ model Message {
   senderId      Int
   appointmentId Int?
   content       String
-  messageType   String      @default("text") // "text", "file", "image"
-  createdAt     DateTime    @default(now())
+  messageType   String      @default("text")
   isRead        Boolean     @default(false)
-  
-  // Relations
+  createdAt     DateTime    @default(now())
+
   sender        User        @relation(fields: [senderId], references: [id])
   appointment   Appointment? @relation(fields: [appointmentId], references: [id])
-  
+
   @@map("messages")
 }
 
@@ -151,16 +143,15 @@ model Review {
   id              Int           @id @default(autoincrement())
   clientId        Int
   lawyerProfileId Int
-  rating          Int           // 1-5 stars
+  rating          Int
   comment         String?
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
   isVisible       Boolean       @default(true)
-  
-  // Relations
+
   client          User          @relation("ClientReviews", fields: [clientId], references: [id])
   lawyerProfile   LawyerProfile @relation("LawyerReviews", fields: [lawyerProfileId], references: [id])
-  
+
   @@unique([clientId, lawyerProfileId])
   @@map("reviews")
 }
@@ -170,13 +161,12 @@ model Notification {
   userId    Int
   title     String
   message   String
-  type      String   // "appointment", "payment", "message", "system"
+  type      String
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
-  
-  // Relations
+
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@map("notifications")
 }
 
@@ -190,10 +180,40 @@ model Document {
   fileType      String
   description   String?
   createdAt     DateTime    @default(now())
-  
-  // Relations
+
   uploader      User        @relation(fields: [uploaderId], references: [id])
   appointment   Appointment? @relation(fields: [appointmentId], references: [id])
-  
+
   @@map("documents")
+}
+
+model Blog {
+  id          Int         @id @default(autoincrement())
+  title       String
+  content     String
+  authorId    Int
+  tags        String[]    @default([])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  isPublished Boolean     @default(false)
+  slug        String      @unique
+  coverImage  String?
+
+  author      User        @relation("UserBlogs", fields: [authorId], references: [id])
+  likes       BlogLike[]  @relation("BlogLikes")
+
+  @@map("blogs")
+}
+
+model BlogLike {
+  id        Int      @id @default(autoincrement())
+  blogId    Int
+  userId    Int
+  createdAt DateTime @default(now())
+
+  blog      Blog     @relation("BlogLikes", fields: [blogId], references: [id], onDelete: Cascade)
+  user      User     @relation("UserBlogLikes", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([blogId, userId])
+  @@map("blog_likes")
 }
