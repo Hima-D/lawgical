@@ -33,7 +33,7 @@ const BlogDetailPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [likedBlogs, setLikedBlogs] = useState(new Set());
   const [user, setUser] = useState(null);
-  const { slug } = useParams(); // Get the slug from the URL
+  const { slug } = useParams();
   const router = useRouter();
 
   // Fetch blog and user data
@@ -62,7 +62,6 @@ const BlogDetailPage = () => {
         const data = await response.json();
         if (data.user) {
           setUser(data.user);
-          // Fetch user likes if authenticated
           const likesResponse = await fetch(`/api/blogs/likes?userId=${data.user.id}`);
           const likesData = await likesResponse.json();
           if (likesData.success) {
@@ -78,18 +77,13 @@ const BlogDetailPage = () => {
     fetchUser();
   }, [slug]);
 
-  // Handle like/unlike
+  // Handle like/unlike without requiring login
   const handleLike = async (blogId) => {
-    if (!user) {
-      setErrorMessage('Please sign in to like a blog');
-      return;
-    }
-
     try {
       const response = await fetch('/api/blogs/likes', {
         method: likedBlogs.has(blogId) ? 'DELETE' : 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ blogId, userId: user.id }),
+        body: JSON.stringify({ blogId, userId: user?.id || 'anonymous' }),
       });
       const data = await response.json();
       if (data.success) {
@@ -114,21 +108,27 @@ const BlogDetailPage = () => {
     }
   };
 
-  // Handle social media sharing
+  // Handle social media sharing with card structure
   const handleShare = (blog, platform) => {
     const url = `${window.location.origin}/blogs/${blog.slug}`;
     const title = encodeURIComponent(blog.title);
+    const excerpt = encodeURIComponent(blog.content.slice(0, 100) + '...');
+    const author = encodeURIComponent(blog.author.displayName || 'Anonymous');
+    const date = new Date(blog.createdAt).toLocaleDateString();
+    const tags = encodeURIComponent(blog.tags.join(', '));
+    
+    const shareCardText = `${title}\n\n${excerpt}\n\nBy ${author} | ${date}\nTags: ${tags}\nRead more: ${url}`;
     let shareUrl;
 
     switch (platform) {
       case 'twitter':
-        shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+        shareUrl = `https://twitter.com/intent/tweet?text=${shareCardText}`;
         break;
       case 'linkedin':
         shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
         break;
       case 'whatsapp':
-        shareUrl = `https://api.whatsapp.com/send?text=${title}%20${url}`;
+        shareUrl = `https://api.whatsapp.com/send?text=${shareCardText}`;
         break;
       default:
         return;
@@ -208,7 +208,6 @@ const BlogDetailPage = () => {
                       ? 'bg-red-100 text-red-600 border-red-300'
                       : 'border-gray-300 text-gray-700'
                   } hover:bg-red-50`}
-                  disabled={!user}
                 >
                   <Heart
                     size={16}
