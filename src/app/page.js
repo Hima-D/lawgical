@@ -347,7 +347,7 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                     value={formData.email}
                     onChange={handleInputChange}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
-                    placeholder="john.doe@example.com"
+                    placeholder="john.doe@domain.com"
                   />
                 </div>
 
@@ -562,7 +562,7 @@ const FEATURES = [
   {
     icon: Users,
     title: "Expert Team",
-    description: "500+ qualified lawyers, CAs, and CS professionals",
+    description: "100+ qualified lawyers, CAs, and CS professionals",
     color: "from-blue-500 to-indigo-500",
   },
   {
@@ -598,9 +598,9 @@ const FEATURES = [
 ];
 
 const STATS = [
-  { number: "1M+", label: "Happy Clients", icon: Users },
-  { number: "500+", label: "Expert Professionals", icon: Shield },
-  { number: "15+", label: "Years Experience", icon: Clock },
+  { number: "10+", label: "Happy Clients", icon: Users },
+  { number: "10+", label: "Expert Professionals", icon: Shield },
+  { number: "2+", label: "Years Experience", icon: Clock },
   { number: "99%", label: "Success Rate", icon: CheckCircle },
 ];
 
@@ -735,9 +735,9 @@ export default function LawgicalHomepage() {
       }, 20);
     };
 
-    animateCounter(1000000, "clients", "+");
-    animateCounter(500, "experts", "+");
-    animateCounter(15, "experience", "+");
+    animateCounter(10, "clients", "+");
+    animateCounter(10, "experts", "+");
+    animateCounter(2, "experience", "+");
     animateCounter(99, "success", "%");
   }, []);
 
@@ -815,15 +815,15 @@ export default function LawgicalHomepage() {
                 <div className="flex flex-wrap justify-center lg:justify-start space-x-8 text-sm text-gray-500">
                   <div className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <span>1M+ Happy Clients</span>
+                    <span>10+ Happy Clients</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                    <span>500+ Legal Experts</span>
+                    <span>10+ Legal Experts</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
-                    <span>15+ Years Experience</span>
+                    <span>2+ Years Experience</span>
                   </div>
                 </div>
               </div>

@@ -32,7 +32,6 @@ import {
 const servicesList = [
   { name: "POCSO", href: "/pocso", description: "Legal protection for minors", icon: ShieldCheck },
   { name: "POSH", href: "/posh", description: "Workplace harassment law", icon: Users },
-  { name: "Corporate Law", href: "/corporate-law", description: "Business legal services", icon: Briefcase },
   { name: "Litigation", href: "/litigation", description: "Court representation", icon: Gavel },
   { name: "Contract Law", href: "/contract-law", description: "Agreement drafting & review", icon: FileText },
 ];
