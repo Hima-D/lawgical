@@ -49,8 +49,6 @@ const BlogDetailPage = () => {
         }
       } catch (error) {
         setErrorMessage('Error fetching blog post');
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -86,8 +84,13 @@ const BlogDetailPage = () => {
       }
     };
 
-    fetchBlog();
-    fetchUserAndLikes();
+    const fetchData = async () => {
+      setIsLoading(true); // Set loading to true at the start
+      await Promise.all([fetchBlog(), fetchUserAndLikes()]); // Fetch both concurrently
+      setIsLoading(false); // Set loading to false when both are done
+    };
+
+    fetchData();
   }, [slug]);
 
   // Handle like/unlike
@@ -146,7 +149,7 @@ const BlogDetailPage = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 flex items-center justify-center">
-        <p className="text-gray-600">Loading...</p>
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-solid"></div>
       </div>
     );
   }

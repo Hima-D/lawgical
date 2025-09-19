@@ -42,6 +42,7 @@ const BlogPage = () => {
   const [blogs, setBlogs] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Added loading state
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [likedBlogs, setLikedBlogs] = useState(new Set());
@@ -107,8 +108,13 @@ const BlogPage = () => {
       }
     };
 
-    fetchBlogs();
-    fetchUserAndLikes();
+    const fetchData = async () => {
+      setIsLoading(true); // Set loading to true at the start
+      await Promise.all([fetchBlogs(), fetchUserAndLikes()]); // Fetch both concurrently
+      setIsLoading(false); // Set loading to false when both are done
+    };
+
+    fetchData();
   }, []);
 
   // Handle like/unlike
@@ -224,228 +230,236 @@ const BlogPage = () => {
         </div>
       </section>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {user?.userType === 'lawyer' && (
-          <div className="flex justify-end mb-8">
-            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-              <DialogTrigger asChild>
-                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
-                  <PlusCircle size={18} className="mr-2" />
-                  Add New Blog
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[600px] bg-white">
-                <DialogHeader>
-                  <DialogTitle>Create a New Blog Post</DialogTitle>
-                </DialogHeader>
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                  <div>
-                    <label className="text-sm font-medium text-gray-700">Title</label>
-                    <Controller
-                      name="title"
-                      control={control}
-                      rules={{ required: 'Title is required', minLength: { value: 5, message: 'Title must be at least 5 characters' } }}
-                      render={({ field }) => (
-                        <Input
-                          placeholder="Enter blog title"
-                          {...field}
-                          className="mt-1 w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                      )}
-                    />
-                    {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-gray-700">Content</label>
-                    <Controller
-                      name="content"
-                      control={control}
-                      rules={{ required: 'Content is required', minLength: { value: 50, message: 'Content must be at least 50 characters' } }}
-                      render={({ field }) => (
-                        <Textarea
-                          placeholder="Write your blog content..."
-                          rows={8}
-                          {...field}
-                          className="mt-1 w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                        />
-                      )}
-                    />
-                    {errors.content && <p className="text-red-500 text-sm mt-1">{errors.content.message}</p>}
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-gray-700">Tags (comma-separated)</label>
-                    <Controller
-                      name="tags"
-                      control={control}
-                      render={({ field }) => (
-                        <Input
-                          placeholder="e.g., legal, business, compliance"
-                          {...field}
-                          className="mt-1 w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                      )}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-gray-700">Cover Image URL (optional)</label>
-                    <Controller
-                      name="coverImage"
-                      control={control}
-                      render={({ field }) => (
-                        <Input
-                          placeholder="Enter image URL"
-                          {...field}
-                          className="mt-1 w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                      )}
-                    />
-                  </div>
-                  <div className="flex items-center">
-                    <Controller
-                      name="isPublished"
-                      control={control}
-                      render={({ field }) => (
-                        <input
-                          type="checkbox"
-                          checked={field.value}
-                          onChange={(e) => field.onChange(e.target.checked)}
-                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                        />
-                      )}
-                    />
-                    <label className="ml-2 text-sm font-medium text-gray-700">Publish immediately</label>
-                  </div>
-                  <div className="flex justify-end space-x-4">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setIsModalOpen(false)}
-                      className="border-gray-300 text-gray-700 hover:bg-gray-100"
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className={`bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white ${
-                        isSubmitting ? 'opacity-75 cursor-not-allowed' : ''
-                      }`}
-                    >
-                      {isSubmitting ? 'Posting...' : 'Post Blog'}
-                    </Button>
-                  </div>
-                </form>
-              </DialogContent>
-            </Dialog>
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-solid"></div>
           </div>
-        )}
-        {successMessage && (
-          <Alert className="mb-8 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-800">
-            <CheckCircle className="w-6 h-6" />
-            <AlertDescription className="ml-3">{successMessage}</AlertDescription>
-          </Alert>
-        )}
-        {errorMessage && (
-          <Alert className="mb-8 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 text-red-800">
-            <AlertCircle className="w-6 h-6" />
-            <AlertDescription className="ml-3">{errorMessage}</AlertDescription>
-          </Alert>
-        )}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {blogs.map((blog) => (
-            <Card
-              key={blog.id}
-              className="bg-white shadow-lg border border-gray-100 hover:shadow-xl transition-shadow cursor-pointer"
-              onClick={() => router.push(`/blogs/${blog.slug}`)}
-            >
-              <CardHeader>
-                {blog.coverImage && (
-                  <img
-                    src={blog.coverImage}
-                    alt={blog.title}
-                    className="w-full h-48 object-cover rounded-t-lg mb-4"
-                  />
-                )}
-                <CardTitle className="text-xl text-gray-900">{blog.title}</CardTitle>
-                <CardDescription className="text-gray-600">
-                  By {blog.author.displayName || 'Anonymous'} •{' '}
-                  {new Date(blog.createdAt).toLocaleDateString()}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600 line-clamp-3 mb-4">{blog.content}</p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {blog.tags.map((tag, index) => (
-                    <Badge key={index} variant="secondary" className="bg-blue-100 text-blue-800">
-                      <Tag size={14} className="mr-1" />
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleLike(blog.id);
-                      }}
-                      className={`${
-                        likedBlogs.has(blog.id)
-                          ? 'bg-red-100 text-red-600 border-red-300'
-                          : 'border-gray-300 text-gray-700'
-                      } hover:bg-red-50`}
-                    >
-                      <Heart
-                        size={16}
-                        className={likedBlogs.has(blog.id) ? 'fill-red-600' : ''}
+        ) : (
+          <>
+            {user?.userType === 'lawyer' && (
+              <div className="flex justify-end mb-8">
+                <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                  <DialogTrigger asChild>
+                    <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
+                      <PlusCircle size={18} className="mr-2" />
+                      Add New Blog
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[600px] bg-white">
+                    <DialogHeader>
+                      <DialogTitle>Create a New Blog Post</DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                      <div>
+                        <label className="text-sm font-medium text-gray-700">Title</label>
+                        <Controller
+                          name="title"
+                          control={control}
+                          rules={{ required: 'Title is required', minLength: { value: 5, message: 'Title must be at least 5 characters' } }}
+                          render={({ field }) => (
+                            <Input
+                              placeholder="Enter blog title"
+                              {...field}
+                              className="mt-1 w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                          )}
+                        />
+                        {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-700">Content</label>
+                        <Controller
+                          name="content"
+                          control={control}
+                          rules={{ required: 'Content is required', minLength: { value: 50, message: 'Content must be at least 50 characters' } }}
+                          render={({ field }) => (
+                            <Textarea
+                              placeholder="Write your blog content..."
+                              rows={8}
+                              {...field}
+                              className="mt-1 w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                            />
+                          )}
+                        />
+                        {errors.content && <p className="text-red-500 text-sm mt-1">{errors.content.message}</p>}
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-700">Tags (comma-separated)</label>
+                        <Controller
+                          name="tags"
+                          control={control}
+                          render={({ field }) => (
+                            <Input
+                              placeholder="e.g., legal, business, compliance"
+                              {...field}
+                              className="mt-1 w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                          )}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-700">Cover Image URL (optional)</label>
+                        <Controller
+                          name="coverImage"
+                          control={control}
+                          render={({ field }) => (
+                            <Input
+                              placeholder="Enter image URL"
+                              {...field}
+                              className="mt-1 w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                          )}
+                        />
+                      </div>
+                      <div className="flex items-center">
+                        <Controller
+                          name="isPublished"
+                          control={control}
+                          render={({ field }) => (
+                            <input
+                              type="checkbox"
+                              checked={field.value}
+                              onChange={(e) => field.onChange(e.target.checked)}
+                              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                            />
+                          )}
+                        />
+                        <label className="ml-2 text-sm font-medium text-gray-700">Publish immediately</label>
+                      </div>
+                      <div className="flex justify-end space-x-4">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => setIsModalOpen(false)}
+                          className="border-gray-300 text-gray-700 hover:bg-gray-100"
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          type="submit"
+                          disabled={isSubmitting}
+                          className={`bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white ${
+                            isSubmitting ? 'opacity-75 cursor-not-allowed' : ''
+                          }`}
+                        >
+                          {isSubmitting ? 'Posting...' : 'Post Blog'}
+                        </Button>
+                      </div>
+                    </form>
+                  </DialogContent>
+                </Dialog>
+              </div>
+            )}
+            {successMessage && (
+              <Alert className="mb-8 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-800">
+                <CheckCircle className="w-6 h-6" />
+                <AlertDescription className="ml-3">{successMessage}</AlertDescription>
+              </Alert>
+            )}
+            {errorMessage && (
+              <Alert className="mb-8 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 text-red-800">
+                <AlertCircle className="w-6 h-6" />
+                <AlertDescription className="ml-3">{errorMessage}</AlertDescription>
+              </Alert>
+            )}
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {blogs.map((blog) => (
+                <Card
+                  key={blog.id}
+                  className="bg-white shadow-lg border border-gray-100 hover:shadow-xl transition-shadow cursor-pointer"
+                  onClick={() => router.push(`/blogs/${blog.slug}`)}
+                >
+                  <CardHeader>
+                    {blog.coverImage && (
+                      <img
+                        src={blog.coverImage}
+                        alt={blog.title}
+                        className="w-full h-48 object-cover rounded-t-lg mb-4"
                       />
-                      <span className="ml-1">{blog.likeCount || 0}</span>
-                    </Button>
-                    <span className="text-sm text-gray-500">
-                      {blog.likeCount ? `${blog.likeCount} people found this helpful` : 'Be the first to like!'}
-                    </span>
-                  </div>
-                  <div className="flex space-x-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleShare(blog, 'twitter');
-                      }}
-                      className="border-gray-300 text-gray-700 hover:bg-blue-50"
-                    >
-                      <Twitter size={16} />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleShare(blog, 'linkedin');
-                      }}
-                      className="border-gray-300 text-gray-700 hover:bg-blue-50"
-                    >
-                      <Linkedin size={16} />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleShare(blog, 'whatsapp');
-                      }}
-                      className="border-gray-300 text-gray-700 hover:bg-green-50"
-                    >
-                      <MessageCircle size={16} />
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                    )}
+                    <CardTitle className="text-xl text-gray-900">{blog.title}</CardTitle>
+                    <CardDescription className="text-gray-600">
+                      By {blog.author.displayName || 'Anonymous'} •{' '}
+                      {new Date(blog.createdAt).toLocaleDateString()}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600 line-clamp-3 mb-4">{blog.content}</p>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {blog.tags.map((tag, index) => (
+                        <Badge key={index} variant="secondary" className="bg-blue-100 text-blue-800">
+                          <Tag size={14} className="mr-1" />
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleLike(blog.id);
+                          }}
+                          className={`${
+                            likedBlogs.has(blog.id)
+                              ? 'bg-red-100 text-red-600 border-red-300'
+                              : 'border-gray-300 text-gray-700'
+                          } hover:bg-red-50`}
+                        >
+                          <Heart
+                            size={16}
+                            className={likedBlogs.has(blog.id) ? 'fill-red-600' : ''}
+                          />
+                          <span className="ml-1">{blog.likeCount || 0}</span>
+                        </Button>
+                        <span className="text-sm text-gray-500">
+                          {blog.likeCount ? `${blog.likeCount} people found this helpful` : 'Be the first to like!'}
+                        </span>
+                      </div>
+                      <div className="flex space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleShare(blog, 'twitter');
+                          }}
+                          className="border-gray-300 text-gray-700 hover:bg-blue-50"
+                        >
+                          <Twitter size={16} />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleShare(blog, 'linkedin');
+                          }}
+                          className="border-gray-300 text-gray-700 hover:bg-blue-50"
+                        >
+                          <Linkedin size={16} />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleShare(blog, 'whatsapp');
+                          }}
+                          className="border-gray-300 text-gray-700 hover:bg-green-50"
+                        >
+                          <MessageCircle size={16} />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </>
+        )}
       </div>
       <Footer className="mt-16 bg-white shadow-lg border-t border-gray-200" />
     </div>
