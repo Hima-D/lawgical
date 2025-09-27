@@ -70,7 +70,7 @@ export async function GET() {
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/payment`,
+      url: `${baseUrl}/blogs`,
       lastmod: currentDate,
       changefreq: 'weekly',
       priority: 0.6,
