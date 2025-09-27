@@ -1,22 +1,24 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import Head from "next/head";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 
-// Service categories with expanded details
+// Service categories with expanded details and SEO-friendly descriptions
 const SERVICE_CATEGORIES = [
   {
     id: 1,
     title: "Business Setup",
     icon: "🏢",
-    description: "Complete business registration and incorporation services with end-to-end support",
+    description: "Comprehensive business registration and incorporation services with end-to-end support for startups and enterprises.",
+    seoDescription: "Start your business with ease using our expert business setup services, including private limited company registration, LLP formation, and more.",
     services: [
-      { name: "Private Limited Company", price: "₹6,999", duration: "7-15 days", features: ["ROC Filing", "DIN & DSC", "Current Account Opening"] },
-      { name: "LLP Registration", price: "₹4,999", duration: "10-15 days", features: ["LLPIN", "Agreement Drafting", "Compliance Kit"] },
-      { name: "Partnership Firm", price: "₹2,999", duration: "5-7 days", features: ["Partnership Deed", "PAN Registration", "Bank Account Opening"] },
-      { name: "Sole Proprietorship", price: "₹1,999", duration: "3-5 days", features: ["MSME Registration", "Shop License", "Basic Compliance"] },
-      { name: "Section 8 Company", price: "₹8,999", duration: "15-30 days", features: ["NGO Registration", "12A & 80G", "FCRA Consultation"] }
+      { name: "Private Limited Company", price: "₹13,300", features: ["ROC Filing", "DIN & DSC", "Current Account Opening", "Priority Processing", "Dedicated Account Manager"] },
+      { name: "LLP Registration", price: "₹9,500", features: ["LLPIN", "Agreement Drafting", "Compliance Kit", "Priority Processing", "Dedicated Support"] },
+      { name: "Partnership Firm", price: "₹5,800", features: ["Partnership Deed", "PAN Registration", "Bank Account Opening", "Priority Processing", "Extended Support"] },
+      { name: "Sole Proprietorship", price: "₹3,900", features: ["MSME Registration", "Shop License", "Basic Compliance", "Priority Processing", "Compliance Review"] },
+      { name: "Section 8 Company", price: "₹17,200", features: ["NGO Registration", "12A & 80G", "FCRA Consultation", "Priority Processing", "Dedicated Consultant"] }
     ],
     color: "from-blue-500 to-blue-700",
     bgColor: "bg-blue-50",
@@ -26,13 +28,14 @@ const SERVICE_CATEGORIES = [
     id: 2,
     title: "Legal Consultation",
     icon: "⚖️",
-    description: "Expert legal advice from qualified professionals across all practice areas",
+    description: "Expert legal advice from qualified professionals for civil, criminal, corporate, and family law matters.",
+    seoDescription: "Get professional legal consultation from top lawyers for property disputes, corporate agreements, family law, and more.",
     services: [
-      { name: "Civil Lawyer Consultation", price: "₹999", duration: "30 mins", features: ["Property Disputes", "Contract Review", "Legal Notice"] },
-      { name: "Criminal Lawyer", price: "₹1,499", duration: "45 mins", features: ["Bail Applications", "Court Representation", "Case Strategy"] },
-      { name: "Corporate Lawyer", price: "₹1,999", duration: "60 mins", features: ["Business Agreements", "Compliance Review", "M&A Advice"] },
-      { name: "Family Lawyer", price: "₹899", duration: "30 mins", features: ["Divorce Proceedings", "Child Custody", "Property Settlement"] },
-      { name: "Property Lawyer", price: "₹1,299", duration: "45 mins", features: ["Title Verification", "Sale Deed", "Property Registration"] }
+      { name: "Civil Lawyer Consultation", price: "₹2,000", features: ["Property Disputes", "Contract Review", "Legal Notice", "Extended Session", "Follow-up Call"] },
+      { name: "Criminal Lawyer", price: "₹2,900", features: ["Bail Applications", "Court Representation", "Case Strategy", "Priority Booking", "Case Review"] },
+      { name: "Corporate Lawyer", price: "₹3,900", features: ["Business Agreements", "Compliance Review", "M&A Advice", "Extended Session", "Dedicated Advisor"] },
+      { name: "Family Lawyer", price: "₹1,800", features: ["Divorce Proceedings", "Child Custody", "Property Settlement", "Priority Booking", "Follow-up Support"] },
+      { name: "Property Lawyer", price: "₹2,500", features: ["Title Verification", "Sale Deed", "Property Registration", "Priority Processing", "Document Review"] }
     ],
     color: "from-green-500 to-green-700",
     bgColor: "bg-green-50",
@@ -42,13 +45,14 @@ const SERVICE_CATEGORIES = [
     id: 3,
     title: "Tax & Compliance",
     icon: "📊",
-    description: "Comprehensive tax planning and compliance solutions for individuals and businesses",
+    description: "Comprehensive tax planning and compliance solutions for individuals and businesses to ensure financial efficiency.",
+    seoDescription: "Simplify tax and compliance with our GST registration, income tax filing, and annual compliance services for businesses and individuals.",
     services: [
-      { name: "GST Registration", price: "₹2,499", duration: "3-7 days", features: ["GSTIN Certificate", "Digital Signature", "Return Filing Setup"] },
-      { name: "Income Tax Filing", price: "₹999", duration: "1-3 days", features: ["ITR Preparation", "Tax Optimization", "Refund Processing"] },
-      { name: "TDS Returns", price: "₹1,499", duration: "2-5 days", features: ["Quarterly Filing", "TDS Certificates", "Compliance Check"] },
-      { name: "Annual Filings", price: "₹4,999", duration: "7-15 days", features: ["ROC Compliance", "Board Resolutions", "Financial Statements"] },
-      { name: "Tax Planning", price: "₹2,999", duration: "Consultation", features: ["Investment Strategy", "Tax Savings", "Restructuring Advice"] }
+      { name: "GST Registration", price: "₹4,800", features: ["GSTIN Certificate", "Digital Signature", "Return Filing Setup", "Priority Filing", "Dedicated Tax Advisor"] },
+      { name: "Income Tax Filing", price: "₹2,000", features: ["ITR Preparation", "Tax Optimization", "Refund Processing", "Priority Processing", "Tax Consultation"] },
+      { name: "TDS Returns", price: "₹2,900", features: ["Quarterly Filing", "TDS Certificates", "Compliance Check", "Priority Filing", "Compliance Audit"] },
+      { name: "Annual Filings", price: "₹9,500", features: ["ROC Compliance", "Board Resolutions", "Financial Statements", "Priority Filing", "Dedicated CA Support"] },
+      { name: "Tax Planning", price: "₹5,800", features: ["Investment Strategy", "Tax Savings", "Restructuring Advice", "Priority Consultation", "Customized Plan"] }
     ],
     color: "from-purple-500 to-purple-700",
     bgColor: "bg-purple-50",
@@ -58,13 +62,14 @@ const SERVICE_CATEGORIES = [
     id: 4,
     title: "Trademark & IP",
     icon: "©️",
-    description: "Protect your intellectual property rights with comprehensive IP services",
+    description: "Protect your brand and intellectual property with our trademark, copyright, and patent services.",
+    seoDescription: "Secure your intellectual property with our expert trademark registration, copyright filing, and patent services for businesses and creators.",
     services: [
-      { name: "Trademark Registration", price: "₹6,999", duration: "12-18 months", features: ["Search Report", "Application Filing", "Objection Handling"] },
-      { name: "Copyright Registration", price: "₹4,999", duration: "4-6 months", features: ["Work Registration", "Certificate Issue", "Infringement Support"] },
-      { name: "Patent Filing", price: "₹24,999", duration: "18-36 months", features: ["Patent Search", "Specification Draft", "Prosecution Support"] },
-      { name: "Design Registration", price: "₹8,999", duration: "6-12 months", features: ["Design Search", "Application Filing", "Certificate Issue"] },
-      { name: "IP Licensing", price: "₹9,999", duration: "15-30 days", features: ["Agreement Drafting", "Due Diligence", "Registration Support"] }
+      { name: "Trademark Registration", price: "₹13,300", features: ["Search Report", "Application Filing", "Objection Handling", "Priority Filing", "Dedicated IP Consultant"] },
+      { name: "Copyright Registration", price: "₹9,500", features: ["Work Registration", "Certificate Issue", "Infringement Support", "Priority Processing", "Legal Support"] },
+      { name: "Patent Filing", price: "₹47,700", features: ["Patent Search", "Specification Draft", "Prosecution Support", "Priority Filing", "Patent Attorney Support"] },
+      { name: "Design Registration", price: "₹17,200", features: ["Design Search", "Application Filing", "Certificate Issue", "Priority Processing", "Design Consultant"] },
+      { name: "IP Licensing", price: "₹19,100", features: ["Agreement Drafting", "Due Diligence", "Registration Support", "Priority Drafting", "Legal Advisor"] }
     ],
     color: "from-orange-500 to-orange-700",
     bgColor: "bg-orange-50",
@@ -74,13 +79,14 @@ const SERVICE_CATEGORIES = [
     id: 5,
     title: "Documentation",
     icon: "📄",
-    description: "Legal document drafting and review services for all your business needs",
+    description: "Professional legal document drafting and review services for contracts, agreements, and more.",
+    seoDescription: "Ensure your business is protected with our expert legal document drafting services, including contracts, wills, and power of attorney.",
     services: [
-      { name: "Business Contracts", price: "₹3,999", duration: "3-7 days", features: ["Custom Drafting", "Legal Review", "Amendment Support"] },
-      { name: "Employment Agreements", price: "₹1,999", duration: "2-5 days", features: ["Offer Letters", "Service Agreements", "NDA Templates"] },
-      { name: "Legal Notices", price: "₹2,499", duration: "1-3 days", features: ["Notice Drafting", "Legal Dispatch", "Follow-up Support"] },
-      { name: "Will & Testament", price: "₹4,999", duration: "5-10 days", features: ["Will Drafting", "Registration", "Witness Arrangement"] },
-      { name: "Power of Attorney", price: "₹1,499", duration: "2-4 days", features: ["Document Drafting", "Notarization", "Registration"] }
+      { name: "Business Contracts", price: "₹6,400", features: ["Custom Drafting", "Legal Review", "Amendment Support", "Priority Drafting", "Dedicated Legal Advisor"] },
+      { name: "Employment Agreements", price: "₹3,200", features: ["Offer Letters", "Service Agreements", "NDA Templates", "Priority Drafting", "Legal Review"] },
+      { name: "Legal Notices", price: "₹4,000", features: ["Notice Drafting", "Legal Dispatch", "Follow-up Support", "Priority Dispatch", "Legal Support"] },
+      { name: "Will & Testament", price: "₹8,000", features: ["Will Drafting", "Registration", "Witness Arrangement", "Priority Drafting", "Notary Support"] },
+      { name: "Power of Attorney", price: "₹2,400", features: ["Document Drafting", "Notarization", "Registration", "Priority Processing", "Notary Support"] }
     ],
     color: "from-red-500 to-red-700",
     bgColor: "bg-red-50",
@@ -90,13 +96,14 @@ const SERVICE_CATEGORIES = [
     id: 6,
     title: "Licenses & Permits",
     icon: "🏆",
-    description: "Obtain all necessary licenses and permits for your business operations",
+    description: "Obtain essential licenses and permits to ensure your business operates legally and efficiently.",
+    seoDescription: "Streamline your business operations with our license and permit services, including FSSAI, trade, and labor licenses.",
     services: [
-      { name: "FSSAI License", price: "₹3,999", duration: "15-30 days", features: ["Application Filing", "Document Verification", "License Issue"] },
-      { name: "Trade License", price: "₹2,999", duration: "10-20 days", features: ["Municipal Approval", "Document Support", "Renewal Reminders"] },
-      { name: "Professional Tax", price: "₹1,999", duration: "7-15 days", features: ["State Registration", "Certificate Issue", "Compliance Support"] },
-      { name: "ESI & PF Registration", price: "₹4,999", duration: "10-20 days", features: ["Employee Registration", "Digital Setup", "Monthly Returns"] },
-      { name: "Labor License", price: "₹5,999", duration: "20-30 days", features: ["Factory License", "Contract Labor", "Compliance Kit"] }
+      { name: "FSSAI License", price: "₹6,400", features: ["Application Filing", "Document Verification", "License Issue", "Priority Filing", "Dedicated Support"] },
+      { name: "Trade License", price: "₹4,800", features: ["Municipal Approval", "Document Support", "Renewal Reminders", "Priority Processing", "Compliance Support"] },
+      { name: "Professional Tax", price: "₹3,200", features: ["State Registration", "Certificate Issue", "Compliance Support", "Priority Registration", "Tax Advisor"] },
+      { name: "ESI & PF Registration", price: "₹8,000", features: ["Employee Registration", "Digital Setup", "Monthly Returns", "Priority Setup", "Compliance Support"] },
+      { name: "Labor License", price: "₹8,800", features: ["Factory License", "Contract Labor", "Compliance Kit", "Priority Processing", "Dedicated Support"] }
     ],
     color: "from-indigo-500 to-indigo-700",
     bgColor: "bg-indigo-50",
@@ -105,10 +112,10 @@ const SERVICE_CATEGORIES = [
 ];
 
 const POPULAR_SERVICES = [
-  { name: "Private Limited Company", originalPrice: "₹8,999", currentPrice: "₹6,999", discount: "22%", category: "Business Setup" },
-  { name: "Trademark Registration", originalPrice: "₹9,999", currentPrice: "₹6,999", discount: "30%", category: "IP Protection" },
-  { name: "GST Registration", originalPrice: "₹3,499", currentPrice: "₹2,499", discount: "29%", category: "Tax & Compliance" },
-  { name: "Legal Consultation", originalPrice: "₹1,499", currentPrice: "₹999", discount: "33%", category: "Legal Advice" }
+  { name: "Private Limited Company", originalPrice: "₹17,200", price: "₹13,300", discount: "22%", category: "Business Setup", seoDescription: "Register your private limited company with expert support and compliance." },
+  { name: "Trademark Registration", originalPrice: "₹17,200", price: "₹13,300", discount: "22%", category: "IP Protection", seoDescription: "Protect your brand with our affordable trademark registration services." },
+  { name: "GST Registration", originalPrice: "₹6,200", price: "₹4,800", discount: "22%", category: "Tax & Compliance", seoDescription: "Get your GST registration done quickly with our expert tax services." },
+  { name: "Legal Consultation", originalPrice: "₹2,600", price: "₹2,000", discount: "23%", category: "Legal Advice", seoDescription: "Consult top lawyers for civil, criminal, or corporate legal advice." }
 ];
 
 export default function ServicesPage() {
@@ -117,9 +124,44 @@ export default function ServicesPage() {
 
   const currentCategory = SERVICE_CATEGORIES.find(cat => cat.id === activeCategory);
 
+  // Structured data for SEO
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Legal and Compliance Services",
+    "description": "Comprehensive legal services including business setup, tax compliance, trademark registration, and legal consultation.",
+    "provider": {
+      "@type": "Organization",
+      "name": "Your Legal Service Provider"
+    },
+    "serviceType": [
+      "Business Setup",
+      "Legal Consultation",
+      "Tax & Compliance",
+      "Trademark & IP",
+      "Documentation",
+      "Licenses & Permits"
+    ],
+    "offers": POPULAR_SERVICES.map(service => ({
+      "@type": "Offer",
+      "name": service.name,
+      "description": service.seoDescription,
+      "price": service.price.replace("₹", ""),
+      "priceCurrency": "INR"
+    }))
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100" >
-    <Header />
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100">
+      <Head>
+        <title>Legal Services - Business Setup, Tax Compliance, Trademark Registration</title>
+        <meta name="description" content="Discover expert legal services for business setup, tax compliance, trademark registration, and legal consultation with transparent pricing and fast processing." />
+        <meta name="keywords" content="legal services, business setup, tax compliance, trademark registration, legal consultation, GST registration, company registration" />
+        <meta name="robots" content="index, follow" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      </Head>
+
+      <Header />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-50 via-white to-purple-50 py-16">
@@ -128,7 +170,7 @@ export default function ServicesPage() {
             Comprehensive <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Legal Services</span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            From business registration to legal consultation, we provide end-to-end solutions for all your legal and compliance needs
+            From business registration to legal consultation and tax compliance, we offer end-to-end solutions to meet all your legal needs with expert support and transparent pricing.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -163,7 +205,7 @@ export default function ServicesPage() {
                 </h3>
                 
                 <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl font-bold text-blue-600">{service.currentPrice}</span>
+                  <span className="text-2xl font-bold text-blue-600">{service.price}</span>
                   <span className="text-lg text-gray-400 line-through">{service.originalPrice}</span>
                 </div>
                 
@@ -204,7 +246,7 @@ export default function ServicesPage() {
                       }`}
                     >
                       <div className="flex items-center">
-                        <span className="text-2xl mr-3">{category.icon}</span>
+                        <span className="text-2xl mr-3" aria-label={category.title}>{category.icon}</span>
                         <div>
                           <div className="font-semibold">{category.title}</div>
                           <div className={`text-sm ${
@@ -225,7 +267,7 @@ export default function ServicesPage() {
               {currentCategory && (
                 <div className={`${currentCategory.bgColor} rounded-xl p-8 ${currentCategory.borderColor} border-2`}>
                   <div className="flex items-center mb-6">
-                    <span className="text-4xl mr-4">{currentCategory.icon}</span>
+                    <span className="text-4xl mr-4" aria-label={currentCategory.title}>{currentCategory.icon}</span>
                     <div>
                       <h3 className="text-3xl font-bold text-gray-900">{currentCategory.title}</h3>
                       <p className="text-gray-600 mt-2">{currentCategory.description}</p>
@@ -244,12 +286,6 @@ export default function ServicesPage() {
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
                                 </svg>
                                 {service.price}
-                              </span>
-                              <span className="flex items-center">
-                                <svg className="w-4 h-4 mr-1 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                {service.duration}
                               </span>
                             </div>
                             <div className="flex flex-wrap gap-2">
@@ -317,22 +353,22 @@ export default function ServicesPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center p-6">
-              <div className="text-4xl mb-4">🏆</div>
+              <div className="text-4xl mb-4" aria-label="Expert Team">🏆</div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Expert Team</h3>
               <p className="text-gray-600">Qualified lawyers, CAs, and CS professionals with 15+ years experience</p>
             </div>
             <div className="text-center p-6">
-              <div className="text-4xl mb-4">⚡</div>
+              <div className="text-4xl mb-4" aria-label="Quick Processing">⚡</div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Quick Processing</h3>
-              <p className="text-gray-600">Fast turnaround times with guaranteed delivery dates</p>
+              <p className="text-gray-600">Efficient handling with dedicated support for timely completion</p>
             </div>
             <div className="text-center p-6">
-              <div className="text-4xl mb-4">💰</div>
+              <div className="text-4xl mb-4" aria-label="Transparent Pricing">💰</div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Transparent Pricing</h3>
               <p className="text-gray-600">No hidden costs, clear pricing structure with no surprises</p>
             </div>
             <div className="text-center p-6">
-              <div className="text-4xl mb-4">🛡️</div>
+              <div className="text-4xl mb-4" aria-label="Secure">🛡️</div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">100% Secure</h3>
               <p className="text-gray-600">Your data and documents are completely safe and confidential</p>
             </div>

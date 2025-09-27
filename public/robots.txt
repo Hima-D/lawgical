@@ -1,10 +1,9 @@
-# *
+# Allow all crawlers, including AI agents, to access and index the site
 User-agent: *
 Allow: /
 
-# *
-User-agent: *
-Disallow: /api
+# Disallow sensitive or irrelevant paths
+Disallow: /api/
 Disallow: /404
 Disallow: /500
 
