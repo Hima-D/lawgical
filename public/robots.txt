@@ -11,4 +11,4 @@ Disallow: /500
 Host: https://www.lawgical.tech
 
 # Sitemaps
-Sitemap: https://www.lawgical.tech/sitemap-0.xml
+Sitemap: https://www.lawgical.tech/sitemap.xml
