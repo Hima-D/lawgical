@@ -1,27 +1,5 @@
 import { NextResponse } from 'next/server';
 
-// Sample services data (replace with actual import from '@/components/services')
-const services = [
-  { title: "Company Registration" },
-  { title: "GST Registration" },
-  { title: "Trademark Registration" },
-  { title: "Legal Consultation" },
-  { title: "POSH Compliance" },
-  { title: "Contract Drafting" },
-  { title: "Intellectual Property" },
-  { title: "Tax Planning" },
-  { title: "Labor Law" },
-];
-
-// Function to slugify service titles
-const slugify = (text) => {
-  if (!text || typeof text !== 'string') return '';
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '');
-};
-
 // Function to validate URLs
 const isValidUrl = (url) => {
   try {
@@ -35,65 +13,157 @@ const isValidUrl = (url) => {
 // Generate sitemap XML
 export async function GET() {
   const baseUrl = 'https://www.lawgical.tech';
-  const currentDate = new Date().toISOString().split('T')[0]; // 2025-09-27
+  const currentDate = new Date().toISOString().split('T')[0]; // e.g., 2025-09-29
 
-  // Static pages (aligned with LawgicalHomepage and ConsultationModal links)
+  // Static pages from provided XML
   const staticPages = [
     {
       url: `${baseUrl}/`,
       lastmod: currentDate,
       changefreq: 'daily',
-      priority: 1.0, // Homepage is most important
+      priority: 1.0, // Higher priority for homepage
     },
     {
-      url: `${baseUrl}/service`, // Matches Link in LawgicalHomepage
+      url: `${baseUrl}/sitemap.xml`,
       lastmod: currentDate,
-      changefreq: 'weekly',
-      priority: 0.8,
+      changefreq: 'daily',
+      priority: 0.7,
     },
     {
-      url: `${baseUrl}/privacy-policy`, // From ConsultationModal
+      url: `${baseUrl}/aboutus`,
       lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: 0.6,
+      changefreq: 'daily',
+      priority: 0.7,
     },
     {
-      url: `${baseUrl}/terms-of-service`, // From ConsultationModal
+      url: `${baseUrl}/appointments`,
       lastmod: currentDate,
-      changefreq: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/consultation`,
-      lastmod: currentDate,
-      changefreq: 'weekly',
+      changefreq: 'daily',
       priority: 0.7,
     },
     {
       url: `${baseUrl}/blogs`,
       lastmod: currentDate,
-      changefreq: 'weekly',
-      priority: 0.6,
+      changefreq: 'daily',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/careers`,
+      lastmod: currentDate,
+      changefreq: 'daily',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/chat`,
+      lastmod: currentDate,
+      changefreq: 'daily',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/companies`,
+      lastmod: currentDate,
+      changefreq: 'daily',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/consultation`,
+      lastmod: currentDate,
+      changefreq: 'daily',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/contact`,
+      lastmod: currentDate,
+      changefreq: 'daily',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/contract-law`,
+      lastmod: currentDate,
+      changefreq: 'daily',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/documents`,
+      lastmod: currentDate,
+      changefreq: 'daily',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/litigation`,
+      lastmod: currentDate,
+      changefreq: 'daily',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/payment`,
+      lastmod: currentDate,
+      changefreq: 'daily',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/pocso`,
+      lastmod: currentDate,
+      changefreq: 'daily',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/posh`,
+      lastmod: currentDate,
+      changefreq: 'daily',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/posh/register`,
+      lastmod: currentDate,
+      changefreq: 'daily',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/service`,
+      lastmod: currentDate,
+      changefreq: 'daily',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/signin`,
+      lastmod: currentDate,
+      changefreq: 'daily',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/signup`,
+      lastmod: currentDate,
+      changefreq: 'daily',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/team`,
+      lastmod: currentDate,
+      changefreq: 'daily',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/terms-of-service`,
+      lastmod: currentDate,
+      changefreq: 'daily',
+      priority: 0.7,
     },
   ];
 
-  // Dynamic service pages
-  const servicePages = services.map((service) => {
-    const slug = slugify(service.title);
-    return {
-      url: `${baseUrl}/service/${slug}`, // Changed to /service/ to match LawgicalHomepage's Link
-      lastmod: currentDate,
-      changefreq: 'weekly',
-      priority: 0.7,
-    };
-  });
+  // Validate pages
+  const allPages = staticPages.filter((page) => isValidUrl(page.url));
 
-  // Combine and validate pages
-  const allPages = [...staticPages, ...servicePages].filter((page) => isValidUrl(page.url));
-
-  // Generate XML
+  // Generate XML with additional namespaces
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset 
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml"
+  xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+  xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"
+>
   ${allPages
     .map(
       (page) => `
