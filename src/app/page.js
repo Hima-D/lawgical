@@ -13,11 +13,14 @@ import {
   Users,
   Clock,
   Award,
+  Star,
   Gavel,
   Search,
   Target,
+  MessageCircle,
   ArrowRight,
   X,
+  User,
 } from "lucide-react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
@@ -27,10 +30,65 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Slot } from "@radix-ui/react-slot";
 import TestimonialsSlider from "@/components/testimonials";
-import { Button } from "@/components/ui/button"; // shadcn/ui Button
-import { Card, CardContent } from "@/components/ui/card"; // shadcn/ui Card
-import { Badge } from "@/components/ui/badge"; // shadcn/ui Badge
+
+// Simplified shadcn/ui Components to match LitigationHomepage
+const Button = ({
+  children,
+  variant = "default",
+  size = "default",
+  className = "",
+  asChild = false,
+  ...props
+}) => {
+  const baseClasses =
+    "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background";
+  const variants = {
+    default: "bg-blue-600 text-white hover:bg-blue-700",
+    outline: "border-2 border-input hover:bg-accent hover:text-accent-foreground",
+    ghost: "hover:bg-accent hover:text-accent-foreground",
+    secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200",
+  };
+  const sizes = {
+    default: "h-10 px-4 py-2",
+    sm: "h-9 px-3 rounded-md",
+    lg: "h-12 px-8 text-lg",
+  };
+  const Comp = asChild ? Slot : "button";
+  return (
+    <Comp
+      className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`}
+      {...props}
+    >
+      {children}
+    </Comp>
+  );
+};
+
+const Card = ({ children, className = "", ...props }) => (
+  <div
+    className={`rounded-lg border bg-white text-card-foreground shadow-sm ${className}`}
+    {...props}
+  >
+    {children}
+  </div>
+);
+
+const Badge = ({ children, variant = "default", className = "" }) => {
+  const variants = {
+    default: "bg-blue-100 text-blue-800",
+    secondary: "bg-secondary text-secondary-foreground",
+    outline: "border border-input",
+  };
+  return (
+    <div
+      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors ${variants[variant]} ${className}`}
+    >
+      {children}
+    </div>
+  );
+};
 
 // Consultation Modal Component
 const ConsultationModal = ({ isOpen, onClose }) => {
@@ -177,44 +235,43 @@ const ConsultationModal = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
       <Card className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-gray-100">
-        <CardContent className="p-8">
+        <div className="p-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Free Legal Consultation in India</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Free Legal Consultation</h2>
             <Button
               variant="ghost"
               onClick={handleClose}
               className="text-gray-500 hover:text-gray-700"
-              aria-label="Close consultation modal"
+              aria-label="Close modal"
             >
-              <X className="h-6 w-6" aria-hidden="true" />
+              <X className="h-6 w-6" />
             </Button>
           </div>
 
           {isSuccess ? (
             <div className="text-center py-8">
               <div className="bg-gradient-to-r from-blue-500 to-purple-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="h-8 w-8 text-white" aria-hidden="true" />
+                <CheckCircle className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                Thank You for Your Request!
+                Thank You!
               </h3>
               <p className="text-gray-600 mb-6">
                 Your consultation request has been submitted successfully. Our legal expert will contact you within 24 hours.
               </p>
               <div className="space-y-2 mb-6">
                 <p className="text-sm text-gray-500">
-                  <Mail className="h-4 w-4 inline mr-2" aria-hidden="true" />
+                  <Mail className="h-4 w-4 inline mr-2" />
                   Confirmation email sent to: <strong>{formData.email}</strong>
                 </p>
                 <p className="text-sm text-gray-500">
-                  <Phone className="h-4 w-4 inline mr-2" aria-hidden="true" />
+                  <Phone className="h-4 w-4 inline mr-2" />
                   We&apos;ll call you at: <strong>{formData.phone}</strong>
                 </p>
               </div>
               <Button
                 onClick={handleClose}
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-                aria-label="Close modal after successful submission"
               >
                 Close
               </Button>
@@ -224,7 +281,7 @@ const ConsultationModal = ({ isOpen, onClose }) => {
               {submitError && (
                 <div className="mb-6 p-4 bg-red-50 rounded-lg border border-red-200">
                   <div className="flex items-center">
-                    <X className="h-5 w-5 text-red-500 mr-3" aria-hidden="true" />
+                    <X className="h-5 w-5 text-red-500 mr-3" />
                     <div>
                       <p className="text-sm text-red-700">{submitError}</p>
                       <p className="text-xs text-red-600 mt-1">
@@ -253,7 +310,6 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                       onChange={handleInputChange}
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
                       placeholder="John"
-                      aria-required="true"
                     />
                   </div>
                   <div>
@@ -272,7 +328,6 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                       onChange={handleInputChange}
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
                       placeholder="Doe"
-                      aria-required="true"
                     />
                   </div>
                 </div>
@@ -293,7 +348,6 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                     onChange={handleInputChange}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
                     placeholder="john.doe@domain.com"
-                    aria-required="true"
                   />
                 </div>
 
@@ -313,7 +367,6 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                     onChange={handleInputChange}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
                     placeholder="+91 98765 43210"
-                    aria-required="true"
                   />
                 </div>
 
@@ -349,7 +402,6 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                     value={formData.serviceType}
                     onChange={handleInputChange}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
-                    aria-required="true"
                   >
                     <option value="">Select a service</option>
                     <option value="company-registration">Company Registration</option>
@@ -385,7 +437,7 @@ const ConsultationModal = ({ isOpen, onClose }) => {
 
                 <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                   <div className="flex items-start">
-                    <Shield className="h-5 w-5 text-blue-600 mt-1 mr-3" aria-hidden="true" />
+                    <Shield className="h-5 w-5 text-blue-600 mt-1 mr-3" />
                     <div className="text-sm text-blue-800">
                       <p className="font-medium">Your information is secure</p>
                       <p className="text-xs text-blue-600 mt-1">
@@ -400,7 +452,6 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                     type="submit"
                     disabled={isSubmitting}
                     className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:opacity-50"
-                    aria-label="Submit consultation request"
                   >
                     {isSubmitting ? (
                       <div className="flex items-center justify-center">
@@ -409,7 +460,6 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"
-                          aria-hidden="true"
                         >
                           <circle
                             className="opacity-25"
@@ -436,7 +486,6 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                     variant="outline"
                     onClick={handleClose}
                     className="flex-1 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
-                    aria-label="Cancel consultation request"
                   >
                     Cancel
                   </Button>
@@ -444,18 +493,18 @@ const ConsultationModal = ({ isOpen, onClose }) => {
 
                 <div className="text-center text-xs text-gray-500 mt-4">
                   By submitting this form, you agree to our{" "}
-                  <Link href="/privacy-policy" className="text-blue-600 hover:underline" prefetch={false}>
+                  <Link href="/privacy-policy" className="text-blue-600 hover:underline">
                     Privacy Policy
                   </Link>{" "}
                   and{" "}
-                  <Link href="/terms-of-service" className="text-blue-600 hover:underline" prefetch={false}>
+                  <Link href="/terms-of-service" className="text-blue-600 hover:underline">
                     Terms of Service
                   </Link>
                 </div>
               </form>
             </div>
           )}
-        </CardContent>
+        </div>
       </Card>
     </div>
   );
@@ -464,19 +513,19 @@ const ConsultationModal = ({ isOpen, onClose }) => {
 const EXPERT_CONSULTATION = [
   {
     title: "Talk to a Lawyer",
-    subtitle: "Expert Legal Advice in India",
+    subtitle: "Expert legal advice",
     icon: Gavel,
     color: "from-blue-500 to-indigo-500",
   },
   {
     title: "Talk to a CA",
-    subtitle: "Chartered Accountant for GST & Tax",
+    subtitle: "Chartered Accountant consultation",
     icon: FileText,
     color: "from-green-500 to-emerald-500",
   },
   {
     title: "Talk to a CS",
-    subtitle: "Company Secretary for Compliance",
+    subtitle: "Company Secretary guidance",
     icon: Users,
     color: "from-purple-500 to-violet-500",
   },
@@ -486,25 +535,25 @@ const PROCESS_STEPS = [
   {
     step: "01",
     title: "Choose Your Service",
-    description: "Select from our range of legal and compliance services, including company incorporation and GST registration",
+    description: "Select from our range of legal and compliance services",
     icon: Target,
   },
   {
     step: "02",
     title: "Get Expert Consultation",
-    description: "Connect with our qualified lawyers, CAs, and CS professionals",
+    description: "Connect with our qualified professionals",
     icon: Users,
   },
   {
     step: "03",
     title: "Documentation & Filing",
-    description: "We handle all paperwork for business registration, tax filing, and compliance",
+    description: "We handle all paperwork and filings",
     icon: FileText,
   },
   {
     step: "04",
     title: "Completion & Support",
-    description: "Receive your documents and ongoing support for legal needs",
+    description: "Receive documents and ongoing support",
     icon: CheckCircle,
   },
 ];
@@ -513,37 +562,37 @@ const FEATURES = [
   {
     icon: Users,
     title: "Expert Team",
-    description: "100+ qualified lawyers, CAs, and CS professionals for startups and businesses",
+    description: "100+ qualified lawyers, CAs, and CS professionals",
     color: "from-blue-500 to-indigo-500",
   },
   {
     icon: Clock,
     title: "Quick Turnaround",
-    description: "Fast company incorporation and GST registration in 7-15 days",
+    description: "Fast processing with guaranteed timelines",
     color: "from-green-500 to-emerald-500",
   },
   {
     icon: Award,
     title: "Transparent Pricing",
-    description: "No hidden costs for legal and compliance services",
+    description: "No hidden costs, clear pricing structure",
     color: "from-purple-500 to-violet-500",
   },
   {
     icon: Shield,
     title: "24/7 Support",
-    description: "Round-the-clock support for your legal queries",
+    description: "Round-the-clock customer support",
     color: "from-orange-500 to-amber-500",
   },
   {
     icon: Scale,
     title: "Secure Platform",
-    description: "Bank-level security for your business data",
+    description: "Bank-level security for your data",
     color: "from-teal-500 to-cyan-500",
   },
   {
     icon: Search,
-    title: "India-Focused Services",
-    description: "Specialized legal services for startups and businesses across India",
+    title: "Delhi-NCR Focus",
+    description: "Specialized services for Delhi-NCR businesses",
     color: "from-pink-500 to-rose-500",
   },
 ];
@@ -559,66 +608,66 @@ const INDUSTRIES = [
   {
     name: "Startups",
     icon: Target,
-    description: "End-to-end startup legal solutions, including company incorporation",
+    description: "End-to-end startup legal solutions",
     color: "from-blue-500 to-indigo-500",
   },
   {
     name: "E-commerce",
     icon: FileText,
-    description: "Compliance and tax solutions for online businesses",
+    description: "Online business compliance",
     color: "from-purple-500 to-violet-500",
   },
   {
     name: "Healthcare",
     icon: CheckCircle,
-    description: "Regulatory compliance for medical practices",
+    description: "Medical practice regulations",
     color: "from-green-500 to-emerald-500",
   },
   {
     name: "Education",
     icon: Users,
-    description: "Legal setup for educational institutions",
+    description: "Educational institution setup",
     color: "from-orange-500 to-amber-500",
   },
   {
     name: "Real Estate",
     icon: Scale,
-    description: "Property legal services and documentation",
+    description: "Property legal services",
     color: "from-teal-500 to-cyan-500",
   },
   {
     name: "Manufacturing",
     icon: Gavel,
-    description: "Industrial compliance and contract drafting",
+    description: "Industrial compliance",
     color: "from-pink-500 to-rose-500",
   },
 ];
 
 const FAQS = [
   {
-    question: "What legal services does Lawgical provide in India?",
+    question: "What services does Lawgical provide?",
     answer:
-      "Lawgical offers company incorporation, GST registration, tax filing, POSH compliance, contract drafting, and expert consultations for businesses and individuals across India.",
+      "Lawgical offers legal and compliance services, including contract drafting, business registration, tax filing, POSH training, and expert consultations.",
   },
   {
-    question: "How can I book a free legal consultation?",
+    question: "How can I book a free consultation?",
     answer:
-      "Click the 'Free Consultation' button to schedule a session with our expert lawyers, CAs, or CS professionals.",
+      "Click the 'Free Consultation' button to schedule a session with our experts for personalized guidance.",
   },
   {
-    question: "Is my business data secure with Lawgical?",
+    question: "Is my data secure with Lawgical?",
     answer:
-      "Yes, we use bank-level encryption to ensure the confidentiality and security of your data.",
+      "Yes, we use bank-level security measures to protect your data and ensure confidentiality.",
   },
   {
-    question: "How long does company incorporation take in India?",
+    question: "How long does it take to process my legal requirements?",
     answer:
-      "Company incorporation typically takes 7-15 days with Lawgical’s streamlined process.",
+      "Processing times vary, but we ensure quick turnarounds, typically 7-15 days for registrations and filings.",
   },
   {
-    question: "Does Lawgical serve clients outside major cities?",
+    question: "Do you serve clients outside major cities?",
     answer:
-      "Yes, while we specialize in Delhi-NCR, our services, including GST registration and legal consultations, are available across India via online platforms.",
+      "Yes, while we specialize in Delhi-NCR, our services are available across India via online consultations.",
   },
 ];
 
@@ -646,9 +695,8 @@ const ErrorBoundary = ({ children }) => {
             Please refresh the page or try again later.
           </p>
           <Button
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+            className="bg-blue-600 text-white hover:bg-blue-700"
             onClick={() => window.location.reload()}
-            aria-label="Refresh page"
           >
             Refresh
           </Button>
@@ -703,95 +751,20 @@ export default function LawgicalHomepage() {
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-gradient-to-b from-white via-white to-slate-100">
-        {/* SEO: Enhanced Head section with meta tags and schema markup */}
         <Head>
-          <title>Lawgical: Legal Services & Company Incorporation in India</title>
+          <title>
+            Lawgical | India&apos;s Leading Legal & Compliance Platform
+          </title>
           <meta
             name="description"
-            content="Lawgical offers expert legal services, company incorporation, GST registration, and compliance solutions across India. Trusted by 1M+ clients. Book a free consultation today!"
+            content="Simplify your legal, tax, and compliance needs with Lawgical. Trusted by over 1M+ clients."
           />
           <meta
             name="keywords"
-            content="legal services India, company incorporation, GST registration, POSH compliance, tax filing, contract drafting, startup legal services, Delhi NCR legal experts"
+            content="legal services, compliance, tax filing, contract law, POSH training, business registration"
           />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <meta name="robots" content="index, follow" />
-          <meta name="author" content="Lawgical" />
-          <meta property="og:title" content="Lawgical: Legal Services & Company Incorporation in India" />
-          <meta
-            property="og:description"
-            content="Expert legal, tax, and compliance services for startups and businesses in India. Book a free consultation with Lawgical today!"
-          />
-          <meta property="og:type" content="website" />
-          <meta property="og:url" content="https://www.lawgical.tech" />
-          <meta property="og:image" content="https://www.lawgical.tech/og-image.jpg" />
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content="Lawgical: Legal Services & Company Incorporation in India" />
-          <meta
-            name="twitter:description"
-            content="Simplify your legal needs with Lawgical’s expert services in India. Company incorporation, GST registration, and more."
-          />
-          <meta name="twitter:image" content="https://www.lawgical.tech/og-image.jpg" />
           <link rel="icon" href="/favicon.ico" />
-          <link rel="canonical" href="https://www.lawgical.tech" />
-          {/* Schema Markup for Organization */}
-          <script type="application/ld+json">
-            {`
-              {
-                "@context": "https://schema.org",
-                "@type": "Organization",
-                "name": "Lawgical",
-                "url": "https://www.lawgical.tech",
-                "logo": "https://www.lawgical.tech/logo.png",
-                "contactPoint": [
-                  {
-                    "@type": "ContactPoint",
-                    "telephone": "+91-8383801899",
-                    "contactType": "Customer Service",
-                    "areaServed": "IN",
-                    "availableLanguage": ["English", "Hindi"]
-                  },
-                  {
-                    "@type": "ContactPoint",
-                    "email": "support@lawgical.tech",
-                    "contactType": "Customer Support"
-                  }
-                ],
-                "address": {
-                  "@type": "PostalAddress",
-                  "addressLocality": "Delhi",
-                  "addressRegion": "Delhi NCR",
-                  "addressCountry": "IN"
-                },
-                "sameAs": [
-                  "https://www.facebook.com/lawgical",
-                  "https://twitter.com/lawgicaltech",
-                  "https://www.linkedin.com/company/lawgical"
-                ]
-              }
-            `}
-          </script>
-          {/* Schema Markup for LocalBusiness */}
-          <script type="application/ld+json">
-            {`
-              {
-                "@context": "https://schema.org",
-                "@type": "LocalBusiness",
-                "name": "Lawgical",
-                "url": "https://www.lawgical.tech",
-                "telephone": "+91-8383801899",
-                "email": "support@lawgical.tech",
-                "address": {
-                  "@type": "PostalAddress",
-                  "addressLocality": "Delhi",
-                  "addressRegion": "Delhi NCR",
-                  "addressCountry": "IN"
-                },
-                "openingHours": "Mo-Su 00:00-23:59",
-                "description": "Lawgical provides legal, tax, and compliance services including company incorporation, GST registration, and POSH compliance across India."
-              }
-            `}
-          </script>
         </Head>
 
         <Header />
@@ -801,31 +774,31 @@ export default function LawgicalHomepage() {
           onClose={() => setIsConsultationOpen(false)}
         />
 
-        {/* Hero Section: Optimized for keywords */}
+        {/* Hero Section */}
         <section className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div className="text-center lg:text-left">
-                <Badge className="mb-6 bg-blue-100 text-blue-800">⚖️ Legal Services India</Badge>
+                <Badge className="mb-6">
+                  ⚖️ Expert Legal Services
+                </Badge>
                 <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-                  Expert
+                  India&apos;s Leading
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-                    {" "}Legal & Compliance Services
-                  </span>{" "}
-                  in India
+                    {" "}Legal & Compliance Platform
+                  </span>
                 </h1>
                 <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                  Lawgical simplifies company incorporation, GST registration, POSH compliance, and legal services for startups and businesses across India.
+                  Simplifying legal, tax, and compliance services for individuals and businesses across India with expert guidance and seamless processes.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 mb-8">
                   <Button
                     size="lg"
                     className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all shadow-lg"
                     onClick={() => setIsConsultationOpen(true)}
-                    aria-label="Book free legal consultation"
                   >
-                    <Phone className="h-5 w-5 mr-2" aria-hidden="true" />
-                    Free Legal Consultation
+                    <Phone className="h-5 w-5 mr-2" />
+                    Free Consultation
                   </Button>
                   <Button
                     variant="outline"
@@ -833,9 +806,9 @@ export default function LawgicalHomepage() {
                     className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
                     asChild
                   >
-                    <Link href="/service" prefetch={false}>
-                      Explore Legal Services
-                      <ArrowRight className="h-5 w-5 ml-2" aria-hidden="true" />
+                    <Link href="/service">
+                      View Services
+                      <ArrowRight className="h-5 w-5 ml-2" />
                     </Link>
                   </Button>
                 </div>
@@ -856,53 +829,51 @@ export default function LawgicalHomepage() {
               </div>
               <div>
                 <Card className="bg-white/80 backdrop-blur rounded-2xl shadow-2xl p-8 border border-gray-100">
-                  <CardContent className="text-center">
-                    <div className="mb-6">
-                      <div className="bg-gradient-to-r from-blue-500 to-purple-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Scale className="h-8 w-8 text-white" aria-hidden="true" />
-                      </div>
-                      <h2 className="text-2xl font-bold text-gray-900">
-                        Start Your Legal Journey in India
-                      </h2>
-                      <p className="text-gray-600 mt-2">Expert legal solutions for startups and businesses</p>
+                  <div className="text-center mb-6">
+                    <div className="bg-gradient-to-r from-blue-500 to-purple-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Scale className="h-8 w-8 text-white" />
                     </div>
-                    <div className="space-y-4">
-                      <div className="flex items-center p-4 bg-blue-50 rounded-lg border border-blue-100">
-                        <FileText className="h-8 w-8 text-blue-600 mr-4" aria-hidden="true" />
-                        <div>
-                          <h3 className="font-semibold text-gray-900">Company Incorporation</h3>
-                          <p className="text-sm text-gray-600">
-                            Register your business in India in 7-15 days
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center p-4 bg-purple-50 rounded-lg border border-purple-100">
-                        <Users className="h-8 w-8 text-purple-600 mr-4" aria-hidden="true" />
-                        <div>
-                          <h3 className="font-semibold text-gray-900">Expert Legal Support</h3>
-                          <p className="text-sm text-gray-600">
-                            24/7 consultations with lawyers and CAs
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center p-4 bg-green-50 rounded-lg border border-green-100">
-                        <Shield className="h-8 w-8 text-green-600 mr-4" aria-hidden="true" />
-                        <div>
-                          <h3 className="font-semibold text-gray-900">Secure GST Registration</h3>
-                          <p className="text-sm text-gray-600">
-                            Safe and confidential compliance services
-                          </p>
-                        </div>
+                    <h3 className="text-2xl font-bold text-gray-900">
+                      Start Your Legal Journey
+                    </h3>
+                    <p className="text-gray-600 mt-2">Simplify your legal needs today</p>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="flex items-center p-4 bg-blue-50 rounded-lg border border-blue-100">
+                      <FileText className="h-8 w-8 text-blue-600 mr-4" />
+                      <div>
+                        <h4 className="font-semibold text-gray-900">Quick Registration</h4>
+                        <p className="text-sm text-gray-600">
+                          Business registration in 7-15 days
+                        </p>
                       </div>
                     </div>
-                  </CardContent>
+                    <div className="flex items-center p-4 bg-purple-50 rounded-lg border border-purple-100">
+                      <Users className="h-8 w-8 text-purple-600 mr-4" />
+                      <div>
+                        <h4 className="font-semibold text-gray-900">Expert Support</h4>
+                        <p className="text-sm text-gray-600">
+                          24/7 support from professionals
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center p-4 bg-green-50 rounded-lg border border-green-100">
+                      <Shield className="h-8 w-8 text-green-600 mr-4" />
+                      <div>
+                        <h4 className="font-semibold text-gray-900">100% Secure</h4>
+                        <p className="text-sm text-gray-600">
+                          Your data is safe and confidential
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </Card>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Expert Consultation Banner: Keyword-optimized subtitles */}
+        {/* Expert Consultation Banner */}
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-3 gap-8">
@@ -911,23 +882,20 @@ export default function LawgicalHomepage() {
                   key={index}
                   className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 group"
                 >
-                  <CardContent>
-                    <div
-                      className={`bg-gradient-to-r ${expert.color} w-12 h-12 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
-                    >
-                      <expert.icon className="h-6 w-6 text-white" aria-hidden="true" />
-                    </div>
-                    <h2 className="text-xl font-semibold text-gray-900 mb-2">{expert.title}</h2>
-                    <p className="text-gray-600 text-sm">{expert.subtitle}</p>
-                    <Button
-                      variant="outline"
-                      className="mt-4 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
-                      onClick={() => setIsConsultationOpen(true)}
-                      aria-label={`Consult with ${expert.title}`}
-                    >
-                      Consult Now
-                    </Button>
-                  </CardContent>
+                  <div
+                    className={`bg-gradient-to-r ${expert.color} w-12 h-12 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
+                  >
+                    <expert.icon className="h-6 w-6 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{expert.title}</h3>
+                  <p className="text-gray-600 text-sm">{expert.subtitle}</p>
+                  <Button
+                    variant="outline"
+                    className="mt-4 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+                    onClick={() => setIsConsultationOpen(true)}
+                  >
+                    Consult Now
+                  </Button>
                 </Card>
               ))}
             </div>
@@ -937,15 +905,12 @@ export default function LawgicalHomepage() {
         {/* Stats Section */}
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-gray-900 text-center mb-12 hidden">
-              Our Achievements
-            </h2>
             <div className="grid md:grid-cols-4 gap-8">
               {STATS.map((stat, index) => (
                 <div key={index} className="text-center">
                   <div className="mb-4">
                     <div className="bg-gradient-to-r from-blue-500 to-purple-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto">
-                      <stat.icon className="h-8 w-8 text-white" aria-hidden="true" />
+                      <stat.icon className="h-8 w-8 text-white" />
                     </div>
                   </div>
                   <div className="text-4xl font-bold text-blue-600 mb-2">
@@ -964,13 +929,13 @@ export default function LawgicalHomepage() {
           </div>
         </section>
 
-        {/* How It Works: Keyword-optimized descriptions */}
+        {/* How It Works */}
         <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">How Lawgical Simplifies Legal Services</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">How Lawgical Works</h2>
               <p className="text-xl text-gray-600 max-w-4xl mx-auto">
-                Streamlined process for company incorporation, GST registration, and compliance in India
+                Simple, transparent process to get your legal work done
               </p>
             </div>
             <div className="grid md:grid-cols-2 gap-8">
@@ -979,33 +944,31 @@ export default function LawgicalHomepage() {
                   key={index}
                   className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group"
                 >
-                  <CardContent>
-                    <div className="flex items-start space-x-4">
-                      <div className="bg-gradient-to-r from-blue-500 to-purple-500 w-12 h-12 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0 group-hover:scale-110 transition-transform">
-                        {step.step}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center mb-4">
-                          <step.icon className="h-6 w-6 text-blue-600 mr-2" aria-hidden="true" />
-                          <h3 className="text-xl font-semibold text-gray-900">{step.title}</h3>
-                        </div>
-                        <p className="text-gray-600 leading-relaxed">{step.description}</p>
-                      </div>
+                  <div className="flex items-start space-x-4">
+                    <div className="bg-gradient-to-r from-blue-500 to-purple-500 w-12 h-12 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0 group-hover:scale-110 transition-transform">
+                      {step.step}
                     </div>
-                  </CardContent>
+                    <div className="flex-1">
+                      <div className="flex items-center mb-4">
+                        <step.icon className="h-6 w-6 text-blue-600 mr-2" />
+                        <h3 className="text-xl font-semibold text-gray-900">{step.title}</h3>
+                      </div>
+                      <p className="text-gray-600 leading-relaxed">{step.description}</p>
+                    </div>
+                  </div>
                 </Card>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Why Choose Lawgical: Keyword-optimized descriptions */}
+        {/* Why Choose Lawgical */}
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Why Choose Lawgical for Legal Services</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">Why Choose Lawgical</h2>
               <p className="text-xl text-gray-600 max-w-4xl mx-auto">
-                Trusted legal solutions for startups, compliance, and tax filing in India
+                Accessible, affordable, and efficient legal services
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -1019,104 +982,45 @@ export default function LawgicalHomepage() {
                   }`}
                   onMouseEnter={() => setActiveFeature(index)}
                 >
-                  <CardContent>
-                    <div className="flex items-start space-x-4">
-                      <div
-                        className={`bg-gradient-to-r ${feature.color} w-12 h-12 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
-                      >
-                        <feature.icon className="h-6 w-6 text-white" aria-hidden="true" />
-                      </div>
-                      <div>
-                        <h3
-                          className={`text-xl font-semibold mb-4 ${
-                            activeFeature === index ? "text-white" : "text-gray-900"
-                          }`}
-                        >
-                          {feature.title}
-                        </h3>
-                        <p
-                          className={`leading-relaxed ${
-                            activeFeature === index ? "text-blue-100" : "text-gray-600"
-                          }`}
-                        >
-                          {feature.description}
-                        </p>
-                      </div>
+                  <div className="flex items-start space-x-4">
+                    <div
+                      className={`bg-gradient-to-r ${feature.color} w-12 h-12 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
+                    >
+                      <feature.icon className="h-6 w-6 text-white" />
                     </div>
-                  </CardContent>
+                    <div>
+                      <h3
+                        className={`text-xl font-semibold mb-4 ${
+                          activeFeature === index ? "text-white" : "text-gray-900"
+                        }`}
+                      >
+                        {feature.title}
+                      </h3>
+                      <p
+                        className={`leading-relaxed ${
+                          activeFeature === index ? "text-blue-100" : "text-gray-600"
+                        }`}
+                      >
+                        {feature.description}
+                      </p>
+                    </div>
+                  </div>
                 </Card>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Testimonials Section: Add schema markup */}
-        <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-4xl font-bold text-gray-900 text-center mb-12">
-              Client Testimonials
-            </h2>
-            <TestimonialsSlider />
-            {/* Schema Markup for Reviews */}
-            <script type="application/ld+json">
-              {`
-                [
-                  {
-                    "@context": "https://schema.org",
-                    "@type": "Review",
-                    "itemReviewed": {
-                      "@type": "Organization",
-                      "name": "Lawgical"
-                    },
-                    "reviewRating": {
-                      "@type": "Rating",
-                      "ratingValue": "4.8",
-                      "bestRating": "5"
-                    },
-                    "author": {
-                      "@type": "Person",
-                      "name": "Priya Sharma"
-                    },
-                    "reviewBody": "Lawgical made our company incorporation seamless and fast. Highly recommend their services!",
-                    "publisher": {
-                      "@type": "Organization",
-                      "name": "Lawgical"
-                    }
-                  },
-                  {
-                    "@context": "https://schema.org",
-                    "@type": "Review",
-                    "itemReviewed": {
-                      "@type": "Organization",
-                      "name": "Lawgical"
-                    },
-                    "reviewRating": {
-                      "@type": "Rating",
-                      "ratingValue": "4.9",
-                      "bestRating": "5"
-                    },
-                    "author": {
-                      "@type": "Person",
-                      "name": "Rahul Mehta"
-                    },
-                    "reviewBody": "Their GST registration and tax filing services saved us time and ensured compliance.",
-                    "publisher": {
-                      "@type": "Organization",
-                      "name": "Lawgical"
-                    }
-                  }
-                ]
-              `}
-            </script>
-          </div>
-        </section>
+        {/* Testimonials Section */}
+        <TestimonialsSlider/>
+        {/* Testimonials Slider Component */}
 
-        {/* Industries We Serve: Keyword-optimized headings */}
+        {/* Industries We Serve */}
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Legal Solutions for Every Industry</h2>
-              <p className="text-xl text-gray-600">Tailored compliance and legal services for startups, e-commerce, and more</p>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">Industries We Serve</h2>
+              <p className="text-xl text-gray-600">Specialized legal solutions for every industry</p>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
               {INDUSTRIES.map((industry, index) => (
@@ -1124,28 +1028,26 @@ export default function LawgicalHomepage() {
                   key={index}
                   className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 group"
                 >
-                  <CardContent>
-                    <div
-                      className={`bg-gradient-to-r ${industry.color} w-12 h-12 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
-                    >
-                      <industry.icon className="h-6 w-6 text-white" aria-hidden="true" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">{industry.name} Legal Services</h3>
-                    <p className="text-gray-600 text-sm">{industry.description}</p>
-                  </CardContent>
+                  <div
+                    className={`bg-gradient-to-r ${industry.color} w-12 h-12 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
+                  >
+                    <industry.icon className="h-6 w-6 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{industry.name}</h3>
+                  <p className="text-gray-600 text-sm">{industry.description}</p>
                 </Card>
               ))}
             </div>
           </div>
         </section>
 
-        {/* FAQ Section: Optimized questions for search intent */}
+        {/* FAQ Section */}
         <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Frequently Asked Questions About Legal Services</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
               <p className="text-xl text-gray-600 max-w-4xl mx-auto">
-                Answers to common questions about company incorporation, GST registration, and compliance
+                Answers to common questions about our services
               </p>
             </div>
             <div className="max-w-4xl mx-auto">
@@ -1166,82 +1068,52 @@ export default function LawgicalHomepage() {
                 ))}
               </Accordion>
             </div>
-            {/* Schema Markup for FAQ */}
-            <script type="application/ld+json">
-              {`
-                {
-                  "@context": "https://schema.org",
-                  "@type": "FAQPage",
-                  "mainEntity": [
-                    ${FAQS.map(
-                      (faq, index) => `
-                        {
-                          "@type": "Question",
-                          "name": "${faq.question}",
-                          "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": "${faq.answer}"
-                          }
-                        }${index < FAQS.length - 1 ? "," : ""}`
-                    ).join("")}
-                  ]
-                }
-              `}
-            </script>
           </div>
         </section>
 
-        {/* CTA Section: Emphasize keywords */}
+        {/* CTA Section */}
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Start Your Legal Journey in India</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">Ready to Get Started?</h2>
               <p className="text-xl text-gray-600 max-w-4xl mx-auto">
-                Trusted by 1M+ clients for company incorporation, GST registration, and compliance
+                Join over 1 million+ clients trusting Lawgical for their legal needs
               </p>
             </div>
             <div className="grid md:grid-cols-3 gap-8 mb-12">
               <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 p-8 rounded-xl border border-blue-200 text-center">
-                <CardContent>
-                  <div className="bg-gradient-to-r from-blue-500 to-indigo-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <Phone className="h-8 w-8 text-white" aria-hidden="true" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">24/7 Legal Hotline</h3>
-                  <a
-                    href="tel:+918383801899"
-                    className="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors"
-                    aria-label="Call Lawgical at +91 8383801899"
-                  >
-                    +91 8383801899
-                  </a>
-                  <p className="text-sm text-gray-600 mt-2">(Immediate Response)</p>
-                </CardContent>
+                <div className="bg-gradient-to-r from-blue-500 to-indigo-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Phone className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">24/7 Legal Hotline</h3>
+                <a
+                  href="tel:+918383801899"
+                  className="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors"
+                >
+                  +91 8383801899
+                </a>
+                <p className="text-sm text-gray-600 mt-2">(Immediate Response)</p>
               </Card>
               <Card className="bg-gradient-to-br from-purple-50 to-pink-50 p-8 rounded-xl border border-purple-200 text-center">
-                <CardContent>
-                  <div className="bg-gradient-to-r from-purple-500 to-pink-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <Mail className="h-8 w-8 text-white" aria-hidden="true" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Email Consultation</h3>
-                  <a
-                    href="mailto:support@lawgical.tech"
-                    className="text-2xl font-bold text-purple-600 hover:text-purple-700 transition-colors"
-                    aria-label="Email Lawgical at support@lawgical.tech"
-                  >
-                    support@lawgical.tech
-                  </a>
-                  <p className="text-sm text-gray-600 mt-2">(Free Case Review)</p>
-                </CardContent>
+                <div className="bg-gradient-to-r from-purple-500 to-pink-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Mail className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Email Consultation</h3>
+                <a
+                  href="mailto:support@lawgical.tech"
+                  className="text-2xl font-bold text-purple-600 hover:text-purple-700 transition-colors"
+                >
+                  support@lawgical.tech
+                </a>
+                <p className="text-sm text-gray-600 mt-2">(Free Case Review)</p>
               </Card>
               <Card className="bg-gradient-to-br from-green-50 to-teal-50 p-8 rounded-xl border border-green-200 text-center">
-                <CardContent>
-                  <div className="bg-gradient-to-r from-green-500 to-teal-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <CheckCircle className="h-8 w-8 text-white" aria-hidden="true" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Free Legal Consultation</h3>
-                  <p className="text-xl font-bold text-green-600">Online Booking</p>
-                  <p className="text-sm text-gray-600 mt-2">Schedule Now</p>
-                </CardContent>
+                <div className="bg-gradient-to-r from-green-500 to-teal-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Free Consultation</h3>
+                <p className="text-xl font-bold text-green-600">Online Booking</p>
+                <p className="text-sm text-gray-600 mt-2">Schedule Now</p>
               </Card>
             </div>
             <div className="text-center">
@@ -1249,12 +1121,11 @@ export default function LawgicalHomepage() {
                 size="lg"
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all shadow-lg text-lg px-12 py-4"
                 onClick={() => setIsConsultationOpen(true)}
-                aria-label="Schedule free legal consultation"
               >
-                <Phone className="h-5 w-5 mr-2" aria-hidden="true" />
-                Schedule Free Legal Consultation
+                <Phone className="h-5 w-5 mr-2" />
+                Schedule Free Consultation
               </Button>
-              <p className="text-sm text-gray-500 mt-4">No obligation • Confidential • Expert legal advice in India</p>
+              <p className="text-sm text-gray-500 mt-4">No obligation • Confidential • Expert legal advice</p>
             </div>
           </div>
         </section>
@@ -1264,6 +1135,3 @@ export default function LawgicalHomepage() {
     </ErrorBoundary>
   );
 }
-
-// Next.js Static Generation for SEO
-
