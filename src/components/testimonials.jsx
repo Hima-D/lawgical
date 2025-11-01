@@ -32,6 +32,12 @@ const TESTIMONIALS = [
     content: "POSH training helped us create a safer workplace.",
     rating: 5,
   },
+  {
+    name: "Amit Verma",
+    role: "Small Business Owner",
+    content: "Legal consultations were clear and actionable.",
+    rating: 5,
+  },
 ];
 
 export default function TestimonialsSlider() {
