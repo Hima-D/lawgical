@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -8,11 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  ADMIN
+  ADVOCATE
+  VOLUNTEER
+  DONOR
+  VICTIM
+  USER
+}
+
 model User {
   id            Int            @id @default(autoincrement())
   email         String         @unique
   passwordHash  String?
-  userType      String
+  role          UserRole       @default(USER)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   displayName   String?
@@ -22,138 +30,129 @@ model User {
   emailVerified Boolean        @default(false)
   googleId      String?        @unique
 
-  appointments  Appointment[]  @relation("ClientAppointments")
-  lawyerProfile LawyerProfile?
-  messages      Message[]
+  stories       Story[]
+  casesAsAdvocate Case[]       @relation("AdvocateCases")
+  casesAsVictim   Case[]       @relation("VictimCases")
+  volunteerProfile VolunteerProfile?
+  donations     Donation[]
+  messagesSent  Message[]      @relation("SentMessages")
+  messagesReceived Message[]   @relation("ReceivedMessages")
   notifications Notification[]
-  reviews       Review[]       @relation("ClientReviews")
-  documents     Document[]
-  blogs         Blog[]         @relation("UserBlogs")
-  blogLikes     BlogLike[]     @relation("UserBlogLikes")
-
+  
   @@map("users")
 }
 
-model LawyerProfile {
-  id               Int                @id @default(autoincrement())
-  userId           Int                @unique
-  bio              String?
-  specialization   String
-  licenseNumber    String             @unique
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
-  firmName         String?
-  address          String?
-  websiteUrl       String?
-  hourlyRate       Float?
-  isVerified       Boolean            @default(false)
-  yearsExperience  Int?
-  education        String[]           @default([])
-  certifications   String[]           @default([])
-  languages        String[]           @default([])
+model VolunteerProfile {
+  id             Int      @id @default(autoincrement())
+  userId         Int      @unique
+  skills         String[]
+  location       String?
+  availability   String?
+  isVerified     Boolean  @default(false)
+  
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  appointments     Appointment[]      @relation("LawyerAppointments")
-  availability     AvailabilitySlot[]
-  services         Service[]
-  reviews          Review[]           @relation("LawyerReviews")
-
-  @@map("lawyer_profiles")
+  @@map("volunteer_profiles")
 }
 
-model Service {
-  id              Int           @id @default(autoincrement())
-  lawyerProfileId Int
-  name            String
-  description     String
-  price           Float
-  durationMinutes Int
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  category        String?
-  isActive        Boolean       @default(true)
-
-  lawyerProfile   LawyerProfile @relation(fields: [lawyerProfileId], references: [id], onDelete: Cascade)
-  appointments    Appointment[]
-
-  @@map("services")
+enum StoryStatus {
+  DRAFT
+  PENDING
+  APPROVED
+  REJECTED
+  PUBLISHED
 }
 
-model AvailabilitySlot {
-  id              Int           @id @default(autoincrement())
-  lawyerProfileId Int
-  dayOfWeek       Int
-  startTime       String
-  endTime         String
-  date            DateTime?
-  isRecurring     Boolean       @default(true)
-  isBooked        Boolean       @default(false)
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  notes           String?
-
-  lawyerProfile   LawyerProfile @relation(fields: [lawyerProfileId], references: [id], onDelete: Cascade)
-  appointments    Appointment[]
-
-  @@map("availability_slots")
+model Story {
+  id             Int         @id @default(autoincrement())
+  title          String
+  originalContent String     
+  redactedContent String?    
+  authorId       Int?        
+  status         StoryStatus @default(DRAFT)
+  topics         String[]
+  sensitivityLevel String    @default("NORMAL") // NORMAL, SENSITIVE, CRITICAL
+  isAnonymized   Boolean     @default(true)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  
+  author         User?       @relation(fields: [authorId], references: [id])
+  
+  @@map("stories")
 }
 
-model Appointment {
-  id                 Int              @id @default(autoincrement())
-  clientId           Int
-  lawyerProfileId    Int
-  serviceId          Int
-  availabilitySlotId Int?
-  appointmentDate    DateTime
-  appointmentTime    String
-  status             String           @default("pending")
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @updatedAt
-  clientNotes        String?
-  lawyerNotes        String?
-  meetingLink        String?
-  meetingType        String?
+enum CaseStatus {
+  INTAKE
+  DRAFTING
+  FILED
+  HEARING
+  CLOSED
+}
 
-  client             User             @relation("ClientAppointments", fields: [clientId], references: [id])
-  lawyerProfile      LawyerProfile    @relation("LawyerAppointments", fields: [lawyerProfileId], references: [id])
-  service            Service          @relation(fields: [serviceId], references: [id])
-  availabilitySlot   AvailabilitySlot? @relation(fields: [availabilitySlotId], references: [id])
-  messages           Message[]
-  documents          Document[]
+model Case {
+  id             Int         @id @default(autoincrement())
+  title          String
+  description    String
+  writType       String?     
+  status         CaseStatus  @default(INTAKE)
+  
+  petitionerName String?     
+  
+  victimId       Int?
+  advocateId     Int?
+  
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  
+  victim         User?       @relation("VictimCases", fields: [victimId], references: [id])
+  advocate       User?       @relation("AdvocateCases", fields: [advocateId], references: [id])
+  documents      Document[]
+  
+  @@map("cases")
+}
 
-  @@map("appointments")
+model Project {
+  id             Int         @id @default(autoincrement())
+  name           String
+  description    String
+  targetAmount   Float
+  raisedAmount   Float       @default(0)
+  status         String      @default("ACTIVE") // ACTIVE, COMPLETED, ARCHIVED
+  category       String      @default("LEGAL_AID") // LEGAL_AID, ADVOCACY, SURVIVOR_SUPPORT
+  createdAt      DateTime    @default(now())
+  
+  donations      Donation[]
+  
+  @@map("projects")
+}
+
+model Donation {
+  id             Int         @id @default(autoincrement())
+  amount         Float
+  currency       String      @default("INR")
+  donorId        Int?
+  projectId      Int?
+  status         String      @default("COMPLETED")
+  createdAt      DateTime    @default(now())
+  
+  donor          User?       @relation(fields: [donorId], references: [id])
+  project        Project?    @relation(fields: [projectId], references: [id])
+  
+  @@map("donations")
 }
 
 model Message {
   id            Int         @id @default(autoincrement())
   senderId      Int
-  appointmentId Int?
+  recipientId   Int?        
   content       String
-  messageType   String      @default("text")
   isRead        Boolean     @default(false)
   createdAt     DateTime    @default(now())
 
-  sender        User        @relation(fields: [senderId], references: [id])
-  appointment   Appointment? @relation(fields: [appointmentId], references: [id])
+  sender        User        @relation("SentMessages", fields: [senderId], references: [id])
+  recipient     User?       @relation("ReceivedMessages", fields: [recipientId], references: [id])
 
   @@map("messages")
-}
-
-model Review {
-  id              Int           @id @default(autoincrement())
-  clientId        Int
-  lawyerProfileId Int
-  rating          Int
-  comment         String?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  isVisible       Boolean       @default(true)
-
-  client          User          @relation("ClientReviews", fields: [clientId], references: [id])
-  lawyerProfile   LawyerProfile @relation("LawyerReviews", fields: [lawyerProfileId], references: [id])
-
-  @@unique([clientId, lawyerProfileId])
-  @@map("reviews")
 }
 
 model Notification {
@@ -172,48 +171,13 @@ model Notification {
 
 model Document {
   id            Int         @id @default(autoincrement())
-  uploaderId    Int
-  appointmentId Int?
+  caseId        Int?
   fileName      String
   fileUrl       String
-  fileSize      Int
   fileType      String
-  description   String?
   createdAt     DateTime    @default(now())
 
-  uploader      User        @relation(fields: [uploaderId], references: [id])
-  appointment   Appointment? @relation(fields: [appointmentId], references: [id])
+  case          Case?       @relation(fields: [caseId], references: [id])
 
   @@map("documents")
-}
-
-model Blog {
-  id          Int         @id @default(autoincrement())
-  title       String
-  content     String
-  authorId    Int
-  tags        String[]    @default([])
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  isPublished Boolean     @default(false)
-  slug        String      @unique
-  coverImage  String?
-
-  author      User        @relation("UserBlogs", fields: [authorId], references: [id])
-  likes       BlogLike[]  @relation("BlogLikes")
-
-  @@map("blogs")
-}
-
-model BlogLike {
-  id        Int      @id @default(autoincrement())
-  blogId    Int
-  userId    Int
-  createdAt DateTime @default(now())
-
-  blog      Blog     @relation("BlogLikes", fields: [blogId], references: [id], onDelete: Cascade)
-  user      User     @relation("UserBlogLikes", fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([blogId, userId])
-  @@map("blog_likes")
 }

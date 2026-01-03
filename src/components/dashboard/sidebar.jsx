@@ -5,8 +5,9 @@ import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { LayoutDashboard, Bell, Briefcase, LogOut } from 'lucide-react';
+import { LayoutDashboard, Bell, Briefcase, LogOut, FilePlus } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { v4 as uuidv4 } from 'uuid'; // ← NEW
 
 const Sidebar = ({ user, isLawyer }) => {
   const router = useRouter();
@@ -15,12 +16,26 @@ const Sidebar = ({ user, isLawyer }) => {
 
   const navItems = [
     { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, description: 'View your dashboard' },
+    
+    // ← NEW: Create Document
+    { 
+      label: 'Create Document', 
+      path: null, // special: we generate UUID
+      icon: FilePlus, 
+      description: 'Start a new legal document',
+      onClick: () => {
+        const newId = uuidv4();
+        router.push(`/docs/${newId}`);
+      }
+    },
+
     { label: 'Notifications', path: '/dashboard?view=notifications', icon: Bell, description: 'Check your notifications' },
     ...(isLawyer ? [{ label: 'Services', path: '/dashboard?view=services', icon: Briefcase, description: 'Manage your services' }] : []),
     { label: 'Logout', path: '/logout', icon: LogOut, description: 'Sign out of your account' },
   ];
 
   const isActive = (itemPath) => {
+    if (!itemPath) return false;
     if (itemPath.includes('?')) {
       const [basePath, query] = itemPath.split('?');
       return pathname === basePath && searchParams.get('view') === query.split('=')[1];
@@ -38,8 +53,8 @@ const Sidebar = ({ user, isLawyer }) => {
           <nav className="space-y-1 p-4">
             {navItems.map((item) => (
               <Button
-                key={item.path}
-                onClick={() => router.push(item.path)}
+                key={item.label}
+                onClick={item.onClick || (() => router.push(item.path))}
                 variant="ghost"
                 className={cn(
                   'w-full justify-start text-gray-900 hover:bg-gray-100 hover:text-gray-900',

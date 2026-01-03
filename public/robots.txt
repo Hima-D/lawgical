@@ -1,9 +1,10 @@
-# Allow all crawlers, including AI agents, to access and index the site
+# *
 User-agent: *
 Allow: /
 
-# Disallow sensitive or irrelevant paths
-Disallow: /api/
+# *
+User-agent: *
+Disallow: /api
 Disallow: /404
 Disallow: /500
 
@@ -12,3 +13,4 @@ Host: https://www.lawgical.tech
 
 # Sitemaps
 Sitemap: https://www.lawgical.tech/sitemap.xml
+Sitemap: https://www.lawgical.tech/sitemap-0.xml

@@ -78,6 +78,7 @@
     "pdf-lib": "^1.17.1",
     "pdf.js": "^0.1.0",
     "puppeteer": "^24.15.0",
+    "quill": "^2.0.3",
     "react": "^19.0.0",
     "react-chatbot-kit": "^2.2.2",
     "react-dom": "^19.0.0",
