@@ -276,8 +276,6 @@ export async function GET(request) {
 
 
 // // app/api/reviews/[reviewId]/route.js
-import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
 
 // // GET - Fetch a specific review
 // export async function GET(request, { params }) {
@@ -499,8 +497,6 @@ import { prisma } from '@/lib/prisma';
 
 
 // // app/api/reviews/lawyer/[lawyerProfileId]/stats/route.js
-import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
 
 // // GET - Get review statistics for a lawyer
 // export async function GET(request, { params }) {
