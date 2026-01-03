@@ -8,17 +8,11 @@ import path from 'path';
 import formidable from 'formidable';
 import { v4 as uuidv4 } from 'uuid';
 
-// Disable body parser for form data with files
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
 
 // For App Router
 export async function POST(request) {
   const formData = await request.formData();
-  
+
   try {
     // Extract form fields
     const name = formData.get('name');
@@ -26,7 +20,7 @@ export async function POST(request) {
     const phone = formData.get('phone');
     const department = formData.get('department');
     const resumeFile = formData.get('resume');
-    
+
     // Validate required fields
     if (!name || !email || !phone || !department || !resumeFile) {
       return NextResponse.json(
@@ -42,8 +36,8 @@ export async function POST(request) {
 
     // Simulate successful processing
     return NextResponse.json(
-      { 
-        success: true, 
+      {
+        success: true,
         message: 'Application submitted successfully',
         data: { applicationId: uuidv4() }
       },
@@ -95,12 +89,12 @@ export default async function handler(req, res) {
         // 3. Send confirmation emails, etc.
 
         // Simulate successful processing
-        res.status(200).json({ 
-          success: true, 
+        res.status(200).json({
+          success: true,
           message: 'Application submitted successfully',
           data: { applicationId: uuidv4() }
         });
-        
+
         resolve();
       } catch (error) {
         console.error('Application submission error:', error);

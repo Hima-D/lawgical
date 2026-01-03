@@ -37,15 +37,14 @@ export const metadata = {
     "lawyers in noida", "legal services gurgaon", "law firm ghaziabad", "lawyers in faridabad",
     "legal consultation greater noida", "corporate lawyers in gurgaon"
   ].join(", "),
-  
+
   authors: [{ name: "Chahat Siwach", url: "https://www.lawgical.tech/aboutus" }],
   generator: "Next.js",
   applicationName: "Lawgical Legal Platform",
   referrer: "origin-when-cross-origin",
-  colorScheme: "light dark",
   creator: "Lawgical Legal Tech",
   publisher: "Lawgical",
-  
+
   openGraph: {
     title: "Lawgical - Expert Legal Services & Lawyer Consultation in Delhi NCR",
     description:
@@ -65,7 +64,7 @@ export const metadata = {
       }
     ]
   },
-  
+
   twitter: {
     card: "summary_large_image",
     title: "Lawgical - Legal Services & Lawyer Consultation in Delhi NCR",
@@ -81,7 +80,7 @@ export const metadata = {
       }
     ]
   },
-  
+
   robots: {
     index: true,
     follow: true,
@@ -95,8 +94,8 @@ export const metadata = {
       'max-snippet': -1
     }
   },
-  
-  icons: { 
+
+  icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
       { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
@@ -110,21 +109,21 @@ export const metadata = {
       { rel: "mask-icon", url: "/safari-pinned-tab.svg", color: "#2563eb" }
     ]
   },
-  
+
   manifest: "/site.webmanifest",
-  
+
   category: "Legal Services",
   classification: "Professional Services",
   coverage: "Delhi NCR",
   distribution: "India",
   rating: "General",
-  
+
   formatDetection: {
     email: false,
     address: false,
     telephone: false
   },
-  
+
   other: {
     "geo.region": "IN-DL",
     "geo.country": "India",
@@ -166,7 +165,7 @@ export const metadata = {
     "doc-rights": "Copywritten Work",
     "doc-type": "Public"
   },
-  
+
   alternates: {
     canonical: "https://www.lawgical.tech",
     languages: {
@@ -179,12 +178,12 @@ export const metadata = {
       ]
     }
   },
-  
+
   verification: {
     google: "QYcBwyVDXGDlSSxuYbzHmLRiUrofznU8LHBS9ZTUUqI",
     bing: "1CCF3565C81789FD267302CF040AA5F0"
   },
-  
+
   archives: ['https://www.lawgical.tech/archive'],
   assets: ['https://www.lawgical.tech/assets'],
   bookmarks: ['https://www.lawgical.tech/bookmarks']
@@ -197,6 +196,7 @@ export const viewport = {
   minimumScale: 1,
   userScalable: true,
   viewportFit: "cover",
+  colorScheme: "light dark",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#2563eb" },
     { media: "(prefers-color-scheme: dark)", color: "#1e40af" }
@@ -232,13 +232,13 @@ export default function RootLayout({ children }) {
         {/* Enhanced Meta Tags */}
         <meta name="google-site-verification" content="QYcBwyVDXGDlSSxuYbzHmLRiUrofznU8LHBS9ZTUUqI" />
         <meta name="msvalidate.01" content="1CCF3565C81789FD267302CF040AA5F0" />
-        
+
         {/* Geographic Targeting (Delhi NCR) */}
         <meta name="geo.region" content="IN-DL" />
         <meta name="geo.country" content="India" />
         <meta name="geo.placename" content="Delhi NCR" />
         <meta name="ICBM" content="28.6139,77.2090" />
-        
+
         {/* Enhanced Performance */}
         <link rel="preconnect" href="https://personalize.relevic.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -246,17 +246,17 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://www.google-analytics.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://connect.facebook.net" />
-        
+
         {/* DNS prefetch for external scripts */}
         <link rel="dns-prefetch" href="//js.hs-scripts.com" />
         <link rel="dns-prefetch" href="//cdn.segment.com" />
         <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
         <link rel="dns-prefetch" href="//connect.facebook.net" />
-        
+
         {/* Resource hints */}
         <link rel="prefetch" href="/sitemap.xml" />
         <link rel="prefetch" href="/robots.txt" />
-        
+
         {/* Animate.css */}
         <link
           rel="stylesheet"
@@ -265,7 +265,7 @@ export default function RootLayout({ children }) {
           crossOrigin="anonymous"
           referrerPolicy="no-referrer"
         />
-        
+
         {/* LegalService Schema */}
         <script
           type="application/ld+json"
@@ -543,13 +543,13 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      
+
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <noscript>
-          <iframe 
+          <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-TSVBZ4FD"
-            height="0" 
-            width="0" 
+            height="0"
+            width="0"
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
@@ -566,10 +566,10 @@ export default function RootLayout({ children }) {
           />
         </noscript>
 
-        <ThemeProvider 
-          attribute="class" 
-          defaultTheme="system" 
-          enableSystem 
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
           disableTransitionOnChange
         >
           {children}
@@ -601,9 +601,9 @@ export default function RootLayout({ children }) {
             `
           }}
         />
-        
+
         <Script src="//js-na2.hsforms.net/forms/embed/v2.js" strategy="afterInteractive" />
-        
+
         <Script
           id="hubspot-form"
           strategy="afterInteractive"
