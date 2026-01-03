@@ -1,18 +1,13 @@
-// ==================== APPOINTMENTS API ====================
-
-// app/api/appointments/route.js - Main appointments endpoint
-import { PrismaClient } from '@/generated/prisma';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
 
 // Middleware to verify JWT and get user
 async function verifyAuth() {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get('token');
-    
+
     if (!token) {
       throw new Error('No token provided');
     }
@@ -28,15 +23,15 @@ export async function POST(request) {
   try {
     // Verify authentication
     const user = await verifyAuth();
-    
-    const { 
-      lawyerProfileId, 
-      serviceId, 
-      appointmentDate, 
-      appointmentTime, 
+
+    const {
+      lawyerProfileId,
+      serviceId,
+      appointmentDate,
+      appointmentTime,
       clientNotes,
       meetingType,
-      availabilitySlotId 
+      availabilitySlotId
     } = await request.json();
 
     // Validation
@@ -183,7 +178,7 @@ export async function POST(request) {
 
   } catch (error) {
     console.error('Book appointment error:', error);
-    
+
     if (error.message === 'Invalid token' || error.message === 'No token provided') {
       return Response.json(
         { error: 'Authentication required' },
@@ -288,7 +283,7 @@ export async function GET(request) {
 
   } catch (error) {
     console.error('Get appointments error:', error);
-    
+
     if (error.message === 'Invalid token' || error.message === 'No token provided') {
       return Response.json(
         { error: 'Authentication required' },

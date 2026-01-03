@@ -1,12 +1,9 @@
-
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@/generated/prisma';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
 
 export async function GET(request, { params }) {
   console.log('Received GET request for /api/client/lawyer/[lawyerId]/services');
-  
+
   try {
     const { lawyerId } = await params; // Await params to resolve the Promise
     console.log(`Processing request for lawyer ID: ${lawyerId}`);

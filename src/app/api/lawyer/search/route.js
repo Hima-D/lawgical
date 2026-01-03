@@ -1,9 +1,5 @@
-// app/api/lawyers/search/route.js
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@/generated/prisma';
-
-// Create a single Prisma instance
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
 
 // Helper function to build where clause
 function buildWhereClause(params) {
@@ -233,18 +229,18 @@ function validateSearchParams(searchParams) {
   }
 
   // Validate sort parameters
-  const sortBy = ['experience', 'rate', 'rating', 'name', 'createdAt'].includes(searchParams.get('sortBy')) 
-    ? searchParams.get('sortBy') 
+  const sortBy = ['experience', 'rate', 'rating', 'name', 'createdAt'].includes(searchParams.get('sortBy'))
+    ? searchParams.get('sortBy')
     : 'createdAt';
-  
-  const sortOrder = ['asc', 'desc'].includes(searchParams.get('sortOrder')) 
-    ? searchParams.get('sortOrder') 
+
+  const sortOrder = ['asc', 'desc'].includes(searchParams.get('sortOrder'))
+    ? searchParams.get('sortOrder')
     : 'desc';
 
   // Validate pagination parameters
   let page = parseInt(searchParams.get('page'));
   let limit = parseInt(searchParams.get('limit'));
-  
+
   page = !isNaN(page) && page > 0 ? page : 1;
   limit = !isNaN(limit) && limit > 0 && limit <= 50 ? limit : 6; // Max limit of 50
 
@@ -268,10 +264,10 @@ function validateSearchParams(searchParams) {
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
-    
+
     // Validate and sanitize parameters
     const params = validateSearchParams(searchParams);
-    
+
     console.log('Search params:', {
       search: params.search,
       specialization: params.specialization,
@@ -342,7 +338,7 @@ export async function GET(request) {
         skip: params.skip,
         take: params.limit
       }),
-      
+
       prisma.lawyerProfile.count({
         where: whereClause
       })
@@ -426,7 +422,7 @@ export async function GET(request) {
 
   } catch (error) {
     console.error('Search lawyers error:', error);
-    
+
     // Return more specific error messages
     let errorMessage = 'Internal server error';
     let statusCode = 500;
@@ -442,7 +438,7 @@ export async function GET(request) {
     }
 
     return NextResponse.json(
-      { 
+      {
         success: false,
         error: errorMessage,
         message: process.env.NODE_ENV === 'development' ? error.message : undefined,

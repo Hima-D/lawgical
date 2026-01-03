@@ -1,9 +1,7 @@
-import { PrismaClient } from '@/generated/prisma';
+import { prisma } from '@/lib/prisma';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import { parse } from 'json2csv';
-
-const prisma = new PrismaClient();
 
 // Helper function to authenticate the JWT token
 const verifyAuth = async () => {

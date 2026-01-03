@@ -1,9 +1,6 @@
 // app/api/lawyers/recommended/route.js
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@/generated/prisma';
-
-// Create a single Prisma instance
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
 
 // Helper function to calculate average rating
 function calculateAverageRating(reviews) {
@@ -15,12 +12,12 @@ function calculateAverageRating(reviews) {
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
-    
+
     // Parse query parameters
     const limit = Math.min(parseInt(searchParams.get('limit')) || 6, 20);
     const specialization = searchParams.get('specialization');
     const location = searchParams.get('location');
-    
+
     console.log('Fetching recommended lawyers with params:', { limit, specialization, location });
 
     // Build base query for verified lawyers
@@ -153,9 +150,9 @@ export async function GET(request) {
 
   } catch (error) {
     console.error('Recommended lawyers error:', error);
-    
+
     return NextResponse.json(
-      { 
+      {
         success: false,
         error: 'Failed to fetch recommended lawyers',
         message: process.env.NODE_ENV === 'development' ? error.message : undefined
@@ -258,7 +255,7 @@ export async function POST(request) {
       const averageRating = calculateAverageRating(lawyer.reviews);
       const reviewCount = lawyer._count.reviews;
       const completedAppointments = lawyer._count.appointments;
-      
+
       let recommendationScore = averageRating * 10 + Math.min(reviewCount * 2, 20);
 
       return {
@@ -303,7 +300,7 @@ export async function POST(request) {
   } catch (error) {
     console.error('Personalized recommendations error:', error);
     return NextResponse.json(
-      { 
+      {
         success: false,
         error: 'Failed to fetch personalized recommendations'
       },

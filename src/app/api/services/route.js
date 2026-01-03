@@ -1,16 +1,13 @@
-// app/api/services/route.js
-import { PrismaClient } from '@/generated/prisma';
+import { prisma } from '@/lib/prisma';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
-
-const prisma = new PrismaClient();
 
 // Middleware to verify JWT and get user
 async function verifyAuth() {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get('token');
-    
+
     if (!token) {
       throw new Error('No token provided');
     }
@@ -131,7 +128,7 @@ export async function GET(request) {
 
   } catch (error) {
     console.error('Get services error:', error);
-    
+
     if (error.message === 'Invalid token' || error.message === 'No token provided') {
       return Response.json(
         { error: 'Authentication required' },
@@ -153,7 +150,7 @@ export async function POST(request) {
   try {
     // Verify authentication
     const user = await verifyAuth();
-    
+
     if (user.userType !== 'lawyer') {
       return Response.json(
         { error: 'Only lawyers can add services' },
@@ -258,7 +255,7 @@ export async function POST(request) {
 
   } catch (error) {
     console.error('Create service error:', error);
-    
+
     if (error.message === 'Invalid token' || error.message === 'No token provided') {
       return Response.json(
         { error: 'Authentication required' },

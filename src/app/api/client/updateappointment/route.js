@@ -1,16 +1,13 @@
-// app/api/appointments/[appointmentId]/route.js
-import { PrismaClient } from '@/generated/prisma';
+import { prisma } from '@/lib/prisma';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
-
-const prisma = new PrismaClient();
 
 // Middleware to verify JWT and get user
 async function verifyAuth() {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get('token');
-    
+
     if (!token) {
       throw new Error('No token provided');
     }
@@ -27,15 +24,15 @@ export async function PUT(request, { params }) {
   try {
     const user = await verifyAuth();
     const appointmentId = parseInt(params.appointmentId);
-    
-    const { 
-      status, 
-      lawyerNotes, 
-      clientNotes, 
-      meetingLink, 
+
+    const {
+      status,
+      lawyerNotes,
+      clientNotes,
+      meetingLink,
       meetingType,
       appointmentDate,
-      appointmentTime 
+      appointmentTime
     } = await request.json();
 
     // Get the appointment with all related data
@@ -75,7 +72,7 @@ export async function PUT(request, { params }) {
     // Check permissions
     const isClient = user.userId === appointment.clientId;
     const isLawyer = user.userId === appointment.lawyerProfile.userId;
-    
+
     if (!isClient && !isLawyer) {
       return Response.json(
         { error: 'You do not have permission to update this appointment' },
@@ -95,7 +92,7 @@ export async function PUT(request, { params }) {
     // Status change business rules
     if (status) {
       const currentStatus = appointment.status;
-      
+
       // Only lawyers can confirm appointments
       if (status === 'confirmed' && !isLawyer) {
         return Response.json(
@@ -168,13 +165,13 @@ export async function PUT(request, { params }) {
 
     // Prepare update data
     const updateData = {};
-    
+
     if (status) updateData.status = status;
     if (appointmentDate) updateData.appointmentDate = new Date(appointmentDate);
     if (appointmentTime) updateData.appointmentTime = appointmentTime;
     if (meetingLink !== undefined) updateData.meetingLink = meetingLink;
     if (meetingType) updateData.meetingType = meetingType;
-    
+
     // Only allow relevant parties to update notes
     if (isLawyer && lawyerNotes !== undefined) {
       updateData.lawyerNotes = lawyerNotes;
@@ -222,7 +219,7 @@ export async function PUT(request, { params }) {
 
       // Create notifications based on the update
       const notifications = [];
-      
+
       if (status && status !== appointment.status) {
         const statusMessages = {
           confirmed: {
@@ -269,7 +266,7 @@ export async function PUT(request, { params }) {
           },
           {
             userId: appointment.lawyerProfile.userId,
-            title: 'Appointment Rescheduled', 
+            title: 'Appointment Rescheduled',
             message: rescheduleMessage,
             type: 'appointment'
           }
@@ -293,7 +290,7 @@ export async function PUT(request, { params }) {
 
   } catch (error) {
     console.error('Update appointment error:', error);
-    
+
     if (error.message === 'Invalid token' || error.message === 'No token provided') {
       return Response.json(
         { error: 'Authentication required' },
@@ -350,7 +347,7 @@ export async function DELETE(request, { params }) {
     // Check permissions
     const isClient = user.userId === appointment.clientId;
     const isLawyer = user.userId === appointment.lawyerProfile.userId;
-    
+
     if (!isClient && !isLawyer) {
       return Response.json(
         { error: 'You do not have permission to cancel this appointment' },
@@ -410,7 +407,7 @@ export async function DELETE(request, { params }) {
 
   } catch (error) {
     console.error('Cancel appointment error:', error);
-    
+
     if (error.message === 'Invalid token' || error.message === 'No token provided') {
       return Response.json(
         { error: 'Authentication required' },
@@ -495,7 +492,7 @@ export async function GET(request, { params }) {
     // Check permissions
     const isClient = user.userId === appointment.clientId;
     const isLawyer = user.userId === appointment.lawyerProfile.userId;
-    
+
     if (!isClient && !isLawyer) {
       return Response.json(
         { error: 'You do not have permission to view this appointment' },
@@ -509,7 +506,7 @@ export async function GET(request, { params }) {
 
   } catch (error) {
     console.error('Get appointment error:', error);
-    
+
     if (error.message === 'Invalid token' || error.message === 'No token provided') {
       return Response.json(
         { error: 'Authentication required' },

@@ -1,9 +1,7 @@
 import { NextResponse } from 'next/server';
 import { verify } from 'jsonwebtoken';
-import { PrismaClient } from '@/generated/prisma';
+import { prisma } from '@/lib/prisma';
 import { addHours, isWithinInterval, startOfHour, endOfHour } from 'date-fns';
-
-const prisma = new PrismaClient();
 
 // Helper function to authenticate the JWT token
 const authenticateToken = (request) => {
@@ -134,6 +132,6 @@ export async function POST(request) {
       { status: error.message.includes('Unauthorized') ? 401 : error.message.includes('Invalid') ? 400 : 500 }
     );
   } finally {
-    await prisma.$disconnect();
+    // Shared prisma client handles connections
   }
 }

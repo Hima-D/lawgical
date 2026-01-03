@@ -1,7 +1,5 @@
-// // lib/lawyers.js - Utility functions for lawyer operations
-// import { PrismaClient } from "@/generated/prisma";
-
-// const prisma = new PrismaClient();
+// lib/lawyers.js - Utility functions for lawyer operations
+import { prisma } from "@/lib/prisma";
 
 // export class LawyerService {
 //   /**

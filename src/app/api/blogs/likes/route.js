@@ -1,8 +1,6 @@
-import { PrismaClient } from '@/generated/prisma';
+import { prisma } from '@/lib/prisma';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
-
-const prisma = new PrismaClient();
 
 // GET /api/blogs/likes?userId=X - Fetch user’s liked blogs
 export async function GET(req) {

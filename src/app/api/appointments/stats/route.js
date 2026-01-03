@@ -1,9 +1,6 @@
-// app/api/appointments/stats/route.js - Get appointment statistics
-import { PrismaClient } from '@/generated/prisma';
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
 
 export async function GET(request) {
   try {
@@ -96,6 +93,6 @@ export async function GET(request) {
     console.error('Get appointment stats error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   } finally {
-    await prisma.$disconnect();
+    // Shared prisma client handles connections
   }
 }

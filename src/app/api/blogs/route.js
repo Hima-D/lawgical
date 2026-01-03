@@ -1,8 +1,6 @@
-import { PrismaClient } from '@/generated/prisma';
+import { prisma } from '@/lib/prisma';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
-
-const prisma = new PrismaClient();
 
 // GET /api/blogs - Fetch all published blogs (public)
 // GET /api/blogs?slug=<slug> - Fetch a single blog by slug (public)

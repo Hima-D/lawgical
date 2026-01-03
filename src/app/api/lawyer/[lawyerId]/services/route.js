@@ -1,10 +1,6 @@
-
 // app/api/client/lawyer/[lawyerId]/services/route.js
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@/generated/prisma';
-
-// Create a single Prisma instance
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
 
 export async function GET(request, { params }) {
   console.log(`Received GET request for /api/client/lawyer/${params.lawyerId}/services`);

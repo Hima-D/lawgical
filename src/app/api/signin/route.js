@@ -1,11 +1,8 @@
-// app/api/signin/route.js
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
-import { PrismaClient } from '@/generated/prisma';
+import { prisma } from '@/lib/prisma';
 import { OAuth2Client } from 'google-auth-library';
-
-const prisma = new PrismaClient();
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // Helper function to verify Google token
@@ -222,7 +219,7 @@ export async function POST(request) {
     // Handle Google OAuth signin
     if (authType === 'google' && googleToken) {
       const googlePayload = await verifyGoogleToken(googleToken);
-      
+
       if (!googlePayload) {
         return Response.json({ error: 'Invalid Google token' }, { status: 401 });
       }
@@ -288,9 +285,9 @@ export async function POST(request) {
 
     // If user has Google account but no password, suggest Google signin
     if (user.googleId && !user.passwordHash) {
-      return Response.json({ 
+      return Response.json({
         error: 'This account uses Google Sign-In. Please sign in with Google.',
-        suggestGoogleAuth: true 
+        suggestGoogleAuth: true
       }, { status: 400 });
     }
 

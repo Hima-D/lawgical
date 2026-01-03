@@ -1,14 +1,11 @@
-// app/api/reviews/route.js
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@/generated/prisma';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
 
 // GET - Fetch reviews with filters
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
-    
+
     const lawyerProfileId = searchParams.get('lawyerProfileId');
     const clientId = searchParams.get('clientId');
     const limit = Math.min(parseInt(searchParams.get('limit')) || 10, 50);
@@ -102,7 +99,7 @@ export async function GET(request) {
   } catch (error) {
     console.error('Fetch reviews error:', error);
     return NextResponse.json(
-      { 
+      {
         success: false,
         error: 'Failed to fetch reviews',
         message: process.env.NODE_ENV === 'development' ? error.message : undefined
@@ -279,10 +276,8 @@ export async function GET(request) {
 
 
 // // app/api/reviews/[reviewId]/route.js
-// import { NextResponse } from 'next/server';
-// import { PrismaClient } from '@/generated/prisma';
-
-// const prisma = new PrismaClient();
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
 // // GET - Fetch a specific review
 // export async function GET(request, { params }) {
@@ -504,10 +499,8 @@ export async function GET(request) {
 
 
 // // app/api/reviews/lawyer/[lawyerProfileId]/stats/route.js
-// import { NextResponse } from 'next/server';
-// import { PrismaClient } from '@/generated/prisma';
-
-// const prisma = new PrismaClient();
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
 // // GET - Get review statistics for a lawyer
 // export async function GET(request, { params }) {

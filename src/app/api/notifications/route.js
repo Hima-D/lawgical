@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
 import { verify } from 'jsonwebtoken';
-import { PrismaClient } from '@/generated/prisma';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
 
 // Helper function to authenticate the JWT token
 const authenticateToken = (request) => {
@@ -40,7 +38,7 @@ const authenticateToken = (request) => {
 // GET: Fetch notifications for the authenticated user
 export async function GET(request) {
   console.log('Received GET request for /api/notifications');
-  
+
   const user = authenticateToken(request);
   if (!user) {
     return NextResponse.json(

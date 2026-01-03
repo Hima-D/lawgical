@@ -1,16 +1,13 @@
-// app/api/lawyer/profile/route.js
-import { PrismaClient } from '@/generated/prisma';
+import { prisma } from '@/lib/prisma';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
-
-const prisma = new PrismaClient();
 
 // Middleware to verify JWT and get user
 async function verifyAuth() {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get('token');
-    
+
     if (!token) {
       throw new Error('No token provided');
     }
@@ -25,39 +22,39 @@ async function verifyAuth() {
 // Validation helper
 function validateProfileData(data) {
   const errors = [];
-  
+
   if (data.specialization && (data.specialization.length < 2 || data.specialization.length > 100)) {
     errors.push('Specialization must be between 2-100 characters');
   }
-  
+
   if (data.licenseNumber && (data.licenseNumber.length < 5 || data.licenseNumber.length > 50)) {
     errors.push('License number must be between 5-50 characters');
   }
-  
+
   if (data.firmName && data.firmName.length > 200) {
     errors.push('Firm name cannot exceed 200 characters');
   }
-  
+
   if (data.address && data.address.length > 300) {
     errors.push('Address cannot exceed 300 characters');
   }
-  
+
   if (data.websiteUrl && !isValidUrl(data.websiteUrl)) {
     errors.push('Please provide a valid website URL');
   }
-  
+
   if (data.hourlyRate && (isNaN(data.hourlyRate) || data.hourlyRate < 0 || data.hourlyRate > 10000)) {
     errors.push('Hourly rate must be a number between 0-10000');
   }
-  
+
   if (data.yearsExperience && (isNaN(data.yearsExperience) || data.yearsExperience < 0 || data.yearsExperience > 70)) {
     errors.push('Years of experience must be between 0-70');
   }
-  
+
   if (data.bio && data.bio.length > 2000) {
     errors.push('Bio cannot exceed 2000 characters');
   }
-  
+
   return errors;
 }
 
@@ -80,7 +77,7 @@ function calculateCompletionPercentage(profile) {
     profile.hourlyRate,
     profile.services && profile.services.length > 0
   ];
-  
+
   const completedFields = requiredFields.filter(field => !!field).length;
   return Math.round((completedFields / requiredFields.length) * 100);
 }
@@ -89,12 +86,12 @@ function calculateCompletionPercentage(profile) {
 export async function POST(request) {
   try {
     const user = await verifyAuth();
-    
+
     if (user.userType !== 'lawyer') {
       return Response.json(
-        { 
+        {
           success: false,
-          error: 'Only lawyers can create lawyer profiles' 
+          error: 'Only lawyers can create lawyer profiles'
         },
         { status: 403 }
       );
@@ -118,9 +115,9 @@ export async function POST(request) {
     // Validation
     if (!specialization || !licenseNumber) {
       return Response.json(
-        { 
+        {
           success: false,
-          error: 'Specialization and license number are required' 
+          error: 'Specialization and license number are required'
         },
         { status: 400 }
       );
@@ -129,10 +126,10 @@ export async function POST(request) {
     const validationErrors = validateProfileData(data);
     if (validationErrors.length > 0) {
       return Response.json(
-        { 
+        {
           success: false,
           error: 'Validation failed',
-          errors: validationErrors 
+          errors: validationErrors
         },
         { status: 400 }
       );
@@ -145,9 +142,9 @@ export async function POST(request) {
 
     if (existingProfile) {
       return Response.json(
-        { 
+        {
           success: false,
-          error: 'Lawyer profile already exists. Use PUT to update.' 
+          error: 'Lawyer profile already exists. Use PUT to update.'
         },
         { status: 409 }
       );
@@ -160,9 +157,9 @@ export async function POST(request) {
 
     if (existingLicense) {
       return Response.json(
-        { 
+        {
           success: false,
-          error: 'License number already exists' 
+          error: 'License number already exists'
         },
         { status: 409 }
       );
@@ -225,12 +222,12 @@ export async function POST(request) {
 
   } catch (error) {
     console.error('Create lawyer profile error:', error);
-    
+
     if (error.message === 'Invalid token' || error.message === 'No token provided') {
       return Response.json(
-        { 
+        {
           success: false,
-          error: 'Authentication required' 
+          error: 'Authentication required'
         },
         { status: 401 }
       );
@@ -238,18 +235,18 @@ export async function POST(request) {
 
     if (error.code === 'P2002') {
       return Response.json(
-        { 
+        {
           success: false,
-          error: 'License number already exists' 
+          error: 'License number already exists'
         },
         { status: 409 }
       );
     }
 
     return Response.json(
-      { 
+      {
         success: false,
-        error: 'Internal server error' 
+        error: 'Internal server error'
       },
       { status: 500 }
     );
@@ -263,12 +260,12 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId');
-    
+
     if (!userId) {
       return Response.json(
-        { 
+        {
           success: false,
-          error: 'User ID is required' 
+          error: 'User ID is required'
         },
         { status: 400 }
       );
@@ -325,9 +322,9 @@ export async function GET(request) {
 
     if (!lawyerProfile) {
       return Response.json(
-        { 
+        {
           success: false,
-          error: 'Lawyer profile not found' 
+          error: 'Lawyer profile not found'
         },
         { status: 404 }
       );
@@ -356,9 +353,9 @@ export async function GET(request) {
   } catch (error) {
     console.error('Get lawyer profile error:', error);
     return Response.json(
-      { 
+      {
         success: false,
-        error: 'Internal server error' 
+        error: 'Internal server error'
       },
       { status: 500 }
     );
@@ -371,12 +368,12 @@ export async function GET(request) {
 export async function PUT(request) {
   try {
     const user = await verifyAuth();
-    
+
     if (user.userType !== 'lawyer') {
       return Response.json(
-        { 
+        {
           success: false,
-          error: 'Only lawyers can update lawyer profiles' 
+          error: 'Only lawyers can update lawyer profiles'
         },
         { status: 403 }
       );
@@ -401,10 +398,10 @@ export async function PUT(request) {
     const validationErrors = validateProfileData(data);
     if (validationErrors.length > 0) {
       return Response.json(
-        { 
+        {
           success: false,
           error: 'Validation failed',
-          errors: validationErrors 
+          errors: validationErrors
         },
         { status: 400 }
       );
@@ -417,9 +414,9 @@ export async function PUT(request) {
 
     if (!existingProfile) {
       return Response.json(
-        { 
+        {
           success: false,
-          error: 'Lawyer profile not found. Create one first.' 
+          error: 'Lawyer profile not found. Create one first.'
         },
         { status: 404 }
       );
@@ -433,9 +430,9 @@ export async function PUT(request) {
 
       if (licenseConflict) {
         return Response.json(
-          { 
+          {
             success: false,
-            error: 'License number already exists' 
+            error: 'License number already exists'
           },
           { status: 409 }
         );
@@ -444,7 +441,7 @@ export async function PUT(request) {
 
     // Build update data - only update provided fields
     const updateData = {};
-    
+
     if (bio !== undefined) updateData.bio = bio?.trim() || null;
     if (specialization !== undefined) updateData.specialization = specialization.trim();
     if (licenseNumber !== undefined) updateData.licenseNumber = licenseNumber.trim();
@@ -498,12 +495,12 @@ export async function PUT(request) {
 
   } catch (error) {
     console.error('Update lawyer profile error:', error);
-    
+
     if (error.message === 'Invalid token' || error.message === 'No token provided') {
       return Response.json(
-        { 
+        {
           success: false,
-          error: 'Authentication required' 
+          error: 'Authentication required'
         },
         { status: 401 }
       );
@@ -511,18 +508,18 @@ export async function PUT(request) {
 
     if (error.code === 'P2002') {
       return Response.json(
-        { 
+        {
           success: false,
-          error: 'License number already exists' 
+          error: 'License number already exists'
         },
         { status: 409 }
       );
     }
 
     return Response.json(
-      { 
+      {
         success: false,
-        error: 'Internal server error' 
+        error: 'Internal server error'
       },
       { status: 500 }
     );
@@ -535,12 +532,12 @@ export async function PUT(request) {
 export async function DELETE(request) {
   try {
     const user = await verifyAuth();
-    
+
     if (user.userType !== 'lawyer') {
       return Response.json(
-        { 
+        {
           success: false,
-          error: 'Only lawyers can delete their profiles' 
+          error: 'Only lawyers can delete their profiles'
         },
         { status: 403 }
       );
@@ -553,9 +550,9 @@ export async function DELETE(request) {
 
     if (!existingProfile) {
       return Response.json(
-        { 
+        {
           success: false,
-          error: 'Lawyer profile not found' 
+          error: 'Lawyer profile not found'
         },
         { status: 404 }
       );
@@ -573,21 +570,21 @@ export async function DELETE(request) {
 
   } catch (error) {
     console.error('Delete lawyer profile error:', error);
-    
+
     if (error.message === 'Invalid token' || error.message === 'No token provided') {
       return Response.json(
-        { 
+        {
           success: false,
-          error: 'Authentication required' 
+          error: 'Authentication required'
         },
         { status: 401 }
       );
     }
 
     return Response.json(
-      { 
+      {
         success: false,
-        error: 'Internal server error' 
+        error: 'Internal server error'
       },
       { status: 500 }
     );

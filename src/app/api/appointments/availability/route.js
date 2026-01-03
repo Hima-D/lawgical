@@ -1,9 +1,5 @@
-// app/api/appointments/availability/route.js
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@/generated/prisma';
-
-// Create a single Prisma instance
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
 
 export async function GET(request) {
   try {
@@ -28,7 +24,7 @@ export async function GET(request) {
 
     // Get lawyer's availability slots for the specific date or day of week
     const dayOfWeek = targetDate.getDay();
-    
+
     const availabilitySlots = await prisma.availabilitySlot.findMany({
       where: {
         lawyerProfileId: parseInt(lawyerProfileId),
@@ -73,29 +69,29 @@ export async function GET(request) {
 
     // Generate available time slots
     const availableSlots = [];
-    
+
     for (const slot of availabilitySlots) {
       const startTime = slot.startTime; // e.g., "09:00"
       const endTime = slot.endTime;     // e.g., "17:00"
-      
+
       // Convert to minutes for easier calculation
       const startMinutes = timeToMinutes(startTime);
       const endMinutes = timeToMinutes(endTime);
       const slotDuration = 60; // Default 1 hour slots
-      
+
       // Generate time slots
       for (let current = startMinutes; current < endMinutes; current += slotDuration) {
         const timeSlot = minutesToTime(current);
-        
+
         // Check if this slot conflicts with existing appointments
         const hasConflict = existingAppointments.some(apt => {
           const aptStartMinutes = timeToMinutes(apt.appointmentTime);
           const aptEndMinutes = aptStartMinutes + (apt.service.durationMinutes || 60);
-          
+
           return (current >= aptStartMinutes && current < aptEndMinutes) ||
-                 (current + slotDuration > aptStartMinutes && current + slotDuration <= aptEndMinutes);
+            (current + slotDuration > aptStartMinutes && current + slotDuration <= aptEndMinutes);
         });
-        
+
         if (!hasConflict) {
           availableSlots.push({
             time: timeSlot,
@@ -120,7 +116,7 @@ export async function GET(request) {
       { status: 500 }
     );
   } finally {
-    await prisma.$disconnect();
+    // Shared prisma client handles connections
   }
 }
 

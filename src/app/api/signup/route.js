@@ -1,9 +1,6 @@
-// app/api/signup/route.js
 import bcrypt from 'bcryptjs';
-import { PrismaClient } from '@/generated/prisma'; // or '@prisma/client' if not using custom output
+import { prisma } from '@/lib/prisma';
 import { sendWelcomeEmail } from '@/lib/resend';
-
-const prisma = new PrismaClient();
 
 export async function POST(request) {
   try {
@@ -86,7 +83,7 @@ export async function POST(request) {
     let emailSent = false;
     try {
       const emailResult = await sendWelcomeEmail(user.email, user.displayName, user.userType);
-      
+
       if (emailResult.success) {
         console.log(`Welcome email sent to ${user.email}:`, emailResult.data.id);
         emailSent = true;
@@ -108,7 +105,7 @@ export async function POST(request) {
 
   } catch (error) {
     console.error('Signup error:', error);
-    
+
     // Handle specific Prisma errors
     if (error.code === 'P2002') {
       return Response.json(
@@ -116,7 +113,7 @@ export async function POST(request) {
         { status: 400 }
       );
     }
-    
+
     return Response.json(
       { error: 'Internal server error' },
       { status: 500 }

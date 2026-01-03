@@ -1,8 +1,6 @@
-import { PrismaClient } from '@/generated/prisma';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
 
 // Helper function to authenticate the JWT token
 const verifyAuth = async () => {
@@ -109,8 +107,6 @@ export async function GET(request, { params }) {
       { error: error.message || 'Internal server error' },
       { status: error.message === 'No token provided' || error.message === 'Invalid token' ? 401 : 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }
 
@@ -210,7 +206,5 @@ export async function PUT(request, { params }) {
       { error: error.message || 'Internal server error' },
       { status: error.message === 'No token provided' || error.message === 'Invalid token' ? 401 : 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }
